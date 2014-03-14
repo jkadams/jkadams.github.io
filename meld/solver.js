@@ -26,7 +26,14 @@ Solver.finalBoardScore = function(game) {
 };
 
 Solver.prototype.moveScores = function(game, depthRemaining) {
-  if (depthRemaining == this.depthNewCards + this.depthNoNewCards) {
+  var depthNewCards = this.depthNewCards;
+  var depthNoNewCards = this.depthNoNewCards;
+  if (game.highestValue() <= 48) {
+    depthNewCards = 2;
+    depthNoNewCards = 2;
+  }
+
+  if (depthRemaining == depthNewCards + depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
   var bestMove = 'NONE';
@@ -57,9 +64,9 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
     var count = 0;
     var expectedScore;
     if (nextLocations.length > 0) {
-	    if (depthRemaining < this.depthNewCards) {
+	    if (depthRemaining < depthNewCards) {
 	      for (var i = 0; i < nextLocations.length; i++) {
-	      	var maxNextPiece = depthRemaining < this.depthNewCards - 1 ? 3 : 1;
+	      	var maxNextPiece = depthRemaining < depthNewCards - 1 ? 3 : 1;
 	        for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
 	          var randomGame = tempGame.copy();
 	          randomGame.makeNextMove(deltaR, deltaC, nextLocations[i], nextPiece);
