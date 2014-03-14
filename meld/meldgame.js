@@ -6,7 +6,7 @@ MeldGame.COLUMNS = 4;
 MeldGame.NEXT_BONUS = -1;
 
 // Move direction enum.
-var Move = { LEFT : 0, UP : 1, RIGHT : 2, DOWN : 3 };
+MeldGame.Move = { LEFT : 0, UP : 1, RIGHT : 2, DOWN : 3 };
 
 function MeldGame(opt_existingGame) {
   if (opt_existingGame) {

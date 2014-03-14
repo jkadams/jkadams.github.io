@@ -35,22 +35,22 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
   }
   var bestMove = 'NONE';
   var bestScore = Solver.LOSE_SCORE;
-  for (var m in Move) {
+  for (var m in MeldGame.Move) {
     var deltaR, deltaC;
-    switch (Move[m]) {
-      case Move.LEFT: // left
+    switch (MeldGame.Move[m]) {
+      case MeldGame.Move.LEFT: // left
         deltaR = 0;
         deltaC = -1;
         break;
-      case Move.UP: // up
+      case MeldGame.Move.UP: // up
         deltaR = -1;
         deltaC = 0;
         break;
-      case Move.RIGHT: // right
+      case MeldGame.Move.RIGHT: // right
         deltaR = 0;
         deltaC = 1;
         break;
-      case Move.DOWN: // down
+      case MeldGame.Move.DOWN: // down
         deltaR = 1;
         deltaC = 0;
         break;

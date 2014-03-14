@@ -68,16 +68,16 @@ MeldController.prototype.handleKeyDown = function(e) {
   var m;
   switch (e.keyCode) {
     case 37: // left
-      m = Move.LEFT;
+      m = MeldGame.Move.LEFT;
       break;
     case 38: // up
-      m = Move.UP;
+      m = MeldGame.Move.UP;
       break;
     case 39: // right
-      m = Move.RIGHT;
+      m = MeldGame.Move.RIGHT;
       break;
     case 40: // down
-      m = Move.DOWN;
+      m = MeldGame.Move.DOWN;
       break;
     case 78:
       this.startNewGame();
@@ -92,19 +92,19 @@ MeldController.prototype.handleKeyDown = function(e) {
 MeldController.prototype.move = function(m) {
   var deltaR, deltaC;
   switch (m) {
-    case Move.LEFT: // left
+    case MeldGame.Move.LEFT: // left
       deltaR = 0;
       deltaC = -1;
       break;
-    case Move.UP: // up
+    case MeldGame.Move.UP: // up
       deltaR = -1;
       deltaC = 0;
       break;
-    case Move.RIGHT: // right
+    case MeldGame.Move.RIGHT: // right
       deltaR = 0;
       deltaC = 1;
       break;
-    case Move.DOWN: // down
+    case MeldGame.Move.DOWN: // down
       deltaR = 1;
       deltaC = 0;
       break;
