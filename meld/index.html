@@ -10,6 +10,7 @@
     var controller = new MeldController();
     var worker, solver;
     var autoMove;
+    var highestCounts = {};
     try {
       worker = new Worker("worker.js");
       worker.addEventListener("message", workerMessageHandler, false);
@@ -20,14 +21,7 @@
 
     function workerMessageHandler(event) {
       var move = event.data;
-      if (move == 'NONE') {
-        console.log(controller.nextValueString);
-        return;
-      }
-      var wasSuccessful = makeMove(move);
-      if (wasSuccessful && autoMove) {
-        window.setTimeout(requestBestMove, 250);
-      }
+      makeAutoMove(move);
     }
 
     function handleToggleAutoMove(event) {
@@ -35,6 +29,17 @@
       if (autoMove) {
         requestBestMove();
       }
+    }
+    
+    function logAndReset() {
+      console.log(controller.nextValueString);
+      console.log(controller.game.pieces);
+      var hiVal = controller.game.highestValue();
+      if (!highestCounts[hiVal]) {
+        highestCounts[hiVal] = 0;
+      }
+      highestCounts[hiVal]++;
+      newGame();
     }
 
     function handleNewGame(event) {
@@ -61,14 +66,18 @@
         worker.postMessage(controller.game.copy());
       } else {
         var move = solver.findBestMove(controller.game.copy());
-        var wasSuccessful = makeMove(move);
-        if (wasSuccessful && autoMove) {
-          window.setTimeout(requestBestMove, 250);
-        }
+        makeAutoMove(move);
       }
     }
-    function makeMove(move) {
-      return controller.move(MeldGame.Move[move]);
+    function makeAutoMove(move) {
+      if (move == 'NONE') {
+        logAndReset();
+        return;
+      }
+      var wasSuccessful = controller.move(MeldGame.Move[move]);
+      if (wasSuccessful && autoMove) {
+        window.setTimeout(requestBestMove, 250);
+      }
     }
     </script>
     <link rel="stylesheet" type="text/css" href="style.css">

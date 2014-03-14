@@ -73,7 +73,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
         }
         expectedScore = sum / count;
         if (depthRemaining == 0) {
-          console.log(m+': '+expectedScore);
+          // console.log(m+': '+expectedScore);
         }
       } else {
         expectedScore = this.moveScores(tempGame, depthRemaining + 1);
@@ -87,7 +87,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
   }
   if (depthRemaining == 0) {
     this.nextMove = bestMove;
-    console.log('Best move: ' + bestMove);
+    // console.log('Best move: ' + bestMove);
   }
   return bestScore;
 };

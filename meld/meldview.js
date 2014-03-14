@@ -80,7 +80,9 @@ MeldView.prototype.handleMovePiece = function(event) {
     var board = this.board;
     // Wait until the animation has finished. This fails if you do a bunch of moves at once.
     window.setTimeout(function() {
-      board.removeChild(pieceToRemove);
+      if (pieceToRemove.parentElement) {
+        board.removeChild(pieceToRemove);
+      }
     }, 750);
   }
   this.pieces[e.fromR][e.fromC] = null;
