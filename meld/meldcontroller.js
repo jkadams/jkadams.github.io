@@ -48,7 +48,7 @@ MeldController.prototype.startNewGame = function() {
   this.view.enterDocument();
   this.view.board.focus();
   this.view.board.addEventListener('keydown', this.handleKeyDown.bind(this)); 
-  
+
   for (var i = 0; i < (MeldGame.ROWS - 1) * (MeldGame.COLUMNS - 1); i++) {
     var r = Math.floor(Math.random() * 4);
     var c = Math.floor(Math.random() * 4);

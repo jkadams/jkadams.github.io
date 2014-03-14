@@ -104,13 +104,13 @@ MeldGame.prototype.respondToUser = function(deltaR, deltaC, newPosition, nextVal
 };
 
 MeldGame.prototype.addPiece = function(r, c, value) {
-//  if (this.getPiece(r, c) != 0) {
-//    throw new Error('Can not add piece where one exists');
-//  }
+  //  if (this.getPiece(r, c) != 0) {
+  //    throw new Error('Can not add piece where one exists');
+  //  }
   this.setPiece(r, c, value);
   if (this.eventTarget) {
     var addPieceEvent = new CustomEvent(MeldAddEvent.TYPE,
-      {'detail': new MeldAddEvent(r, c, value)});
+        {'detail': new MeldAddEvent(r, c, value)});
     this.eventTarget.dispatchEvent(addPieceEvent);
   }
 };
@@ -123,36 +123,36 @@ MeldGame.prototype.canMovePiece = function(r, c, deltaR, deltaC) {
   var fromValue = this.getPiece(r, c);
   if (fromValue == 0 || c + deltaC < 0 || c + deltaC >= MeldGame.COLUMNS ||
       r + deltaR < 0 || r + deltaR >= MeldGame.ROWS) {
-    return false;
-  }
-  
+        return false;
+      }
+
   var toValue = this.getPiece(r + deltaR, c + deltaC);
   return toValue == 0 ||
-          (toValue >= 3 && fromValue == toValue) ||
-          (toValue < 3 && fromValue + toValue == 3);
+    (toValue >= 3 && fromValue == toValue) ||
+    (toValue < 3 && fromValue + toValue == 3);
 };
 
 /**
  * Moves the given piece at (r,c) by (deltaR,deltaC).
  */
 MeldGame.prototype.movePiece = function(r, c, deltaR, deltaC) {
-//  if (!this.canMovePiece(r, c, deltaR, deltaC)) {
-//    throw new Error("Can't move piece");
-//  }
+  //  if (!this.canMovePiece(r, c, deltaR, deltaC)) {
+  //    throw new Error("Can't move piece");
+  //  }
   var toR = r + deltaR;
   var toC = c + deltaC;
   this.setPiece(toR, toC, this.getPiece(toR, toC) + this.getPiece(r, c));
   this.setPiece(r, c, 0);
   if (this.eventTarget) {
     var movePieceEvent = new CustomEvent(MeldMoveEvent.TYPE,
-      {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
+        {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
     this.eventTarget.dispatchEvent(movePieceEvent);
   }
 };
 
 MeldGame.prototype.isGameOver = function() {
   return this.copy().move(0, -1).length == 0 &&
-      this.copy().move(-1, 0).length == 0 &&
-      this.copy().move(0, 1).length == 0 &&
-      this.copy().move(1, 0).length == 0;
+    this.copy().move(-1, 0).length == 0 &&
+    this.copy().move(0, 1).length == 0 &&
+    this.copy().move(1, 0).length == 0;
 };

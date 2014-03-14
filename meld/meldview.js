@@ -53,7 +53,7 @@ MeldView.prototype.enterDocument = function() {
   this.nextPiece.appendChild(content);
   this.nextPieceContainer.appendChild(this.nextPiece);
   this.showNextValue();
-  
+
   this.board = document.createElement('div');
   this.board.tabIndex = 0;
   this.board.className = 'gameBoard';
@@ -77,7 +77,7 @@ MeldView.prototype.handleMovePiece = function(event) {
   var pieceToRemove = this.pieces[e.toR][e.toC];
   if (pieceToRemove) {
     pieceToRemove.style.zIndex = 3;
-    
+
     var board = this.board;
     // Wait until the animation has finished. This fails if you do a bunch of moves at once.
     window.setTimeout(function() {

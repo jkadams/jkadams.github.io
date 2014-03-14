@@ -61,28 +61,28 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
     var count = 0;
     var expectedScore;
     if (nextLocations.length > 0) {
-	    if (depthRemaining < depthNewCards) {
-	      for (var i = 0; i < nextLocations.length; i++) {
-	      	var maxNextPiece = depthRemaining < depthNewCards - 1 ? 3 : 1;
-	        for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
-	          var randomGame = tempGame.copy();
-	          randomGame.respondToUser(deltaR, deltaC, nextLocations[i], nextPiece);
-	          sum += this.moveScores(randomGame, depthRemaining + 1);
-	          count++;
-	        }
-	      }
-	      expectedScore = sum / count;
-	      if (depthRemaining == 0) {
-	        console.log(m+': '+expectedScore);
-	      }
-	    } else {
-	      expectedScore = this.moveScores(tempGame, depthRemaining + 1);
-	    }
+      if (depthRemaining < depthNewCards) {
+        for (var i = 0; i < nextLocations.length; i++) {
+          var maxNextPiece = depthRemaining < depthNewCards - 1 ? 3 : 1;
+          for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
+            var randomGame = tempGame.copy();
+            randomGame.respondToUser(deltaR, deltaC, nextLocations[i], nextPiece);
+            sum += this.moveScores(randomGame, depthRemaining + 1);
+            count++;
+          }
+        }
+        expectedScore = sum / count;
+        if (depthRemaining == 0) {
+          console.log(m+': '+expectedScore);
+        }
+      } else {
+        expectedScore = this.moveScores(tempGame, depthRemaining + 1);
+      }
 
-		if (expectedScore < bestScore || bestMove == 'NONE') {
-		  bestScore = expectedScore;
-		  bestMove = m;
-		}
+      if (expectedScore < bestScore || bestMove == 'NONE') {
+        bestScore = expectedScore;
+        bestMove = m;
+      }
     }
   }
   if (depthRemaining == 0) {
