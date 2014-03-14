@@ -1,5 +1,3 @@
-var Move = { LEFT : 0, UP : 1, RIGHT : 2, DOWN : 3 };
-
 function ThreesController() {
   this.game = null;
   this.view = null;

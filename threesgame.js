@@ -1,5 +1,6 @@
 ThreesGame.ROWS = 4;
 ThreesGame.COLUMNS = 4;
+var Move = { LEFT : 0, UP : 1, RIGHT : 2, DOWN : 3 };
 
 function ThreesGame(opt_existingGame) {
   if (opt_existingGame) {
