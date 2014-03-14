@@ -8,13 +8,6 @@ MeldController.prototype.randomNextValue = function() {
   var useBonus = highestValue >= 48 && Math.random() < 1/21;
   if (useBonus) {
     return MeldGame.NEXT_BONUS;
-    /*
-    var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
-    var randBonus = 1 + Math.floor(Math.random() * range);
-    var r = Math.pow(2, randBonus) * 24;
-    this.nextValueString += r + ',';
-    return r;
-    */
   }
   var left = this.game.remaining[0] + this.game.remaining[1] + this.game.remaining[2];
   var nextCard = Math.floor(Math.random() * left);
@@ -32,6 +25,14 @@ MeldController.prototype.randomNextValue = function() {
   if (left == 1) {
     this.game.remaining = [4, 4, 4];	
   }
+  this.nextValueString += r + ',';
+  return r;
+};
+
+MeldController.prototype.randomBonusValue = function() {
+  var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
+  var randBonus = 1 + Math.floor(Math.random() * range);
+  var r = Math.pow(2, randBonus) * 24;
   this.nextValueString += r + ',';
   return r;
 };
@@ -114,7 +115,7 @@ MeldController.prototype.move = function(m) {
   if (moved.length != 0) {
     var randomEntry = moved[Math.floor(Math.random() * moved.length)];
     var bonusValue = null;
-    if (this.game.nextValue == -1) {
+    if (this.game.nextValue == MeldGame.NEXT_BONUS) {
       bonusValue = this.randomBonusValue();
     }
     var randomNextValue = this.randomNextValue();
