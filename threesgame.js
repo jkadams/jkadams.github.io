@@ -18,7 +18,9 @@ ThreesController.prototype.randomNextValue = function() {
   if (useBonus) {
     var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
     var randBonus = 1 + Math.floor(Math.random() * range);
-    return Math.pow(2, randBonus) * 24;
+    var r = Math.pow(2, randBonus) * 24;
+    this.nextValueString += r + ',';
+    return r;
   }
   var left = this.game.remaining[0] + this.game.remaining[1] + this.game.remaining[2];
   var nextCard = Math.floor(Math.random() * left);
@@ -36,6 +38,7 @@ ThreesController.prototype.randomNextValue = function() {
   if (left == 1) {
     this.game.remaining = [4, 4, 4];	
   }
+  this.nextValueString += r + ',';
   return r;
 };
 
@@ -133,7 +136,6 @@ ThreesController.prototype.move = function(m) {
   if (moved.length != 0) {
     var randomEntry = moved[Math.floor(Math.random() * moved.length)];
     var randomNextValue = this.randomNextValue();
-    this.nextValueString += randomNextValue + ',';
     this.game.makeNextMove(deltaR, deltaC, randomEntry, randomNextValue);
     this.view.showNextValue(); // handle with an event?
   }
