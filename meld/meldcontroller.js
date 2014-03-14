@@ -1,9 +1,9 @@
-function ThreesController() {
+function MeldController() {
   this.game = null;
   this.view = null;
 }
 
-ThreesController.prototype.randomNextValue = function() {
+MeldController.prototype.randomNextValue = function() {
   var highestValue = this.game.highestValue();
   var useBonus = highestValue >= 48 && Math.random() < 1/21;
   if (useBonus) {
@@ -33,19 +33,19 @@ ThreesController.prototype.randomNextValue = function() {
   return r;
 };
 
-ThreesController.prototype.startNewGame = function() {
+MeldController.prototype.startNewGame = function() {
   if (this.view) {
     this.view.exitDocument();
   }
   this.nextValueString = '';
-  this.game = new ThreesGame();
+  this.game = new MeldGame();
   this.game.eventTarget = document;
-  this.view = new ThreesView(this.game);
+  this.view = new MeldView(this.game);
   this.view.enterDocument();
   this.view.board.focus();
   this.view.board.addEventListener('keydown', this.handleKeyDown.bind(this)); 
   
-  for (var i = 0; i < (ThreesGame.ROWS - 1) * (ThreesGame.COLUMNS - 1); i++) {
+  for (var i = 0; i < (MeldGame.ROWS - 1) * (MeldGame.COLUMNS - 1); i++) {
     var r = Math.floor(Math.random() * 4);
     var c = Math.floor(Math.random() * 4);
     var value = this.randomNextValue();
@@ -59,7 +59,7 @@ ThreesController.prototype.startNewGame = function() {
   this.view.showNextValue(); // handle with an event?
 };
 
-ThreesController.prototype.handleKeyDown = function(e) {
+MeldController.prototype.handleKeyDown = function(e) {
   this.view.validateState();
   var m;
   switch (e.keyCode) {
@@ -85,7 +85,7 @@ ThreesController.prototype.handleKeyDown = function(e) {
   e.preventDefault();
 };
 
-ThreesController.prototype.move = function(m) {
+MeldController.prototype.move = function(m) {
   var deltaR, deltaC;
   switch (m) {
     case Move.LEFT: // left

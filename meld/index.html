@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Threes Solver</title>
+    <title>Meld Solver</title>
     <script src="meldgame.js"></script>
     <script src="meldview.js"></script>
     <script src="meldcontroller.js"></script>
     <script src="solver.js"></script>
     <script>
-      var controller = new ThreesController();
+      var controller = new MeldController();
       var worker, solver;
       try {
         worker = new Worker("worker.js");

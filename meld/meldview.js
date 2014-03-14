@@ -2,7 +2,7 @@ var piecePadding = 0.5;
 var pieceHeight = 3;
 var pieceWidth = 3;
 
-function ThreesMoveEvent(fromR, fromC, toR, toC, newValue) {
+function MeldMoveEvent(fromR, fromC, toR, toC, newValue) {
   this.fromR = fromR;
   this.fromC = fromC;
   this.toR = toR;
@@ -10,22 +10,22 @@ function ThreesMoveEvent(fromR, fromC, toR, toC, newValue) {
   this.newValue = newValue;
 };
 
-ThreesMoveEvent.TYPE = 'MovePiece';
+MeldMoveEvent.TYPE = 'MovePiece';
 
-function ThreesAddEvent(r, c, value) {
+function MeldAddEvent(r, c, value) {
   this.r = r;
   this.c = c;
   this.value = value;
 };
 
-ThreesAddEvent.TYPE = 'AddPiece';
+MeldAddEvent.TYPE = 'AddPiece';
 
-function ThreesView(game) {
+function MeldView(game) {
   this.game = game;
   this.pieces = [];
-  for (var r = 0; r < ThreesGame.ROWS; r++) {
+  for (var r = 0; r < MeldGame.ROWS; r++) {
     var row = [];
-    for (var c = 0; c < ThreesGame.COLUMNS; c++) {
+    for (var c = 0; c < MeldGame.COLUMNS; c++) {
       if (this.game.getPiece(r, c) == 0) {
         row.push(null);
       } else {
@@ -36,14 +36,14 @@ function ThreesView(game) {
   }
 }
 
-ThreesView.prototype.exitDocument = function() {
+MeldView.prototype.exitDocument = function() {
   document.body.removeChild(this.nextPieceContainer);
   document.body.removeChild(this.board);
-  document.removeEventListener(ThreesMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
-  document.removeEventListener(ThreesAddEvent.TYPE, this.handleAddPiece.bind(this), false);
+  document.removeEventListener(MeldMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
+  document.removeEventListener(MeldAddEvent.TYPE, this.handleAddPiece.bind(this), false);
 };
 
-ThreesView.prototype.enterDocument = function() {
+MeldView.prototype.enterDocument = function() {
   this.nextPieceContainer = document.createElement('div');
   this.nextPieceContainer.className = 'nextPiece';
   document.body.appendChild(this.nextPieceContainer);
@@ -57,8 +57,8 @@ ThreesView.prototype.enterDocument = function() {
   this.board = document.createElement('div');
   this.board.tabIndex = 0;
   this.board.className = 'gameBoard';
-  for (var r = 0; r < ThreesGame.ROWS; r++) {
-    for (var c = 0; c < ThreesGame.COLUMNS; c++) {
+  for (var r = 0; r < MeldGame.ROWS; r++) {
+    for (var c = 0; c < MeldGame.COLUMNS; c++) {
       var emptyPiece = document.createElement('div');
       emptyPiece.className = 'gamePiece emptyPiece';
       this.board.appendChild(emptyPiece);
@@ -66,11 +66,11 @@ ThreesView.prototype.enterDocument = function() {
     }
   }
   document.body.appendChild(this.board);
-  document.addEventListener(ThreesMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
-  document.addEventListener(ThreesAddEvent.TYPE, this.handleAddPiece.bind(this), false);
+  document.addEventListener(MeldMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
+  document.addEventListener(MeldAddEvent.TYPE, this.handleAddPiece.bind(this), false);
 };
 
-ThreesView.prototype.handleMovePiece = function(event) {
+MeldView.prototype.handleMovePiece = function(event) {
   var e = event.detail;
   var piece = this.pieces[e.fromR][e.fromC];
   this.updatePiece(piece, e.toR, e.toC, e.newValue);
@@ -88,7 +88,7 @@ ThreesView.prototype.handleMovePiece = function(event) {
   this.pieces[e.toR][e.toC] = piece;
 };
 
-ThreesView.prototype.handleAddPiece = function(event) {
+MeldView.prototype.handleAddPiece = function(event) {
   var e = event.detail;
   var newPiece = document.createElement('div');
   var content = document.createElement('div');
@@ -99,11 +99,11 @@ ThreesView.prototype.handleAddPiece = function(event) {
   this.pieces[e.r][e.c] = newPiece;
 };
 
-ThreesView.prototype.showNextValue = function() {
+MeldView.prototype.showNextValue = function() {
   this.updatePieceValue(this.nextPiece, this.game.nextValue);
 };
 
-ThreesView.prototype.updatePiece = function(piece, r, c, value) {
+MeldView.prototype.updatePiece = function(piece, r, c, value) {
   var left = c * (pieceWidth + piecePadding) + piecePadding;
   var top = r * (pieceHeight + piecePadding) + piecePadding;
   piece.style.left = left + 'em';
@@ -113,7 +113,7 @@ ThreesView.prototype.updatePiece = function(piece, r, c, value) {
   }
 };
 
-ThreesView.prototype.updatePieceValue = function(piece, value) {
+MeldView.prototype.updatePieceValue = function(piece, value) {
   piece.firstChild.innerText = value;
   piece.className = 'gamePiece';
   if (value == 1) {
@@ -123,9 +123,9 @@ ThreesView.prototype.updatePieceValue = function(piece, value) {
   }
 };
 
-ThreesView.prototype.validateState = function() {
-  for (var r = 0; r < ThreesGame.ROWS; r++) {
-    for (var c = 0; c < ThreesGame.COLUMNS; c++) {
+MeldView.prototype.validateState = function() {
+  for (var r = 0; r < MeldGame.ROWS; r++) {
+    for (var c = 0; c < MeldGame.COLUMNS; c++) {
       if (this.pieces[r][c] == null) {
         if (this.game.getPiece(r, c) != 0) {
           throw new Error('Invalid state @ ' + r + ',' + c);
