@@ -1,0 +1,49 @@
+.gameBoard {
+  z-index: 1;
+  position: relative;
+  background: #ccc;
+  border-radius: 4px;
+  width: 18.2em;
+  height: 18.2em;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.nextPiece {
+  position: relative;
+  background: #ccc;
+  border-radius: 4px;
+  width: 4em;
+  height: 4em;
+  padding: 0.5em;
+  margin: auto;
+}
+.gamePiece {
+  z-index: 4;
+  position: absolute;
+  background: #fff;
+  width: 3em;
+  height: 3em;
+  border-radius: 4px;
+  font: 20px bold Arial, sans-serif;
+  text-align: center;
+  transition-property: top, left;
+  transition-duration: 0.75s, 0.75s;
+  transition-delay: 0s, 0s;
+  margin: auto;
+}
+.pieceContent {
+  line-height: 3em;
+}
+.onePiece {
+  background: blue;
+  color: white;
+}
+.twoPiece {
+  background: red;
+  color: white;
+}
+.emptyPiece {
+  background: #aaa;
+  z-index: 2;
+}
