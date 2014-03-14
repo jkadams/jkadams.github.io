@@ -3,8 +3,8 @@
   position: relative;
   background: #ccc;
   border-radius: 4px;
-  width: 18.2em;
-  height: 18.2em;
+  width: 250px;
+  height: 250px;
   margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
@@ -13,17 +13,17 @@
   position: relative;
   background: #ccc;
   border-radius: 4px;
-  width: 4em;
-  height: 4em;
-  padding: 0.5em;
+  width: 50px;
+  height: 50px;
+  padding: 10px;
   margin: auto;
 }
 .gamePiece {
   z-index: 4;
   position: absolute;
   background: #fff;
-  width: 3em;
-  height: 3em;
+  width: 50px;
+  height: 50px;
   border-radius: 4px;
   font: 20px bold Arial, sans-serif;
   text-align: center;
@@ -35,7 +35,7 @@
   color: white;
 }
 .pieceContent {
-  line-height: 3em;
+  line-height: 50px;
 }
 .onePiece {
   background: blue;

@@ -1,6 +1,6 @@
-var piecePadding = 0.5;
-var pieceHeight = 3;
-var pieceWidth = 3;
+var piecePadding = 10;
+var pieceHeight = 50;
+var pieceWidth = 50;
 
 function MeldMoveEvent(fromR, fromC, toR, toC, newValue) {
   this.fromR = fromR;
@@ -100,14 +100,18 @@ MeldView.prototype.handleAddPiece = function(event) {
 };
 
 MeldView.prototype.showNextValue = function() {
-  this.updatePieceValue(this.nextPiece, this.game.nextValue);
+  var nextValue = this.game.nextValue;
+  if (nextValue > 3) {
+    nextValue = '';
+  }
+  this.updatePieceValue(this.nextPiece, nextValue);
 };
 
 MeldView.prototype.updatePiece = function(piece, r, c, value) {
   var left = c * (pieceWidth + piecePadding) + piecePadding;
   var top = r * (pieceHeight + piecePadding) + piecePadding;
-  piece.style.left = left + 'em';
-  piece.style.top = top + 'em';
+  piece.style.left = left + 'px';
+  piece.style.top = top + 'px';
   if (value != null) {
     this.updatePieceValue(piece, value);
   }

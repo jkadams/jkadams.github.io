@@ -36,12 +36,19 @@
           requestBestMove();
         }
       }
+      function handleNewGame(event) {
+        newGame();
+      }
       
       function init() {
       	var checkbox = document.getElementById('toggleAutoMove');
       	autoMove = checkbox.checked;
       	checkbox.addEventListener('click', handleToggleAutoMove);
-      	
+      	document.getElementById('newGame').addEventListener('click', handleNewGame);
+        newGame();
+      }
+
+      function newGame() {
         controller.startNewGame();
         if (autoMove) {
           requestBestMove();
@@ -69,6 +76,8 @@
   </head>
   <body onload="init();">
   	<label><input type="checkbox" id="toggleAutoMove">Auto-move</label>
+    <br>
+    <input type="button" id="newGame" value="New Game">
   	<br>
   </body>
 </html>
