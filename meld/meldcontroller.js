@@ -30,15 +30,17 @@ MeldController.prototype.randomNextValue = function() {
 };
 
 MeldController.prototype.randomBonusValue = function() {
+  var highestValue = this.game.highestValue();
   var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
   var randBonus = 1 + Math.floor(Math.random() * range);
-  var r = Math.pow(2, randBonus) * 24;
+  var r = Math.pow(2, randBonus) * 3;
   this.nextValueString += r + ',';
   return r;
 };
 
 MeldController.prototype.startNewGame = function() {
   if (this.view) {
+    this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
   this.nextValueString = '';
@@ -47,7 +49,8 @@ MeldController.prototype.startNewGame = function() {
   this.view = new MeldView(this.game);
   this.view.enterDocument();
   this.view.board.focus();
-  this.view.board.addEventListener('keydown', this.handleKeyDown.bind(this)); 
+  this.keyListener = this.handleKeyDown.bind(this);
+  this.view.board.addEventListener('keydown', this.keyListener); 
 
   for (var i = 0; i < (MeldGame.ROWS - 1) * (MeldGame.COLUMNS - 1); i++) {
     var r = Math.floor(Math.random() * 4);

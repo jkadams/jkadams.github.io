@@ -1,4 +1,4 @@
-.gameBoard {
+#gameBoard {
   z-index: 1;
   position: relative;
   background: #ccc;
@@ -9,7 +9,7 @@
   margin-left: auto;
   margin-right: auto;
 }
-.nextPiece {
+#nextPieceContainer {
   position: relative;
   background: #ccc;
   border-radius: 4px;

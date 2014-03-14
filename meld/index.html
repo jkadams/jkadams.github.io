@@ -68,7 +68,7 @@
       }
     }
     function makeMove(move) {
-      return controller.move(Move[move]);
+      return controller.move(MeldGame.Move[move]);
     }
     </script>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -80,5 +80,7 @@
     <br>
     <input type="button" id="newGame" value="New Game">
   	<br>
+  	<div id="nextPieceContainer"></div>
+  	<div id="gameBoard" tabindex=0></div>
   </body>
 </html>

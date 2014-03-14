@@ -36,17 +36,8 @@ function MeldView(game) {
   }
 }
 
-MeldView.prototype.exitDocument = function() {
-  document.body.removeChild(this.nextPieceContainer);
-  document.body.removeChild(this.board);
-  document.removeEventListener(MeldMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
-  document.removeEventListener(MeldAddEvent.TYPE, this.handleAddPiece.bind(this), false);
-};
-
 MeldView.prototype.enterDocument = function() {
-  this.nextPieceContainer = document.createElement('div');
-  this.nextPieceContainer.className = 'nextPiece';
-  document.body.appendChild(this.nextPieceContainer);
+  this.nextPieceContainer = document.getElementById('nextPieceContainer');
   this.nextPiece = document.createElement('div');
   var content = document.createElement('div');
   content.className = 'pieceContent';
@@ -54,9 +45,7 @@ MeldView.prototype.enterDocument = function() {
   this.nextPieceContainer.appendChild(this.nextPiece);
   this.showNextValue();
 
-  this.board = document.createElement('div');
-  this.board.tabIndex = 0;
-  this.board.className = 'gameBoard';
+  this.board = document.getElementById('gameBoard');
   for (var r = 0; r < MeldGame.ROWS; r++) {
     for (var c = 0; c < MeldGame.COLUMNS; c++) {
       var emptyPiece = document.createElement('div');
@@ -65,9 +54,19 @@ MeldView.prototype.enterDocument = function() {
       this.updatePiece(emptyPiece, r, c, null);
     }
   }
-  document.body.appendChild(this.board);
-  document.addEventListener(MeldMoveEvent.TYPE, this.handleMovePiece.bind(this), false);
-  document.addEventListener(MeldAddEvent.TYPE, this.handleAddPiece.bind(this), false);
+  this.moveEventListener = this.handleMovePiece.bind(this);
+  this.addEventListener = this.handleAddPiece.bind(this);
+  document.addEventListener(MeldMoveEvent.TYPE, this.moveEventListener, false);
+  document.addEventListener(MeldAddEvent.TYPE, this.addEventListener, false);
+};
+
+MeldView.prototype.exitDocument = function() {
+  while (this.board.firstChild) {
+    this.board.removeChild(this.board.firstChild);
+  }
+  this.nextPieceContainer.removeChild(this.nextPiece);
+  document.removeEventListener(MeldMoveEvent.TYPE, this.moveEventListener, false);
+  document.removeEventListener(MeldAddEvent.TYPE, this.addEventListener, false);
 };
 
 MeldView.prototype.handleMovePiece = function(event) {
