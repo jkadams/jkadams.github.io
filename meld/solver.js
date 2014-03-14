@@ -66,7 +66,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
 	      	var maxNextPiece = depthRemaining < depthNewCards - 1 ? 3 : 1;
 	        for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
 	          var randomGame = tempGame.copy();
-	          randomGame.makeNextMove(deltaR, deltaC, nextLocations[i], nextPiece);
+	          randomGame.respondToUser(deltaR, deltaC, nextLocations[i], nextPiece);
 	          sum += this.moveScores(randomGame, depthRemaining + 1);
 	          count++;
 	        }

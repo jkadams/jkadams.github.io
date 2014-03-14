@@ -79,7 +79,7 @@ MeldGame.prototype.move = function(deltaR, deltaC) {
   return moved;
 };
 
-MeldGame.prototype.makeNextMove = function(deltaR, deltaC, newPosition, newNextValue) {
+MeldGame.prototype.respondToUser = function(deltaR, deltaC, newPosition, nextValue, bonusValue) {
   var newR, newC;
   if (deltaR != 0) {
     newC = newPosition;
@@ -95,9 +95,12 @@ MeldGame.prototype.makeNextMove = function(deltaR, deltaC, newPosition, newNextV
   } else if (deltaC == -1) {
     newC = MeldGame.COLUMNS - 1;
   }
-  var actualNextValue = this.nextValue;
-  this.addPiece(newR, newC, actualNextValue);
-  this.nextValue = newNextValue;
+  var newValue = this.nextValue;
+  if (newValue == MeldGame.NEXT_BONUS) {
+    newValue = bonusValue;
+  }
+  this.addPiece(newR, newC, newValue);
+  this.nextValue = nextValue;
 };
 
 MeldGame.prototype.addPiece = function(r, c, value) {

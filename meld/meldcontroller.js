@@ -113,8 +113,12 @@ MeldController.prototype.move = function(m) {
   var moved = this.game.move(deltaR, deltaC);
   if (moved.length != 0) {
     var randomEntry = moved[Math.floor(Math.random() * moved.length)];
+    var bonusValue = null;
+    if (this.game.nextValue == -1) {
+      bonusValue = this.randomBonusValue();
+    }
     var randomNextValue = this.randomNextValue();
-    this.game.makeNextMove(deltaR, deltaC, randomEntry, randomNextValue);
+    this.game.respondToUser(deltaR, deltaC, randomEntry, randomNextValue, bonusValue);
     this.view.showNextValue(); // handle with an event?
   }
   return moved.length != 0;
