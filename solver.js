@@ -1,5 +1,6 @@
-function Solver(ply) {
-  this.ply = ply;
+function Solver(depthNewCards, depthNoNewCards) {
+  this.depthNewCards = depthNewCards;
+  this.depthNoNewCards = depthNoNewCards;
   this.nextMove = null;
 }
 
@@ -25,7 +26,7 @@ Solver.finalBoardScore = function(game) {
 };
 
 Solver.prototype.moveScores = function(game, depthRemaining) {
-  if (depthRemaining == this.ply) {
+  if (depthRemaining == this.depthNewCards + this.depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
   var bestMove = 'NONE';
@@ -55,11 +56,10 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
     var sum = 0;
     var count = 0;
     var expectedScore;
-    var RANDOM_NEXT_MOVES = 3;
     if (nextLocations.length > 0) {
-	    if (depthRemaining < RANDOM_NEXT_MOVES) {
+	    if (depthRemaining < this.depthNewCards) {
 	      for (var i = 0; i < nextLocations.length; i++) {
-	      	var maxNextPiece = depthRemaining < RANDOM_NEXT_MOVES - 1 ? 3 : 1;
+	      	var maxNextPiece = depthRemaining < this.depthNewCards - 1 ? 3 : 1;
 	        for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
 	          var randomGame = tempGame.copy();
 	          randomGame.makeNextMove(deltaR, deltaC, nextLocations[i], nextPiece);
@@ -74,7 +74,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
 	    } else {
 	      expectedScore = this.moveScores(tempGame, depthRemaining + 1);
 	    }
-	    
+
 		if (expectedScore < bestScore || bestMove == 'NONE') {
 		  bestScore = expectedScore;
 		  bestMove = m;
