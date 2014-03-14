@@ -9,33 +9,34 @@
     <script>
     var controller = new MeldController();
     var worker, solver;
+    var autoMove;
     try {
       worker = new Worker("worker.js");
-
-      worker.addEventListener("message", function (oEvent) {
-          var move = oEvent.data;
-          if (move == 'NONE') {
-          console.log(controller.nextValueString);
-          return;
-          }
-          var wasSuccessful = makeMove(move);
-          if (wasSuccessful && autoMove) {
-          window.setTimeout(requestBestMove, 250);
-          }
-          }, false);
+      worker.addEventListener("message", workerMessageHandler, false);
     } catch (e) {
       console.log('Could not construct worker. Using main thread.');
       solver = new Solver(3, 1);
     }
 
-    var autoMove;
+    function workerMessageHandler(event) {
+      var move = event.data;
+      if (move == 'NONE') {
+        console.log(controller.nextValueString);
+        return;
+      }
+      var wasSuccessful = makeMove(move);
+      if (wasSuccessful && autoMove) {
+        window.setTimeout(requestBestMove, 250);
+      }
+    }
+
     function handleToggleAutoMove(event) {
       autoMove = event.target.checked;
-
       if (autoMove) {
         requestBestMove();
       }
     }
+
     function handleNewGame(event) {
       newGame();
     }
