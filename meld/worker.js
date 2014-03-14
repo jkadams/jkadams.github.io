@@ -1,4 +1,4 @@
-importScripts('threesgame.js', 'solver.js');
+importScripts('meldgame.js', 'solver.js');
 var solver = new Solver(3, 3);
 
 onmessage = function(oEvent) {
