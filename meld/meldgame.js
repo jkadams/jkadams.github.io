@@ -1,5 +1,11 @@
+// Number of rows and columns in the game.
 MeldGame.ROWS = 4;
 MeldGame.COLUMNS = 4;
+
+// What MeldGame.nextValue will be if the next card is a bonus card.
+MeldGame.NEXT_BONUS = -1;
+
+// Move direction enum.
 var Move = { LEFT : 0, UP : 1, RIGHT : 2, DOWN : 3 };
 
 function MeldGame(opt_existingGame) {
@@ -55,9 +61,6 @@ MeldGame.prototype.highestValue = function() {
 
 // Returns a list of rows or columns that were moved.
 MeldGame.prototype.move = function(deltaR, deltaC) {
-//  if (Math.abs(deltaC) + Math.abs(deltaR) !== 1) {
-//    throw new Error("Invalid delta " + deltaR + ", " + deltaC);
-//  }
   var moved = [];
   var isVertical = deltaR != 0;
   for (var r = 0; r < MeldGame.ROWS; r++) {
@@ -142,4 +145,11 @@ MeldGame.prototype.movePiece = function(r, c, deltaR, deltaC) {
       {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
     this.eventTarget.dispatchEvent(movePieceEvent);
   }
+};
+
+MeldGame.prototype.isGameOver = function() {
+  return this.copy().move(0, -1).length == 0 &&
+      this.copy().move(-1, 0).length == 0 &&
+      this.copy().move(0, 1).length == 0 &&
+      this.copy().move(1, 0).length == 0;
 };

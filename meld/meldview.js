@@ -101,8 +101,8 @@ MeldView.prototype.handleAddPiece = function(event) {
 
 MeldView.prototype.showNextValue = function() {
   var nextValue = this.game.nextValue;
-  if (nextValue > 3) {
-    nextValue = '';
+  if (nextValue == MeldGame.NEXT_BONUS) {
+    nextValue = '+';
   }
   this.updatePieceValue(this.nextPiece, nextValue);
 };

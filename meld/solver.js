@@ -15,10 +15,7 @@ Solver.finalBoardScore = function(game) {
   var pieceCount = game.pieceCount();
   var score = pieceCount;
   if (pieceCount == MeldGame.ROWS * MeldGame.COLUMNS) {
-    if (game.copy().move(0, -1).length == 0 &&
-        game.copy().move(-1, 0).length == 0 &&
-        game.copy().move(0, 1).length == 0 &&
-        game.copy().move(1, 0).length == 0) {
+    if (game.isGameOver()) {
       score = Solver.LOSE_SCORE;
     }
   }

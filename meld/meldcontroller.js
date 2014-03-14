@@ -7,11 +7,14 @@ MeldController.prototype.randomNextValue = function() {
   var highestValue = this.game.highestValue();
   var useBonus = highestValue >= 48 && Math.random() < 1/21;
   if (useBonus) {
+    return MeldGame.NEXT_BONUS;
+    /*
     var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
     var randBonus = 1 + Math.floor(Math.random() * range);
     var r = Math.pow(2, randBonus) * 24;
     this.nextValueString += r + ',';
     return r;
+    */
   }
   var left = this.game.remaining[0] + this.game.remaining[1] + this.game.remaining[2];
   var nextCard = Math.floor(Math.random() * left);
