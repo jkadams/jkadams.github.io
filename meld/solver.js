@@ -4,14 +4,18 @@ function Solver(depthNewCards, depthNoNewCards) {
   this.nextMove = null;
 }
 
+var evaluated = 0;
+
 Solver.prototype.findBestMove = function(game) {
+  var startTime = new Date();
+  evaluated = 0;
   this.moveScores(game, 0);
+  var endTime = new Date();
+  console.log((endTime-startTime)+','+evaluated);
   return this.nextMove;
 };
 
 Solver.LOSE_SCORE = 1000;
-
-var evaluated = 0;
 
 Solver.finalBoardScore = function(game) {
   var pieceCount = game.pieceCount();
