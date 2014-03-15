@@ -19,6 +19,7 @@ body {
   width: 50px;
   padding: 10px;
   margin: auto;
+  text-align: center;
 }
 .gamePiece {
   z-index: 4;
