@@ -9,21 +9,21 @@ MeldController.prototype.randomNextValue = function() {
   if (useBonus) {
     return MeldGame.NEXT_BONUS;
   }
-  var left = this.game.remaining[0] + this.game.remaining[1] + this.game.remaining[2];
+  var left = this.remaining[0] + this.remaining[1] + this.remaining[2];
   var nextCard = Math.floor(Math.random() * left);
   var r;
-  if (nextCard < this.game.remaining[0]) {
+  if (nextCard < this.remaining[0]) {
     r = 1;
-    this.game.remaining[0]--;
-  } else if (nextCard < this.game.remaining[0] + this.game.remaining[1]) {
+    this.remaining[0]--;
+  } else if (nextCard < this.remaining[0] + this.remaining[1]) {
     r = 2;	
-    this.game.remaining[1]--;
+    this.remaining[1]--;
   } else {
     r = 3;
-    this.game.remaining[2]--;
+    this.remaining[2]--;
   }
   if (left == 1) {
-    this.game.remaining = [4, 4, 4];	
+    this.remaining = [4, 4, 4];	
   }
   this.nextValueList.push(r);
   return r;
@@ -43,7 +43,11 @@ MeldController.prototype.startNewGame = function() {
     this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
+  // For logging purposes
   this.nextValueList = [];
+  // This should be on MeldGame but we don't use it in the solver,
+  // so I'm saving space for now.
+  this.remaining = [4, 4, 4];
   this.game = new MeldGame();
   this.game.eventTarget = document;
   this.view = new MeldView(this.game);
@@ -52,6 +56,8 @@ MeldController.prototype.startNewGame = function() {
   this.keyListener = this.handleKeyDown.bind(this);
   this.view.board.addEventListener('keydown', this.keyListener); 
 
+  // Is this the new-game algorithm?
+  // Or is it "swipe in a random valid direction 9 times"?
   for (var i = 0; i < (MeldGame.ROWS - 1) * (MeldGame.COLUMNS - 1); i++) {
     var r = Math.floor(Math.random() * 4);
     var c = Math.floor(Math.random() * 4);
@@ -115,8 +121,9 @@ MeldController.prototype.move = function(m) {
       throw new Error('Invalid move: ' + m);
   }
   var moved = this.game.move(deltaR, deltaC);
-  if (moved.length != 0) {
-    var randomEntry = moved[Math.floor(Math.random() * moved.length)];
+  if (moved != 0) {
+    var movedArray = MeldGame.movedArray(moved);
+    var randomEntry = movedArray[Math.floor(Math.random() * movedArray.length)];
     var bonusValue = null;
     if (this.game.nextValue == MeldGame.NEXT_BONUS) {
       bonusValue = this.randomBonusValue();

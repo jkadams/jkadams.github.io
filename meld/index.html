@@ -16,7 +16,7 @@
       worker.addEventListener("message", workerMessageHandler, false);
     } catch (e) {
       console.log('Could not construct worker. Using main thread.');
-      solver = new Solver(3, 1);
+      solver = new Solver(3, 3);
     }
 
     function workerMessageHandler(event) {
@@ -33,7 +33,7 @@
     
     function logAndReset() {
       console.log(controller.nextValueList.length);
-      console.log(controller.game.pieces);
+      console.log(controller.game);
       var hiVal = controller.game.highestValue();
       if (!highestCounts[hiVal]) {
         highestCounts[hiVal] = 0;
