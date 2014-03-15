@@ -22,7 +22,7 @@ Solver.finalBoardScore = function(game) {
   return score;
 };
 
-Solver.prototype.moveScores = function(game, depthRemaining) {
+Solver.prototype.moveScores = function(game, depthGone) {
   var depthNewCards = this.depthNewCards;
   var depthNoNewCards = this.depthNoNewCards;
   if (game.highestValue() <= 48) {
@@ -30,7 +30,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
     depthNoNewCards = 2;
   }
 
-  if (depthRemaining == depthNewCards + depthNoNewCards) {
+  if (depthGone == depthNewCards + depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
   var bestMove = 'NONE';
@@ -61,22 +61,22 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
     var count = 0;
     var expectedScore;
     if (nextLocations.length > 0) {
-      if (depthRemaining < depthNewCards) {
+      if (depthGone < depthNewCards) {
         for (var i = 0; i < nextLocations.length; i++) {
-          var maxNextPiece = depthRemaining < depthNewCards - 1 ? 3 : 1;
+          var maxNextPiece = depthGone < depthNewCards - 1 ? 3 : 1;
           for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
             var randomGame = tempGame.copy();
             randomGame.respondToUser(deltaR, deltaC, nextLocations[i], nextPiece, 6);
-            sum += this.moveScores(randomGame, depthRemaining + 1);
+            sum += this.moveScores(randomGame, depthGone + 1);
             count++;
           }
         }
         expectedScore = sum / count;
-        if (depthRemaining == 0) {
+        if (depthGone == 0) {
           // console.log(m+': '+expectedScore);
         }
       } else {
-        expectedScore = this.moveScores(tempGame, depthRemaining + 1);
+        expectedScore = this.moveScores(tempGame, depthGone + 1);
       }
 
       if (expectedScore < bestScore || bestMove == 'NONE') {
@@ -85,7 +85,7 @@ Solver.prototype.moveScores = function(game, depthRemaining) {
       }
     }
   }
-  if (depthRemaining == 0) {
+  if (depthGone == 0) {
     this.nextMove = bestMove;
     // console.log('Best move: ' + bestMove);
   }
