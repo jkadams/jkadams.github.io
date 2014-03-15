@@ -39,6 +39,7 @@ function MeldView(game) {
 MeldView.prototype.enterDocument = function() {
   this.nextPieceContainer = document.getElementById('nextPieceContainer');
   this.nextPiece = document.createElement('div');
+  this.nextPiece.style.position = 'relative';
   var content = document.createElement('div');
   content.className = 'pieceContent';
   this.nextPiece.appendChild(content);
