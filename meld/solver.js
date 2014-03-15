@@ -6,7 +6,7 @@ function Solver(depthNewCards, depthNoNewCards) {
 
 var evaluated = 0;
 var times = [];
-var evaluated = [];
+var evalcount = [];
 
 Solver.prototype.findBestMove = function(game) {
   var startTime = new Date();
@@ -14,7 +14,7 @@ Solver.prototype.findBestMove = function(game) {
   this.moveScores(game, 0);
   var endTime = new Date();
   times.push(endTime-startTime);
-  evaluated.push(evaluated);
+  evalcount.push(evaluated);
   return this.nextMove;
 };
 
