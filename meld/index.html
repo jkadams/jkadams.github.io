@@ -76,7 +76,7 @@
       }
       var wasSuccessful = controller.move(MeldGame.Move[move]);
       if (wasSuccessful && autoMove) {
-        window.setTimeout(requestBestMove, 250);
+        window.setTimeout(requestBestMove, 10);
       }
     }
     </script>
