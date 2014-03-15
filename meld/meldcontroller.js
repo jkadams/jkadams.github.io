@@ -25,7 +25,7 @@ MeldController.prototype.randomNextValue = function() {
   if (left == 1) {
     this.game.remaining = [4, 4, 4];	
   }
-  this.nextValueString += r + ',';
+  this.nextValueList.push(r);
   return r;
 };
 
@@ -34,7 +34,7 @@ MeldController.prototype.randomBonusValue = function() {
   var range = Math.round(Math.log(highestValue / 24) / Math.LN2);
   var randBonus = 1 + Math.floor(Math.random() * range);
   var r = Math.pow(2, randBonus) * 3;
-  this.nextValueString += r + ',';
+  this.nextValueList.push(r);
   return r;
 };
 
@@ -43,7 +43,7 @@ MeldController.prototype.startNewGame = function() {
     this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
-  this.nextValueString = '';
+  this.nextValueList = [];
   this.game = new MeldGame();
   this.game.eventTarget = document;
   this.view = new MeldView(this.game);

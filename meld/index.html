@@ -32,7 +32,7 @@
     }
     
     function logAndReset() {
-      console.log(controller.nextValueString);
+      console.log(controller.nextValueList.length);
       console.log(controller.game.pieces);
       var hiVal = controller.game.highestValue();
       if (!highestCounts[hiVal]) {
