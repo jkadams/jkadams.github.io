@@ -5,13 +5,16 @@ function Solver(depthNewCards, depthNoNewCards) {
 }
 
 var evaluated = 0;
+var times = [];
+var evaluated = [];
 
 Solver.prototype.findBestMove = function(game) {
   var startTime = new Date();
   evaluated = 0;
   this.moveScores(game, 0);
   var endTime = new Date();
-  console.log((endTime-startTime)+','+evaluated);
+  times.push(endTime-startTime);
+  evaluated.push(evaluated);
   return this.nextMove;
 };
 
