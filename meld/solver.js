@@ -11,6 +11,8 @@ Solver.prototype.findBestMove = function(game) {
 
 Solver.LOSE_SCORE = 1000;
 
+var evaluated = 0;
+
 Solver.finalBoardScore = function(game) {
   var pieceCount = game.pieceCount();
   var score = pieceCount;
@@ -19,6 +21,7 @@ Solver.finalBoardScore = function(game) {
       score = Solver.LOSE_SCORE;
     }
   }
+  evaluated++;
   return score;
 };
 
