@@ -20,6 +20,7 @@ body {
   padding: 10px;
   margin: auto;
   text-align: center;
+  font-weight: bold;
 }
 .gamePiece {
   z-index: 4;
