@@ -9,13 +9,24 @@ var times = [];
 var evalcount = [];
 
 Solver.prototype.findBestMove = function(game) {
-  var startTime = new Date();
+  //var startTime = new Date();
   evaluated = 0;
   this.moveScores(game, 0);
-  var endTime = new Date();
-  times.push(endTime-startTime);
-  evalcount.push(evaluated);
-  return this.nextMove;
+  //var endTime = new Date();
+  //times.push(endTime-startTime);
+  //evalcount.push(evaluated);
+  switch (this.nextMove) {
+    case 0:
+      return 'LEFT';
+    case 1:
+      return 'UP';
+    case 2:
+      return 'RIGHT';
+    case 3:
+      return 'DOWN';
+    default:
+      return 'NONE';
+  }
 };
 
 Solver.LOSE_SCORE = 1000;
@@ -44,41 +55,37 @@ Solver.prototype.moveScores = function(game, depthGone) {
   if (depthGone == this.depthNewCards + this.depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
-  var bestMove = 'NONE';
+  var bestMove = null;
   var bestScore = Solver.LOSE_SCORE;
-  for (var m in MeldGame.Move) {
-    var moveDirection = MeldGame.Move[m];
+  for (var moveDirection = 0; moveDirection < 4; moveDirection++) {
     var tempGame = game.copy();
     var newLocations = tempGame.move(moveDirection);
     var sum = 0;
     var count = 0;
     var expectedScore;
+    // If we're using the nextValue, try 1/2/3.
+    // Otherwise, just use 1 and it will go unused.
+    var maxNextPiece = depthGone < this.depthNewCards - 1 ? 3 : 1;
     if (newLocations != 0) {
       if (depthGone < this.depthNewCards) {
-        var newLocationsArray = MeldGame.movedArray(newLocations);
-        for (var i = 0; i < newLocationsArray.length; i++) {
-          // If we're using the nextValue, try all three types.
-          // Otherwise, just use one and it will go unused.
-          var newLocation = newLocationsArray[i];
-          var maxNextPiece = depthGone < this.depthNewCards - 1 ? 3 : 1;
-          for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
-            var randomGame = tempGame.copy();
-            randomGame.respondToUser(moveDirection, newLocation, nextPiece, 6);
-            sum += this.moveScores(randomGame, depthGone + 1);
-            count++;
+        for (var newLocation = 0; newLocation < 4; newLocation++) {
+          if (newLocations & (1 << newLocation)) {
+            for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
+              var randomGame = tempGame.copy();
+              randomGame.respondToUser(moveDirection, newLocation, nextPiece, 6);
+              sum += this.moveScores(randomGame, depthGone + 1);
+              count++;
+            }
           }
         }
         expectedScore = sum / count;
-//        if (depthGone == 0) {
-//           console.log(m+': '+expectedScore);
-//        }
       } else {
         expectedScore = this.moveScores(tempGame, depthGone + 1);
       }
 
-      if (expectedScore < bestScore || bestMove == 'NONE') {
+      if (bestMove == null || expectedScore < bestScore) {
         bestScore = expectedScore;
-        bestMove = m;
+        bestMove = moveDirection;
       }
     }
   }

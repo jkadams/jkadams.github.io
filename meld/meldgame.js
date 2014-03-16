@@ -193,7 +193,7 @@ MeldGame.prototype.move = function(moveDirection) {
   for (var i = 0; i < 4; i++) { // the dimension perpendicular to the movement
     // We want to move the 4 cards in the direction from v3 -> v0.
     var v0, v1, v2, v3;
-    var wasDimensionMoved = false;
+    var whatMoved = 0;
     switch (moveDirection) {
       case MeldGame.Move.LEFT:
         v0 = this.getPieceBits(i, 0);
@@ -225,48 +225,48 @@ MeldGame.prototype.move = function(moveDirection) {
     if (newV != v0) {
       v0 = newV;
       v1 = 0;
-      wasDimensionMoved = true;
+      whatMoved |= 3; // changed 0 and 1
     }
     newV = MeldGame.combineValues(v2, v1);
     if (newV != v1) {
       v1 = newV;
       v2 = 0;
-      wasDimensionMoved = true;
+      whatMoved |= 6; // changed 1 and 2
     }
     newV = MeldGame.combineValues(v3, v2);
     if (newV != v2) {
       v2 = newV;
       v3 = 0;
-      wasDimensionMoved = true;
+      whatMoved |= 12; // changed 2 and 3
     }
-    if (wasDimensionMoved) {
+    if (whatMoved) {
       moved |= (1 << i);
     }
     
     switch (moveDirection) {
       case MeldGame.Move.LEFT:
-        this.setPieceBits(i, 0, v0);
-        this.setPieceBits(i, 1, v1);
-        this.setPieceBits(i, 2, v2);
-        this.setPieceBits(i, 3, v3);
+        if (whatMoved & 1) this.setPieceBits(i, 0, v0);
+        if (whatMoved & 2) this.setPieceBits(i, 1, v1);
+        if (whatMoved & 4) this.setPieceBits(i, 2, v2);
+        if (whatMoved & 8) this.setPieceBits(i, 3, v3);
         break;
       case MeldGame.Move.UP:
-        this.setPieceBits(0, i, v0);
-        this.setPieceBits(1, i, v1);
-        this.setPieceBits(2, i, v2);
-        this.setPieceBits(3, i, v3);
+        if (whatMoved & 1) this.setPieceBits(0, i, v0);
+        if (whatMoved & 2) this.setPieceBits(1, i, v1);
+        if (whatMoved & 4) this.setPieceBits(2, i, v2);
+        if (whatMoved & 8) this.setPieceBits(3, i, v3);
         break;
       case MeldGame.Move.RIGHT:     
-        this.setPieceBits(i, 3, v0);
-        this.setPieceBits(i, 2, v1);
-        this.setPieceBits(i, 1, v2);
-        this.setPieceBits(i, 0, v3); 
+        if (whatMoved & 1) this.setPieceBits(i, 3, v0);
+        if (whatMoved & 2) this.setPieceBits(i, 2, v1);
+        if (whatMoved & 4) this.setPieceBits(i, 1, v2);
+        if (whatMoved & 8) this.setPieceBits(i, 0, v3); 
         break;
       case MeldGame.Move.DOWN:
-        this.setPieceBits(3, i, v0);
-        this.setPieceBits(2, i, v1);
-        this.setPieceBits(1, i, v2);
-        this.setPieceBits(0, i, v3);
+        if (whatMoved & 1) this.setPieceBits(3, i, v0);
+        if (whatMoved & 2) this.setPieceBits(2, i, v1);
+        if (whatMoved & 4) this.setPieceBits(1, i, v2);
+        if (whatMoved & 8) this.setPieceBits(0, i, v3);
         break;
     }
   }
