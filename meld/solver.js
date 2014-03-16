@@ -47,27 +47,9 @@ Solver.prototype.moveScores = function(game, depthGone) {
   var bestMove = 'NONE';
   var bestScore = Solver.LOSE_SCORE;
   for (var m in MeldGame.Move) {
-    var deltaR, deltaC;
-    switch (MeldGame.Move[m]) {
-      case MeldGame.Move.LEFT: // left
-        deltaR = 0;
-        deltaC = -1;
-        break;
-      case MeldGame.Move.UP: // up
-        deltaR = -1;
-        deltaC = 0;
-        break;
-      case MeldGame.Move.RIGHT: // right
-        deltaR = 0;
-        deltaC = 1;
-        break;
-      case MeldGame.Move.DOWN: // down
-        deltaR = 1;
-        deltaC = 0;
-        break;
-    }
+    var moveDirection = MeldGame.Move[m];
     var tempGame = game.copy();
-    var newLocations = tempGame.move(deltaR, deltaC);
+    var newLocations = tempGame.move(moveDirection);
     var sum = 0;
     var count = 0;
     var expectedScore;
@@ -81,7 +63,7 @@ Solver.prototype.moveScores = function(game, depthGone) {
           var maxNextPiece = depthGone < this.depthNewCards - 1 ? 3 : 1;
           for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
             var randomGame = tempGame.copy();
-            randomGame.respondToUser(deltaR, deltaC, newLocation, nextPiece, 6);
+            randomGame.respondToUser(moveDirection, newLocation, nextPiece, 6);
             sum += this.moveScores(randomGame, depthGone + 1);
             count++;
           }

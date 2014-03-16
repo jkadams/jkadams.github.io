@@ -99,28 +99,7 @@ MeldController.prototype.handleKeyDown = function(e) {
 };
 
 MeldController.prototype.move = function(m) {
-  var deltaR, deltaC;
-  switch (m) {
-    case MeldGame.Move.LEFT: // left
-      deltaR = 0;
-      deltaC = -1;
-      break;
-    case MeldGame.Move.UP: // up
-      deltaR = -1;
-      deltaC = 0;
-      break;
-    case MeldGame.Move.RIGHT: // right
-      deltaR = 0;
-      deltaC = 1;
-      break;
-    case MeldGame.Move.DOWN: // down
-      deltaR = 1;
-      deltaC = 0;
-      break;
-    default:
-      throw new Error('Invalid move: ' + m);
-  }
-  var moved = this.game.move(deltaR, deltaC);
+  var moved = this.game.moveWithEvents(m);
   if (moved != 0) {
     var movedArray = MeldGame.movedArray(moved);
     var randomEntry = movedArray[Math.floor(Math.random() * movedArray.length)];
@@ -129,7 +108,7 @@ MeldController.prototype.move = function(m) {
       bonusValue = this.randomBonusValue();
     }
     var randomNextValue = this.randomNextValue();
-    this.game.respondToUser(deltaR, deltaC, randomEntry, randomNextValue, bonusValue);
+    this.game.respondToUser(m, randomEntry, randomNextValue, bonusValue);
     this.view.showNextValue(); // handle with an event?
   }
   return moved.length != 0;

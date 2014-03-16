@@ -9,20 +9,24 @@
  *  0   4   8  12   pieces2
  * 16  20  24  28   pieces2
  * 
- * The 4-bit number at each offset maps to the value in this way:
+ * The nibble at each offset maps to the value in this way:
  * 
  * 0 : 0 (no tile)
  * 1 : 1
  * 2 : 2
  * k : 3 * 2^(k-3)
  * 
+ * If a card in the game were to go over 12288, bad things would happen.
+ * 
  * We store the next value to be seen in a third integer.
  * TODO: throw in the undrawn card stack to that integer if necessary
  */
 
 // Number of rows and columns on a game board.
+// Changing this will probably break things.
 MeldGame.ROWS = 4;
 MeldGame.COLUMNS = 4;
+MeldGame.NIBBLE_SIZE = 4;
 
 // What MeldGame.nextValue will be if the next card is a bonus card.
 MeldGame.NEXT_BONUS = -1;
@@ -56,6 +60,13 @@ MeldGame.prototype.copy = function() {
   return new MeldGame(this);
 };
 
+// Returns whether this board is equal to the given other board.
+MeldGame.prototype.equals = function(other) {
+  return this.pieces1 == other.pieces1 &&
+      this.pieces2 == other.pieces2 &&
+      this.nextValue == other.nextValue;
+};
+
 // Maps from 4 bit integers to the actual value of the card.
 MeldGame.BITS_TO_VALUES = [0, 1, 2, 3, 6, 12, 24, 48, 96, 192, 384, 768, 1536, 3072, 6144, 12288];
 
@@ -71,10 +82,10 @@ MeldGame.prototype.getPieceBits = function(r, c) {
   var offset;
   if (r < 2) {
     whichPiece = this.pieces1;
-    offset = 4 * (MeldGame.COLUMNS * r + c);
+    offset = MeldGame.NIBBLE_SIZE * (MeldGame.COLUMNS * r + c);
   } else {
     whichPiece = this.pieces2;
-    offset = 4 * (MeldGame.COLUMNS * (r - 2) + c);
+    offset = MeldGame.NIBBLE_SIZE * (MeldGame.COLUMNS * (r - 2) + c);
   }
   return 0xF & (whichPiece >> offset);
 };
@@ -86,10 +97,10 @@ MeldGame.prototype.setPiece = function(r, c, v) {
 MeldGame.prototype.setPieceBits = function(r, c, bits) {
   var offset;
   if (r < 2) {
-    offset = 4 * (MeldGame.COLUMNS * r + c);
+    offset = MeldGame.NIBBLE_SIZE * (MeldGame.COLUMNS * r + c);
     this.pieces1 = (this.pieces1 & ~(0xF << offset)) | (bits << offset);
   } else {
-    offset = 4 * (MeldGame.COLUMNS * (r - 2) + c);
+    offset = MeldGame.NIBBLE_SIZE * (MeldGame.COLUMNS * (r - 2) + c);
     this.pieces2 = (this.pieces2 & ~(0xF << offset)) | (bits << offset);
   }
 };
@@ -125,17 +136,40 @@ MeldGame.movedArray = function(set) {
     set >>= 1;
   }
   return array;
-}
+};
 
 // Returns a 4 element bit set containing the rows or columns that moved.
-MeldGame.prototype.move = function(deltaR, deltaC) {
+// Also fires events that update the view.
+MeldGame.prototype.moveWithEvents = function(moveDirection) {
+  var deltaR, deltaC;
+  switch (moveDirection) {
+    case MeldGame.Move.LEFT:
+      deltaR = 0;
+      deltaC = -1;
+      break;
+    case MeldGame.Move.UP:
+      deltaR = -1;
+      deltaC = 0;
+      break;
+    case MeldGame.Move.RIGHT:
+      deltaR = 0;
+      deltaC = 1;
+      break;
+    case MeldGame.Move.DOWN:
+      deltaR = 1;
+      deltaC = 0;
+      break;
+    default:
+      throw new Error('Invalid move: ' + m);
+  }
   var moved = 0;
   var isVertical = deltaR != 0;
   for (var r = 0; r < MeldGame.ROWS; r++) {
     var rT = deltaR == 1 ? MeldGame.ROWS - 1 - r : r;
     for (var c = 0; c < MeldGame.COLUMNS; c++) {
       var cT = deltaC == 1 ? MeldGame.COLUMNS - 1 - c : c;
-      if (this.movePieceIfPossible(rT, cT, deltaR, deltaC)) {
+      if (this.canMovePiece(rT, cT, deltaR, deltaC)) {
+        this.movePiece(rT, cT, deltaR, deltaC);
         var movedEntry = isVertical ? cT : rT;
         moved |= (1 << movedEntry);
       }
@@ -144,6 +178,124 @@ MeldGame.prototype.move = function(deltaR, deltaC) {
   return moved;
 };
 
+/**
+ * Moves the board in the given direction.
+ * 
+ * This moves the 4 cards on each row/column in the direction from v3 -> v0.
+ * Merges v1 onto v0 if possible.
+ * Then merges v2 onto v1 if possible.
+ * Then merges v3 onto v2 if possible.
+ * 
+ * Returns a 4 element bit set containing the rows or columns that changed.
+ */
+MeldGame.prototype.move = function(moveDirection) {
+  var moved = 0;
+  for (var i = 0; i < 4; i++) { // the dimension perpendicular to the movement
+    // We want to move the 4 cards in the direction from v3 -> v0.
+    var v0, v1, v2, v3;
+    var wasDimensionMoved = false;
+    switch (moveDirection) {
+      case MeldGame.Move.LEFT:
+        v0 = this.getPieceBits(i, 0);
+        v1 = this.getPieceBits(i, 1);
+        v2 = this.getPieceBits(i, 2);
+        v3 = this.getPieceBits(i, 3);
+        break;
+      case MeldGame.Move.UP:
+        v0 = this.getPieceBits(0, i);
+        v1 = this.getPieceBits(1, i);
+        v2 = this.getPieceBits(2, i);
+        v3 = this.getPieceBits(3, i);
+        break;
+      case MeldGame.Move.RIGHT:      
+        v0 = this.getPieceBits(i, 3);
+        v1 = this.getPieceBits(i, 2);
+        v2 = this.getPieceBits(i, 1);
+        v3 = this.getPieceBits(i, 0);
+        break;
+      case MeldGame.Move.DOWN:
+        v0 = this.getPieceBits(3, i);
+        v1 = this.getPieceBits(2, i);
+        v2 = this.getPieceBits(1, i);
+        v3 = this.getPieceBits(0, i);
+        break;
+    }
+
+    var newV = MeldGame.combineValues(v1, v0);
+    if (newV != v0) {
+      v0 = newV;
+      v1 = 0;
+      wasDimensionMoved = true;
+    }
+    newV = MeldGame.combineValues(v2, v1);
+    if (newV != v1) {
+      v1 = newV;
+      v2 = 0;
+      wasDimensionMoved = true;
+    }
+    newV = MeldGame.combineValues(v3, v2);
+    if (newV != v2) {
+      v2 = newV;
+      v3 = 0;
+      wasDimensionMoved = true;
+    }
+    if (wasDimensionMoved) {
+      moved |= (1 << i);
+    }
+    
+    switch (moveDirection) {
+      case MeldGame.Move.LEFT:
+        this.setPieceBits(i, 0, v0);
+        this.setPieceBits(i, 1, v1);
+        this.setPieceBits(i, 2, v2);
+        this.setPieceBits(i, 3, v3);
+        break;
+      case MeldGame.Move.UP:
+        this.setPieceBits(0, i, v0);
+        this.setPieceBits(1, i, v1);
+        this.setPieceBits(2, i, v2);
+        this.setPieceBits(3, i, v3);
+        break;
+      case MeldGame.Move.RIGHT:     
+        this.setPieceBits(i, 3, v0);
+        this.setPieceBits(i, 2, v1);
+        this.setPieceBits(i, 1, v2);
+        this.setPieceBits(i, 0, v3); 
+        break;
+      case MeldGame.Move.DOWN:
+        this.setPieceBits(3, i, v0);
+        this.setPieceBits(2, i, v1);
+        this.setPieceBits(1, i, v2);
+        this.setPieceBits(0, i, v3);
+        break;
+    }
+  }
+  return moved;
+};
+
+/**
+ * Returns the new toValue when combining the two fromValue and toValue pieces.
+ * If the move is not allowed, toValue is returned.
+ * @param {Number} fromValue
+ * @param {Number} toValue
+ * @returns {Number}
+ */
+MeldGame.combineValues = function(fromValue, toValue) {
+  if (fromValue == 0) {
+    return toValue;
+  }
+  if (toValue < 3) {
+    if (toValue == 0 || fromValue + toValue == 3) {
+      return fromValue + toValue;  
+    } else {
+      return toValue;
+    }
+  } else if (fromValue == toValue) {
+    return toValue + 1;
+  } else {
+    return toValue;
+  }
+};
 
 // Returns whether any piece can move in a given direction.
 MeldGame.prototype.canMoveAnyPiece = function(deltaR, deltaC) {
@@ -157,43 +309,6 @@ MeldGame.prototype.canMoveAnyPiece = function(deltaR, deltaC) {
     }
   }
   return false;
-};
-
-MeldGame.prototype.respondToUser = function(
-        deltaR, deltaC, newPosition, nextValue, bonusValue) {
-  var newR, newC;
-  if (deltaR != 0) {
-    newC = newPosition;
-  } else {
-    newR = newPosition;
-  }
-  if (deltaR == 1) {
-    newR = 0;
-  } else if (deltaR == -1) {
-    newR = MeldGame.ROWS - 1;
-  } else if (deltaC == 1) {
-    newC = 0;
-  } else if (deltaC == -1) {
-    newC = MeldGame.COLUMNS - 1;
-  }
-  var newValue = this.nextValue;
-  if (newValue == MeldGame.NEXT_BONUS) {
-    newValue = bonusValue;
-  }
-  this.addPiece(newR, newC, newValue);
-  this.nextValue = nextValue;
-};
-
-MeldGame.prototype.addPiece = function(r, c, value) {
-//  if (this.getPiece(r, c) != 0) {
-//    throw new Error('Can not add piece where one exists');
-//  }
-  this.setPiece(r, c, value);
-  if (this.eventTarget) {
-    var addPieceEvent = new CustomEvent(MeldAddEvent.TYPE,
-        {'detail': new MeldAddEvent(r, c, value)});
-    this.eventTarget.dispatchEvent(addPieceEvent);
-  }
 };
 
 /**
@@ -239,46 +354,47 @@ MeldGame.prototype.movePiece = function(r, c, deltaR, deltaC) {
   }
 };
 
-/**
- * Moves the given piece at (r,c) by (deltaR,deltaC) if possible.
- * Returns whether the piece was moved.
- */
-MeldGame.prototype.movePieceIfPossible = function(r, c, deltaR, deltaC) {
-  if (c + deltaC < 0 || c + deltaC >= MeldGame.COLUMNS ||
-      r + deltaR < 0 || r + deltaR >= MeldGame.ROWS) {
-    return false;
+MeldGame.prototype.respondToUser = function(
+        moveDirection, newPosition, nextValue, bonusValue) {
+  var newR, newC;
+  switch (moveDirection) {
+    case MeldGame.Move.LEFT:
+      newR = newPosition;
+      newC = MeldGame.COLUMNS - 1;
+      break;
+    case MeldGame.Move.UP:
+      newR = MeldGame.ROWS - 1;
+      newC = newPosition;
+      break;
+    case MeldGame.Move.RIGHT:
+      newR = newPosition;
+      newC = 0;
+      break;
+    case MeldGame.Move.DOWN:
+      newR = 0;
+      newC = newPosition;
+      break;
+    default:
+      throw new Error('Invalid move: ' + m);
   }
-  var fromValue = this.getPieceBits(r, c);
-  if (fromValue == 0) {
-    return false;
+  var newValue = this.nextValue;
+  if (newValue == MeldGame.NEXT_BONUS) {
+    newValue = bonusValue;
   }
-  var toR = r + deltaR;
-  var toC = c + deltaC;
-  var toValue = this.getPieceBits(toR, toC);
+  this.addPiece(newR, newC, newValue);
+  this.nextValue = nextValue;
+};
 
-  var newValue;
-  if (toValue < 3) {
-    if (toValue == 0 || fromValue + toValue == 3) {
-      newValue = fromValue + toValue;  
-    } else {
-      return false;
-    }
-  } else if (fromValue == toValue) {
-    newValue = toValue + 1;
-  } else {
-    return false;
-  }
-  if (!this.canMovePiece(r, c, deltaR, deltaC)) {
-    throw new Error('Can\'t move this piece.');
-  }
-  this.setPieceBits(toR, toC, newValue);
-  this.setPieceBits(r, c, 0);
+MeldGame.prototype.addPiece = function(r, c, value) {
+//  if (this.getPiece(r, c) != 0) {
+//    throw new Error('Can not add piece where one exists');
+//  }
+  this.setPiece(r, c, value);
   if (this.eventTarget) {
-    var movePieceEvent = new CustomEvent(MeldMoveEvent.TYPE,
-        {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
-    this.eventTarget.dispatchEvent(movePieceEvent);
+    var addPieceEvent = new CustomEvent(MeldAddEvent.TYPE,
+        {'detail': new MeldAddEvent(r, c, value)});
+    this.eventTarget.dispatchEvent(addPieceEvent);
   }
-  return true;
 };
 
 MeldGame.prototype.isGameOver = function() {
