@@ -62,7 +62,7 @@ Solver.prototype.moveScores = function(game, depthGone) {
   // If the next card is a bonus card, and we're at depth 0, try all possible.
   var bonusMax = 6;
   if (depthGone == 0 && game.nextValue == MeldGame.NEXT_BONUS) {
-    bonusMax = tempGame.highestValue() / 8;
+    bonusMax = game.highestValue() / 8;
   }
   var bestMove = null;
   var bestScore = Solver.LOSE_SCORE;
