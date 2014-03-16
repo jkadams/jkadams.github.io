@@ -33,15 +33,15 @@ Solver.finalBoardScore = function(game) {
 };
 
 Solver.prototype.moveScores = function(game, depthGone) {
-  var depthNewCards = this.depthNewCards;
-  var depthNoNewCards = this.depthNoNewCards;
-  if (game.highestValue() <= 48) {
-    // Go fast at the beginning of the game, it doesn't matter as much.
-    depthNewCards = 2;
-    depthNoNewCards = 2;
-  }
+//  var depthNewCards = this.depthNewCards;
+//  var depthNoNewCards = this.depthNoNewCards;
+//  if (game.highestValue() <= 48) {
+//    // Go fast at the beginning of the game, it doesn't matter as much.
+//    depthNewCards = 2;
+//    depthNoNewCards = 2;
+//  }
 
-  if (depthGone == depthNewCards + depthNoNewCards) {
+  if (depthGone == this.depthNewCards + this.depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
   var bestMove = 'NONE';
@@ -72,13 +72,13 @@ Solver.prototype.moveScores = function(game, depthGone) {
     var count = 0;
     var expectedScore;
     if (newLocations != 0) {
-      if (depthGone < depthNewCards) {
+      if (depthGone < this.depthNewCards) {
         var newLocationsArray = MeldGame.movedArray(newLocations);
         for (var i = 0; i < newLocationsArray.length; i++) {
           // If we're using the nextValue, try all three types.
           // Otherwise, just use one and it will go unused.
           var newLocation = newLocationsArray[i];
-          var maxNextPiece = depthGone < depthNewCards - 1 ? 3 : 1;
+          var maxNextPiece = depthGone < this.depthNewCards - 1 ? 3 : 1;
           for (var nextPiece = 1; nextPiece <= maxNextPiece; nextPiece++) {
             var randomGame = tempGame.copy();
             randomGame.respondToUser(deltaR, deltaC, newLocation, nextPiece, 6);

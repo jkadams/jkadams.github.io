@@ -132,11 +132,10 @@ MeldGame.prototype.move = function(deltaR, deltaC) {
   var moved = 0;
   var isVertical = deltaR != 0;
   for (var r = 0; r < MeldGame.ROWS; r++) {
+    var rT = deltaR == 1 ? MeldGame.ROWS - 1 - r : r;
     for (var c = 0; c < MeldGame.COLUMNS; c++) {
-      var rT = deltaR == 1 ? MeldGame.ROWS - 1 - r : r;
       var cT = deltaC == 1 ? MeldGame.COLUMNS - 1 - c : c;
-      if (this.canMovePiece(rT, cT, deltaR, deltaC)) {
-        this.movePiece(rT, cT, deltaR, deltaC);
+      if (this.movePieceIfPossible(rT, cT, deltaR, deltaC)) {
         var movedEntry = isVertical ? cT : rT;
         moved |= (1 << movedEntry);
       }
@@ -186,9 +185,9 @@ MeldGame.prototype.respondToUser = function(
 };
 
 MeldGame.prototype.addPiece = function(r, c, value) {
-  if (this.getPiece(r, c) != 0) {
-    throw new Error('Can not add piece where one exists');
-  }
+//  if (this.getPiece(r, c) != 0) {
+//    throw new Error('Can not add piece where one exists');
+//  }
   this.setPiece(r, c, value);
   if (this.eventTarget) {
     var addPieceEvent = new CustomEvent(MeldAddEvent.TYPE,
@@ -221,9 +220,6 @@ MeldGame.prototype.canMovePiece = function(r, c, deltaR, deltaC) {
  * Moves the given piece at (r,c) by (deltaR,deltaC).
  */
 MeldGame.prototype.movePiece = function(r, c, deltaR, deltaC) {
-  if (!this.canMovePiece(r, c, deltaR, deltaC)) {
-    throw new Error("Can't move piece");
-  }
   var toR = r + deltaR;
   var toC = c + deltaC;
   var toValue = this.getPieceBits(toR, toC);
@@ -241,6 +237,48 @@ MeldGame.prototype.movePiece = function(r, c, deltaR, deltaC) {
         {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
     this.eventTarget.dispatchEvent(movePieceEvent);
   }
+};
+
+/**
+ * Moves the given piece at (r,c) by (deltaR,deltaC) if possible.
+ * Returns whether the piece was moved.
+ */
+MeldGame.prototype.movePieceIfPossible = function(r, c, deltaR, deltaC) {
+  if (c + deltaC < 0 || c + deltaC >= MeldGame.COLUMNS ||
+      r + deltaR < 0 || r + deltaR >= MeldGame.ROWS) {
+    return false;
+  }
+  var fromValue = this.getPieceBits(r, c);
+  if (fromValue == 0) {
+    return false;
+  }
+  var toR = r + deltaR;
+  var toC = c + deltaC;
+  var toValue = this.getPieceBits(toR, toC);
+
+  var newValue;
+  if (toValue < 3) {
+    if (toValue == 0 || fromValue + toValue == 3) {
+      newValue = fromValue + toValue;  
+    } else {
+      return false;
+    }
+  } else if (fromValue == toValue) {
+    newValue = toValue + 1;
+  } else {
+    return false;
+  }
+  if (!this.canMovePiece(r, c, deltaR, deltaC)) {
+    throw new Error('Can\'t move this piece.');
+  }
+  this.setPieceBits(toR, toC, newValue);
+  this.setPieceBits(r, c, 0);
+  if (this.eventTarget) {
+    var movePieceEvent = new CustomEvent(MeldMoveEvent.TYPE,
+        {'detail': new MeldMoveEvent(r, c, toR, toC, this.getPiece(toR, toC))});
+    this.eventTarget.dispatchEvent(movePieceEvent);
+  }
+  return true;
 };
 
 MeldGame.prototype.isGameOver = function() {

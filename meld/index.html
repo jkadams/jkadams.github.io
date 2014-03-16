@@ -16,7 +16,7 @@
       worker.addEventListener("message", workerMessageHandler, false);
     } catch (e) {
       console.log('Could not construct worker. Using main thread.');
-      solver = new Solver(3, 3);
+      solver = new Solver(3, 2);
     }
 
     function workerMessageHandler(event) {
@@ -32,6 +32,7 @@
     }
     
     function logAndReset() {
+      console.log(controller.nextValueList);
       console.log(controller.nextValueList.length);
       console.log(controller.game);
       var hiVal = controller.game.highestValue();
@@ -85,8 +86,7 @@
     <meta name="viewport" content="width=device-width">
     </head>
     <body onload="init();">
-      <h3>Please check out <a href="http://asherv.com/threes/">Threes</a>!
-      This is just an exploration in writing AI based on the gameplay.</h3>
+      <h3>Please check out <a href="http://asherv.com/threes/">Threes</a>!</h3>
       <label><input type="checkbox" id="toggleAutoMove">Auto-move</label>
       <br>
       <input type="button" id="newGame" value="New Game">
