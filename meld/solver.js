@@ -1,3 +1,25 @@
+/**
+ * Copyright 2014 Google Inc. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * The class responsible for trying to find the best next move.
+ *
+ * @author jkadams
+ */
+
 function Solver(depthNewCards, depthNoNewCards) {
   this.depthNewCards = depthNewCards;
   this.depthNoNewCards = depthNoNewCards;
@@ -44,14 +66,6 @@ Solver.finalBoardScore = function(game) {
 };
 
 Solver.prototype.moveScores = function(game, depthGone) {
-//  var depthNewCards = this.depthNewCards;
-//  var depthNoNewCards = this.depthNoNewCards;
-//  if (game.highestValue() <= 48) {
-//    // Go fast at the beginning of the game, it doesn't matter as much.
-//    depthNewCards = 2;
-//    depthNoNewCards = 2;
-//  }
-
   if (depthGone == this.depthNewCards + this.depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
