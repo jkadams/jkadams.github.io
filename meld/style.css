@@ -1,10 +1,16 @@
 body {
  font-family: Arial, sans-serif; 
 }
+#middle {
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  text-align: center;
+}
 #gameBoard {
   z-index: 1;
   position: relative;
-  background: #ccc;
+  background: #cce;
   border-radius: 4px;
   width: 250px;
   height: 250px;
@@ -28,7 +34,7 @@ body {
   background: #fff;
   width: 50px;
   height: 50px;
-  border-radius: 4px;
+  border-radius: 8px;
   font: 20px bold Arial, sans-serif;
   text-align: center;
   transition-property: top, left;
@@ -37,6 +43,9 @@ body {
   margin: auto;
   background: black;
   color: white;
+  -moz-box-shadow:    3px 3px 3px rgba(100, 100, 100, 0.6);
+  -webkit-box-shadow: 3px 3px 3px rgba(100, 100, 100, 0.6);
+  box-shadow:         3px 3px 3px rgba(100, 100, 100, 0.6);
 }
 .pieceContent {
   line-height: 50px;
@@ -50,6 +59,9 @@ body {
   color: white;
 }
 .emptyPiece {
-  background: #aaa;
+  background: #aac;
   z-index: 2;
+  -moz-box-shadow:    none;
+  -webkit-box-shadow: none;
+  box-shadow:         none;
 }
