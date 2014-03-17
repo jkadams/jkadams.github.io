@@ -7,17 +7,29 @@
     <script src="meldcontroller.js"></script>
     <script src="solver.js"></script>
     <script>
+    // The controller for the game.
     var controller = new MeldController();
-    var worker, solver;
+
+    // The web worker, which will find a good next move in another thread.
+    var worker;
+    // The solver, which will be defined if the worker is undefined.
+    var solver;
+    
+    // Whether to automatically move using the Solver.
     var autoMove;
+    
+    // A map from highest card value to number of occurrences.
     var highestCounts = {};
+    
+    // Milliseconds between each auto-move (after it has been calculated).
     var MOVE_INTERVAL = 1;
+    
     try {
       worker = new Worker("worker.js");
       worker.addEventListener("message", workerMessageHandler, false);
     } catch (e) {
       console.log('Could not construct worker. Using main thread.');
-      solver = new Solver(3, 2);
+      solver = new Solver(2, 2);
     }
 
     function workerMessageHandler(event) {
@@ -41,7 +53,10 @@
         highestCounts[hiVal] = 0;
       }
       highestCounts[hiVal]++;
-      newGame();
+      var autoRestart = document.getElementById('toggleAutoRestart');
+      if (autoRestart.checked) {
+        newGame();
+      }
     }
 
     function handleNewGame(event) {
@@ -93,7 +108,8 @@
       <div id="gameBoard" tabindex=0></div>
       <div style="margin:10px"><span id="score" style="display:none"></span></div>
       <div><input type="button" id="newGame" value="New Game"></div>
-      <div><label><input type="checkbox" id="toggleAutoMove">Auto-move</label></div>
+      <div><label><input type="checkbox" id="toggleAutoMove">Auto-Move</label></div>
+      <div><label><input type="checkbox" id="toggleAutoRestart">Auto-Restart</label></div>
       </div>
     </body>
 </html>

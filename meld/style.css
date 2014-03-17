@@ -1,5 +1,6 @@
 body {
- font-family: Arial, sans-serif; 
+  font-family: Arial, sans-serif; 
+  font-weight: bold;
 }
 #middle {
   margin-left: auto;
@@ -8,12 +9,16 @@ body {
   text-align: center;
 }
 #score {
-  font-weight: bold;
   border: 2px solid blue;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
   padding: 5px;
+}
+#newGame {
+  padding: 5px;
+  font-family: Arial, sans-serif; 
+  font-weight: bold;
 }
 #gameBoard {
   z-index: 1;
