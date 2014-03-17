@@ -403,3 +403,16 @@ MeldGame.prototype.isGameOver = function() {
       this.canMoveAnyPiece(0, 1) ||
       this.canMoveAnyPiece(1, 0));
 };
+
+MeldGame.prototype.finalScore = function() {
+  var score = 0;
+  for (var r = 0; r < MeldGame.ROWS; r++) {
+    for (var c = 0; c < MeldGame.COLUMNS; c++) {
+      var piece = this.getPiece(r, c);
+      if (piece >= 3) {
+        score += Math.pow(3, Math.round(Math.log(piece / 3) / Math.LN2) + 1)
+      }
+    }
+  }
+  return score;
+};

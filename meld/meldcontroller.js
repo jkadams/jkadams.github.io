@@ -16,14 +16,14 @@ MeldController.prototype.randomNextValue = function() {
     r = 1;
     this.remaining[0]--;
   } else if (nextCard < this.remaining[0] + this.remaining[1]) {
-    r = 2;	
+    r = 2;
     this.remaining[1]--;
   } else {
     r = 3;
     this.remaining[2]--;
   }
   if (left == 1) {
-    this.remaining = [4, 4, 4];	
+    this.remaining = [4, 4, 4];
   }
   this.nextValueList.push(r);
   return r;
@@ -43,6 +43,9 @@ MeldController.prototype.startNewGame = function() {
     this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
+  var scoreElement = document.getElementById('score');
+  scoreElement.innerText = '';
+  scoreElement.style.display = 'none';
   // For logging purposes
   this.nextValueList = [];
   // This should be on MeldGame but we don't use it in the solver,
@@ -54,7 +57,7 @@ MeldController.prototype.startNewGame = function() {
   this.view.enterDocument();
   this.view.board.focus();
   this.keyListener = this.handleKeyDown.bind(this);
-  this.view.board.addEventListener('keydown', this.keyListener); 
+  this.view.board.addEventListener('keydown', this.keyListener);
 
   // Is this the new-game algorithm?
   // Or is it "swipe in a random valid direction 9 times"?
@@ -62,7 +65,7 @@ MeldController.prototype.startNewGame = function() {
     var r = Math.floor(Math.random() * 4);
     var c = Math.floor(Math.random() * 4);
     var value = this.randomNextValue();
-    while (this.game.getPiece(r, c) != 0) {	
+    while (this.game.getPiece(r, c) != 0) {
       r = Math.floor(Math.random() * 4);
       c = Math.floor(Math.random() * 4);
     }
@@ -110,6 +113,12 @@ MeldController.prototype.move = function(m) {
     var randomNextValue = this.randomNextValue();
     this.game.respondToUser(m, randomEntry, randomNextValue, bonusValue);
     this.view.showNextValue(); // handle with an event?
+  }
+  if (this.game.isGameOver()) {
+    var score = this.game.finalScore();
+    var scoreElement = document.getElementById('score');
+    scoreElement.innerText = 'Game over! Your score is ' + score + '.';
+    scoreElement.style.display = '';
   }
   return moved.length != 0;
 };
