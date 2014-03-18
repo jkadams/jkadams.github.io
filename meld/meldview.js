@@ -141,7 +141,7 @@ MeldView.prototype.updatePiece = function(piece, r, c, value) {
 };
 
 MeldView.prototype.updatePieceValue = function(piece, value) {
-  piece.firstChild.innerText = value;
+  piece.firstChild.textContent = value;
   piece.className = 'gamePiece';
   if (value == 1) {
     piece.className += ' onePiece';
@@ -158,7 +158,7 @@ MeldView.prototype.validateState = function() {
           throw new Error('Invalid state @ ' + r + ',' + c);
         }
       } else {
-        if (this.pieces[r][c].firstChild.innerText != this.game.getPiece(r, c)) {
+        if (this.pieces[r][c].firstChild.textContent != this.game.getPiece(r, c)) {
           throw new Error('Invalid state @ ' + r + ',' + c);
         }
       }

@@ -67,7 +67,7 @@ MeldController.prototype.startNewGame = function() {
     this.view.exitDocument();
   }
   var scoreElement = document.getElementById('score');
-  scoreElement.innerText = '';
+  scoreElement.textContent = '';
   scoreElement.style.display = 'none';
   // For logging purposes
   this.nextValueList = [];
@@ -140,7 +140,7 @@ MeldController.prototype.move = function(m) {
   if (this.game.isGameOver()) {
     var score = this.game.finalScore();
     var scoreElement = document.getElementById('score');
-    scoreElement.innerText = 'Game over! Your score is ' + score + '.';
+    scoreElement.textContent = 'Game over! Your score is ' + score + '.';
     scoreElement.style.display = '';
   }
   return moved.length != 0;
