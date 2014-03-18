@@ -32,8 +32,8 @@
       worker.addEventListener("message", workerMessageHandler, false);
     } catch (e) {
       console.log('Could not construct worker. Using main thread.');
-      solver = new Solver(2, 2);
-      MOVE_INTERVAL = 200;
+      solver = new Solver(3, 2);
+      MOVE_INTERVAL = 2;
     }
 
     function workerMessageHandler(event) {

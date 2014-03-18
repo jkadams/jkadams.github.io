@@ -54,14 +54,23 @@ Solver.prototype.findBestMove = function(game) {
 Solver.LOSE_SCORE = 1000;
 
 Solver.finalBoardScore = function(game) {
-  var pieceCount = game.pieceCount();
-  var score = pieceCount;
-  if (pieceCount == MeldGame.ROWS * MeldGame.COLUMNS) {
+  var score = 0;
+  var pieces1 = game.pieces1;
+  var pieces2 = game.pieces2;
+  for (var c = 0; c < MeldGame.COLUMNS; c++) {
+    if (pieces1 & 0xF) score++;
+    if ((pieces1 >> 16) & 0xF) score++;
+    if (pieces2 & 0xF) score++;
+    if ((pieces2 >> 16) & 0xF) score++;
+    pieces1 >>= 4;
+    pieces2 >>= 4;
+  }
+  if (score == 16) {
     if (game.isGameOver()) {
-      score = Solver.LOSE_SCORE;
+      score = Solver.LOSE_SCORE; // no possible moves
     }
   }
-  evaluated++;
+//  evaluated++;
   return score;
 };
 
@@ -112,11 +121,14 @@ Solver.prototype.moveScores = function(game, depthGone) {
         bestScore = expectedScore;
         bestMove = moveDirection;
       }
+//      if (depthGone == 0) {
+//        console.log(moveDirection + ': ' + expectedScore);
+//      }
     }
   }
   if (depthGone == 0) {
     this.nextMove = bestMove;
-    // console.log('Best move: ' + bestMove);
+//    console.log('Best move: ' + bestMove);
   }
   return bestScore;
 };

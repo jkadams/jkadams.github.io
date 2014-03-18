@@ -314,6 +314,12 @@ MeldGame.combineValues = function(fromValue, toValue) {
   }
 };
 
+MeldGame.canCombineValues = function(leftValue, rightValue) {
+  return leftValue != 0 && rightValue != 0 &&
+    ((rightValue >= 3 && rightValue == leftValue) ||
+    (rightValue < 3 && rightValue + leftValue == 3));
+};
+
 // Returns whether any piece can move in a given direction.
 MeldGame.prototype.canMoveAnyPiece = function(deltaR, deltaC) {
   for (var r = 0; r < MeldGame.ROWS; r++) {
