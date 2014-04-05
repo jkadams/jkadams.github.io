@@ -121,14 +121,10 @@ Solver.prototype.moveScores = function(game, depthGone) {
         bestScore = expectedScore;
         bestMove = moveDirection;
       }
-//      if (depthGone == 0) {
-//        console.log(moveDirection + ': ' + expectedScore);
-//      }
     }
   }
   if (depthGone == 0) {
     this.nextMove = bestMove;
-//    console.log('Best move: ' + bestMove);
   }
   return bestScore;
 };
