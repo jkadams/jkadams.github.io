@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Meld Solver</title>
+    <title>Solver</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -97,7 +97,13 @@
       }
       var wasSuccessful = controller.move(MeldGame.Move[move]);
       if (wasSuccessful && autoMove) {
-        window.setTimeout(requestBestMove, MOVE_INTERVAL);
+        var moveInterval = 1;
+        var moveIntervalElement = document.getElementById('moveInterval');
+        var m = parseInt(moveIntervalElement.value, 10);
+        if (m > 0 && m < 10000) {
+            moveInterval = m;
+        }
+        window.setTimeout(requestBestMove, m);
       }
     }
     </script>
@@ -105,12 +111,14 @@
     <body onload="init();">
       <div id="middle">
       <h2>Please check out <a href="http://asherv.com/threes/">Threes</a>!</h2>
+      <h3>This is a javascript attempt at an AI for Threes, with animation.</h3>
       <div id="nextPieceContainer"><div>Next</div></div>
       <div id="gameBoard" tabindex=0></div>
       <div style="margin:10px"><span id="score" style="display:none"></span></div>
       <div><input type="button" id="newGame" value="New Game"></div>
-      <div><label><input type="checkbox" id="toggleAutoMove">Auto-Move</label></div>
-      <div><label><input type="checkbox" id="toggleAutoRestart">Auto-Restart</label></div>
+      <div><label><input type="checkbox" id="toggleAutoMove">Enable AI</label></div>
+      <div><label><input type="checkbox" id="toggleAutoRestart">Auto-Restart AI</label></div>
+      <div><label><input type="text" id="moveInterval" value="100" style="width:40px"> Wait between moves (ms)</label></div>
       </div>
     </body>
 </html>
