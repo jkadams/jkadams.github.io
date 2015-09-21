@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dancer</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <script>
+      provide = function(namespace) {
+        var parts = namespace.split('.');
+        var currentPart;
+        var parent = window;
+        for (var i = 0; i < parts.length; i++) {
+          currentPart = parts[i];
+          parent[currentPart] = parent[currentPart] || {};
+          parent = parent[currentPart];
+        }
+        return parent;
+      };
+
+      inherits = function(subclass, superclass) {
+        function tempCtor() {};
+        tempCtor.prototype = superclass.prototype;
+        subclass.superClass_ = superclass.prototype;
+        subclass.prototype = new tempCtor();
+        subclass.prototype.constructor = subclass;
+      };
+
+      base = function(me, opt_methodName, var_args) {
+        var caller = arguments.callee.caller;
+        if (caller.superClass_) {
+          // This is a constructor. Call the superclass constructor.
+          return caller.superClass_.constructor.apply(
+              me, Array.prototype.slice.call(arguments, 1));
+        }
+        var args = Array.prototype.slice.call(arguments, 2);
+        var foundCaller = false;
+        for (var ctor = me.constructor;
+             ctor; ctor = ctor.superClass_ && ctor.superClass_.constructor) {
+          if (ctor.prototype[opt_methodName] === caller) {
+            foundCaller = true;
+          } else if (foundCaller) {
+            return ctor.prototype[opt_methodName].apply(me, args);
+          }
+        }
+
+        // If we did not find the caller in the prototype chain,
+        // then one of two things happened:
+        // 1) The caller is an instance method.
+        // 2) This method was not called by the right caller.
+        if (me[opt_methodName] === caller) {
+          return me.constructor.prototype[opt_methodName].apply(me, args);
+        } else {
+          throw Error(
+              'base called from a method of one name ' +
+              'to a method of a different name');
+        }
+      };
+    </script>
+    <script src="enemies.js"></script>
+    <script src="dancegame.js"></script>
+    <script src="danceview.js"></script>
+    <script src="dancecontroller.js"></script>
+    <script>
+    // The controller for the game.
+    var controller = new Dance.Controller();
+    function handleNewGame(event) {
+      controller.startNewGame();
+    }
+
+    function init() {
+      document.getElementById('newGame').addEventListener('click', handleNewGame);
+      controller.startNewGame();
+    }
+    </script>
+    </head>
+    <body onload="init();">
+      <div id="middle">
+      <div id="gameBoard" tabindex=0></div>
+      <div><input type="button" id="newGame" value="New Game"></div>
+      </div>
+    </body>
+</html>

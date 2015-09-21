@@ -1,0 +1,87 @@
+/**
+@import url(http://fonts.googleapis.com/css?family=Dosis:400,700);
+*/
+body {
+  font-family: 'Arial', sans-serif;
+}
+#middle {
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  text-align: center;
+}
+#score {
+  border: 2px solid #37229F;
+  border-radius: 8px;
+  padding: 5px;
+  font-weight: bold;
+}
+#newGame {
+  padding: 5px;
+  font: 1em 'Arial', sans-serif; 
+  font-weight: bold;
+}
+#gameBoard {
+  font: 1.5em 'Lucida Console', monospace;
+  white-space: pre;
+  z-index: 1;
+  position: relative;
+  background: #eee;
+  border-radius: 12px;
+  width: 500px;
+  height: 500px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #37229F;
+}
+#nextPieceContainer {
+  position: relative;
+  background: #eee;
+  border-radius: 4px;
+  border: 2px solid #37229F;
+  width: 50px;
+  padding: 10px;
+  margin: auto;
+  text-align: center;
+  font-weight: bold;
+}
+.gamePiece {
+  z-index: 4;
+  position: absolute;
+  background: #10044B;
+  color: white;
+  width: 50px;
+  height: 50px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+  font: 20px 'Arial', sans-serif;
+  font-weight: bold;
+  text-align: center;
+  transition-property: top, left;
+  transition-duration: 0.75s, 0.75s;
+  transition-delay: 0s, 0s;
+  margin: auto;
+  -moz-box-shadow:    3px 3px 3px rgba(0, 0, 0, 0.25);
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
+  box-shadow:         3px 3px 3px rgba(0, 0, 0, 0.25);
+}
+.pieceContent {
+  line-height: 50px;
+}
+.onePiece {
+  background: #B6ACE7;
+  color: black;
+}
+.twoPiece {
+  background: #8975E7;
+  color: white;
+}
+.emptyPiece {
+  background: #ccc;
+  z-index: 2;
+  -moz-box-shadow:    none;
+  -webkit-box-shadow: none;
+  box-shadow:         none;
+}

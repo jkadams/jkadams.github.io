@@ -1,0 +1,45 @@
+0: if all open, right, else left, else down, else up
+1: if all open, left, else down, else up, else right
+2: if all open, down, else up, else right, else left
+3: if all open, up, else right, else left, else down
+
+difference between fast/slow replay: the harpy moves one turn late on the fast.
+
+bat movement:
+RIGHT -> LEFT -> DOWN -> UP
+
+full video:
+3,3,1,0,0,3,2,1,3,0,0,0,1,
+0,1,0,3,0,3,1,1,3,0,1,1,1,3,2,0,1,3,3,0,1,2,2,0,2,3,3,0,2,1,2,2,1,1,1,0,3,2,2,2,3,0,2,1,3,2,1,2,2,3,2,1,1,3,2,2,2,2,3,
+2,0,3,0,3,3,0,2,0,3,2,3,3
+,3,1,3,0,3,2,1,0,3,1,3,0,3,3,2,1,1,2,2,3,0,2,1,2,1,2,0,2,3,1,2,1,2,0,3,0,2,2,3,0,0,0,2,1,0,2,2,0,0,2,0,1,1,0,3,2,2,3,3,3,2,3,1,0,0,1,0,2,0,0,2,0,2,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+ 
+3 ??? 
+3 (?down) up,
+1 (-up) left,
+0 [0,3] (up left) right,
+0 [0,3] (up) right, 
+3 [0,3] (up) right,
+2 (up) down,
+1 left,
+3 up,
+0 [0,3] (up) right,
+0 [0,3] (up) right,
+0 [0,3] (up) right,
+1 (up) left,
+
+second bat:
+
+1) 0 [0,2,3] (up down) right,
+1 (down right) left,
+0 (up down) right,
+3 (down right) up,
+0 (left down) right,
+3
+(56, but it's #60 in the rng list, what are the extra 4?)
+D,R,U,R,U,U,R,D,R,U,D,U,U
+2,0,3,0,3,3,0,2,0,3,2,3,3
+
+0,1,0,3,0,3,1,1,3,0,1,1,1,3,2,0,1,3,3,0,1,2,2,0,2,3,3,0,2,1,2,2,1,1,1,0,3,2,2,2,3,0,2,1,3,2,1,2,2,3,2,1,1,3,2,2,2,2,3,2,0,3,0,3,3,
+
+26) third bat moves down (left blocked) [1,2], is killed immediately
