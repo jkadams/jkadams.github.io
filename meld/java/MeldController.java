@@ -32,7 +32,7 @@ public class MeldController {
   public MeldController() {
     this.game = null;
     this.remaining = new int[3];
-    this.random = new Random(51652);
+    this.random = new Random(516352);
   }
 
   public int randomNextValue() {

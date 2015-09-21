@@ -89,9 +89,16 @@ public class MeldGame {
   public MeldGame copy() {
     return new MeldGame(this);
   }
+  
+  public int hashCode() {
+    return (int)(pieces ^ (pieces>>>32)) * 31 + nextValue;
+  }
 
-  // Returns whether this board is equal to the given other board.
-  public boolean equals(MeldGame other) {
+  public boolean equals(Object o) {
+    if (!(o instanceof MeldGame)) {
+      return false;
+    }
+    MeldGame other = (MeldGame) o;
     return this.pieces == other.pieces &&
         this.nextValue == other.nextValue;
   }
@@ -376,14 +383,17 @@ public class MeldGame {
   }
 
   public void printBoard() {
+    String padding = "                                       ";
     for (int r = 0; r < MeldGame.ROWS; r++) {
+      System.out.print(padding);
       if (r == 0) {
         System.out.print("(" + (this.nextValue == MeldGame.NEXT_BONUS ? "+" : this.nextValue) + ")");
       } else {
         System.out.print("   ");
       }
       for (int c = 0; c < MeldGame.COLUMNS; c++) {
-        System.out.printf("%5d ",this.getPiece(r, c));
+        int piece = this.getPiece(r, c);
+        System.out.printf("%5s ", piece == 0 ? "" : (piece + ""));
       }
       System.out.println();
     }

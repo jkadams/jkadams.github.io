@@ -24,19 +24,17 @@ function Solver(depthNewCards, depthNoNewCards) {
   this.depthNewCards = depthNewCards;
   this.depthNoNewCards = depthNoNewCards;
   this.nextMove = null;
+  this.seen = {};
 }
 
-var evaluated = 0;
 var times = [];
-var evalcount = [];
 
 Solver.prototype.findBestMove = function(game) {
   var startTime = new Date();
-  evaluated = 0;
+  this.seen = {};
   this.moveScores(game, 0);
   var endTime = new Date();
   times.push(endTime-startTime);
-  evalcount.push(evaluated);
   switch (this.nextMove) {
     case 0:
       return 'LEFT';
@@ -70,11 +68,15 @@ Solver.finalBoardScore = function(game) {
       score = Solver.LOSE_SCORE; // no possible moves
     }
   }
-//  evaluated++;
   return score;
 };
 
 Solver.prototype.moveScores = function(game, depthGone) {
+  var gameString = game.pieces1 + '/' + game.pieces2 + '/' + game.nextValue;
+  if (this.seen[gameString] != null) {
+    return this.seen[gameString];
+  }
+  
   if (depthGone == this.depthNewCards + this.depthNoNewCards) {
     return Solver.finalBoardScore(game);
   }
@@ -126,5 +128,6 @@ Solver.prototype.moveScores = function(game, depthGone) {
   if (depthGone == 0) {
     this.nextMove = bestMove;
   }
+  this.seen[gameString] = bestScore;
   return bestScore;
 };
