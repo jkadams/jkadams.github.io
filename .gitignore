@@ -1,3 +1,5 @@
 *.classpath
 *.class
 *.project
+dance\.idea\*
+meld\java\State*.png
