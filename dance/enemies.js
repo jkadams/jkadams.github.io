@@ -29,6 +29,17 @@ provide('Dance.Units.OrangeSlime');
 
 Dance.Units.ids = 0;
 
+//var xhr = new XMLHttpRequest();
+//xhr.onload = function() {
+//  dump(xhr.responseXML.documentElement.nodeName);
+//}
+//xhr.onerror = function() {
+//  dump("Error while getting XML.");
+//}
+//xhr.open("GET", "necrodancer.xml");
+//xhr.responseType = "document";
+//xhr.send();
+
 Dance.Units.BaseUnit = function(position, baseProperties) {
   this.initialHealth = baseProperties.initialHealth || 1;
   this.typePriority = baseProperties.typePriority || 0;
