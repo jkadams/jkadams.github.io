@@ -61,7 +61,7 @@ Dance.Units.BaseUnit.prototype.makeMove = function(game) {
     return true;
   }
   var move = this.getMovementDirection(game);
-  if (move.rowDelta == 0 && move.columnDelta == 0) {
+  if (move.rowDelta == 0 && move.colDelta == 0) {
     this.facingDirection = move.direction;
     this.momentum = null;
     return true;
@@ -98,16 +98,16 @@ Dance.Units.BaseUnit.prototype.getMovementDirection = function(game) {
 Dance.Units.BaseUnit.prototype.attack = function(game, target, move) {
   this.facingDirection = move.direction;
   this.momentum = null;
-  target.health -= this.strength;
+  target.onHit(game, move, this.strength);
   if (target.health <= 0) {
     target.health = 0;
     target.onDeath(game, move);
-  } else {
-    target.onHit(game, move); // also when onDeath?
   }
 };
 
-Dance.Units.BaseUnit.prototype.onHit = function(game, move) { };
+Dance.Units.BaseUnit.prototype.onHit = function(game, move, damage) {
+  this.health -= damage;
+};
 
 Dance.Units.BaseUnit.prototype.onDeath = function(game, move) {
   game.removeUnit(this);
@@ -154,15 +154,16 @@ Dance.Units.Skeleton.prototype.getMovementDirection = function(game) {
   }
 };
 
-Dance.Units.Skeleton.prototype.onHit = function(game, move) {
+Dance.Units.Skeleton.prototype.onHit = function(game, move, damage) {
   if (this.hasHead) {
-    if (this.health <= 1) {
+    if (this.health - damage < 2) {
       this.hasHead = false;
       this.beatsPerMove = 1;
       this.currentBeat = 0;
       this.directionHitFrom = move; // should be a direction, not a move
     }
   }
+  base(this, 'onHit', game, move, damage);
 };
 
 Dance.Units.WhiteSkeleton = function(position) {
@@ -209,15 +210,19 @@ Dance.Units.WhiteSkeletonKnight.ID = 202;
 Dance.Units.YellowSkeletonKnight.ID = 203;
 Dance.Units.BlackSkeletonKnight.ID = 204;
 
-Dance.Units.SkeletonKnight.prototype.onDeath = function(game, move) {
-  base(this, 'onDeath', game, move);
+Dance.Units.SkeletonKnight.prototype.onHit = function(game, move, damage) {
   // Should actually add a shield skeleton.
   var position = this.position;
   var knockback = position.applyMove(move);
   if (game.isPositionFree(knockback)) {
     position = knockback;
   }
-  game.addUnit(new Dance.Units.Skeleton(this.replacementId, position));
+  var newUnit = new Dance.Units.Skeleton(this.replacementId, position);
+  newUnit.currentBeat = 1;
+  game.addUnit(newUnit);
+  this.health = 0;
+//  game.removeUnit(this);
+  // what if the unit died? what if not?
 };
 
 Dance.Units.GreenSlime = function(position) {
