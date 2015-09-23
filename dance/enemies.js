@@ -35,20 +35,19 @@ Dance.Units.ids = 0;
 
 Dance.Units.BaseUnit = function(enemyId, position) {
   var stats = Dance.Enemies[enemyId].getElementsByTagName('stats')[0];
+  this.enemyId = enemyId;
   this.initialHealth = Number(stats.getAttribute('health'));
-  this.strength = Number(stats.getAttribute('damagePerHit'));
+  this.strength = 1; // Number(stats.getAttribute('damagePerHit'));
   this.beatsPerMove = Number(stats.getAttribute('beatsPerMove'));
   this.currentBeat = 0;
   this.coinsToDrop = Number(stats.getAttribute('coinsToDrop'));
   this.typePriority = stats.getAttribute('priority');
   this.movement = stats.getAttribute('custom');
 
-  this.numStates = 1;
-  this.currentState = 0;
   this.distancesToPlayer = [];
   this.id = Dance.Units.ids++;
   this.position = position;
-  this.facingDirection = Dance.Move.DOWN;
+  this.facingDirection = Dance.Direction.DOWN;
   this.lastPosition = null;
   this.momentum = null;
   this.health = this.initialHealth;
@@ -56,29 +55,72 @@ Dance.Units.BaseUnit = function(enemyId, position) {
   this.madeCurrentMove = true;
 };
 
-Dance.Units.BaseUnit.prototype.attack = function(game, target, direction) {
-  this.facingDirection = direction;
-//  console.log(this.id + ' : Attack kills momentum');
+Dance.Units.BaseUnit.prototype.makeMove = function(game) {
+  if (this.advanceBeat(1) != 0) {
+    // Waiting
+    return true;
+  }
+  var move = this.getMovementDirection(game);
+  if (move.rowDelta == 0 && move.columnDelta == 0) {
+    this.facingDirection = move.direction;
+    this.momentum = null;
+    return true;
+  }
+  var newPosition = this.position.applyMove(move);
+  var player = game.player;
+  // Attack
+  if (player.isOnPosition(newPosition)) {
+    this.attack(game, player, move);
+    return true;
+  }
+  // Move
+  if (game.isPositionFree(newPosition)) {
+    this.move(game, move);
+    return true;
+  } else {
+    var unitAtPosition = game.unitAtPosition(newPosition);
+    if (unitAtPosition && !unitAtPosition.madeCurrentMove) {
+      return false;
+    }
+  }
+
+  // Move fails
+  this.facingDirection = move.direction;
+  this.momentum = null;
+  return true;
+};
+
+Dance.Units.BaseUnit.prototype.getMovementDirection = function(game) {
+  // Default behavior is basic seek.
+  return this.bestApproach(game);
+};
+
+Dance.Units.BaseUnit.prototype.attack = function(game, target, move) {
+  this.facingDirection = move.direction;
   this.momentum = null;
   target.health -= this.strength;
   if (target.health <= 0) {
     target.health = 0;
-    target.onDeath(game);
+    target.onDeath(game, move);
+  } else {
+    target.onHit(game, move); // also when onDeath?
   }
 };
 
-Dance.Units.BaseUnit.prototype.onDeath = function(game) {
+Dance.Units.BaseUnit.prototype.onHit = function(game, move) { };
+
+Dance.Units.BaseUnit.prototype.onDeath = function(game, move) {
   game.removeUnit(this);
 };
 
-Dance.Units.BaseUnit.prototype.move = function(game, direction) {
-  var newPosition = this.position.movedTo(direction);
-  this.facingDirection = direction;
+Dance.Units.BaseUnit.prototype.move = function(game, move) {
+  var newPosition = this.position.applyMove(move);
+  this.facingDirection = move.direction;
   if (!this.position.equals(newPosition)) {
     this.lastPosition = this.position;
   }
   this.position = newPosition;
-  this.momentum = direction;
+  this.momentum = move.direction;
 };
 
 Dance.Units.BaseUnit.prototype.isOnPosition = function(position) {
@@ -90,18 +132,8 @@ Dance.Units.BaseUnit.prototype.advanceBeat = function(incr) {
   return this.currentBeat;
 };
 
-Dance.Units.BaseUnit.prototype.makeMove = function(game) {
-  console.log(this.id + ":" + this.currentBeat);
-  if (this.advanceBeat(1) == 0) {
-    return this.makeNextMove(game);
-  } else {
-    // Waiting
-    return true;
-  }
-};
-
 Dance.Units.Aria = function(position) {
-  base(this, 5, position);
+  base(this, 601, position);
   this.weapon = null;
   this.shovel = null;
 };
@@ -109,9 +141,29 @@ inherits(Dance.Units.Aria, Dance.Units.BaseUnit);
 
 Dance.Units.Skeleton = function(enemyId, position) {
   base(this, enemyId, position);
-  this.isWaiting = false;
+  this.hasHead = true;
+  this.directionHitFrom = null;
 };
 inherits(Dance.Units.Skeleton, Dance.Units.BaseUnit);
+
+Dance.Units.Skeleton.prototype.getMovementDirection = function(game) {
+  if (this.hasHead) {
+    return this.bestApproach(game);
+  } else {
+    return this.directionHitFrom;
+  }
+};
+
+Dance.Units.Skeleton.prototype.onHit = function(game, move) {
+  if (this.hasHead) {
+    if (this.health <= 1) {
+      this.hasHead = false;
+      this.beatsPerMove = 1;
+      this.currentBeat = 0;
+      this.directionHitFrom = move; // should be a direction, not a move
+    }
+  }
+};
 
 Dance.Units.WhiteSkeleton = function(position) {
   base(this, Dance.Units.WhiteSkeleton.ID, position);
@@ -132,42 +184,9 @@ Dance.Units.WhiteSkeleton.ID = 3;
 Dance.Units.YellowSkeleton.ID = 4;
 Dance.Units.BlackSkeleton.ID = 5;
 
-Dance.Units.Skeleton.prototype.makeNextMove = function(game) {
-  var player = game.player;
-  var direction = this.bestApproach(game);
-  var newPosition = this.position.movedTo(direction);
-  // Attack
-  if (player.isOnPosition(newPosition)) {
-    this.isWaiting = true;
-    this.attack(game, player);
-    return true;
-  }
-  // Move
-  if (game.isPositionFree(newPosition)) {
-    this.isWaiting = true;
-    this.move(game, direction);
-    return true;
-  } else {
-    var unitAtPosition = game.unitAtPosition(newPosition);
-    if (unitAtPosition && !unitAtPosition.madeCurrentMove) {
-      // Want to move to a space where another enemy is, but that enemy has not moved this turn.
-      // TODO: what about loops?
-      return false;
-    }
-  }
-
-  // Failed to do anything, but change direction if necessary.
-  this.facingDirection = direction;
-  console.log(this.id + ' : No action kills momentum');
-  this.momentum = null;
-  return true;
-};
-
 Dance.Units.SkeletonKnight = function(enemyId, replacementId, position) {
   base(this, enemyId, position);
-  this.createReplacement = function() {
-    return new Dance.Units.Skeleton(replacementId, this.position);
-  };
+  this.replacementId = replacementId;
 };
 inherits(Dance.Units.SkeletonKnight, Dance.Units.BaseUnit);
 
@@ -190,41 +209,15 @@ Dance.Units.WhiteSkeletonKnight.ID = 202;
 Dance.Units.YellowSkeletonKnight.ID = 203;
 Dance.Units.BlackSkeletonKnight.ID = 204;
 
-Dance.Units.SkeletonKnight.prototype.makeNextMove = function(game) {
-  var direction = this.bestApproach(game);
-  var player = game.player;
-
-  var newPosition = this.position.movedTo(direction);
-  // Attack
-  if (player.isOnPosition(newPosition)) {
-    this.attack(game, player);
-    return true;
-  }
-  // Move
-  if (game.isPositionFree(newPosition)) {
-    this.move(game, direction);
-    return true;
-  } else {
-    var unitAtPosition = game.unitAtPosition(newPosition);
-    if (unitAtPosition && !unitAtPosition.madeCurrentMove) {
-      // Want to move to a space where another enemy is, but that enemy has not moved this turn.
-      // TODO: what about loops?
-      return false;
-    }
-  }
-
-  // Failed to do anything, but change direction if necessary.
-  this.facingDirection = direction;
-  console.log(this.id + ' : No action kills momentum');
-  this.momentum = null;
-  return true;
-};
-
-Dance.Units.SkeletonKnight.prototype.onDeath = function(game) {
-  base(this, 'onDeath', game);
+Dance.Units.SkeletonKnight.prototype.onDeath = function(game, move) {
+  base(this, 'onDeath', game, move);
   // Should actually add a shield skeleton.
-  // Also position should be knocked back in the direction of the attack.
-  game.addUnit(this.createReplacement());
+  var position = this.position;
+  var knockback = position.applyMove(move);
+  if (game.isPositionFree(knockback)) {
+    position = knockback;
+  }
+  game.addUnit(new Dance.Units.Skeleton(this.replacementId, position));
 };
 
 Dance.Units.GreenSlime = function(position) {
@@ -246,74 +239,33 @@ Dance.Units.GreenSlime.ID = 0;
 Dance.Units.BlueSlime.ID = 1;
 Dance.Units.OrangeSlime.ID = 2;
 
-Dance.Units.GreenSlime.prototype.makeNextMove = function(game) {
-  return true;
+Dance.Units.GreenSlime.prototype.getMovementDirection = function(game) {
+  return Dance.Move.STAY;
 };
 
-Dance.Units.BlueSlime.prototype.makeNextMove = function(game) {
-  var player = game.player;
-  var direction;
+Dance.Units.BlueSlime.prototype.getMovementDirection = function(game) {
   if (this.lastPosition && this.lastPosition.row > this.position.row) {
-    direction = Dance.Move.DOWN;
+    return Dance.Move.DOWN;
   } else {
-    direction = Dance.Move.UP;
+    return Dance.Move.UP;
   }
-
-  var newPosition = this.position.movedTo(direction);
-  // Attack
-  if (player.isOnPosition(newPosition)) {
-    this.attack(game, player);
-    return true;
-  }
-  // Move
-  if (game.isPositionFree(newPosition)) {
-    this.move(game, direction);
-    return true;
-  } else {
-    var unitAtPosition = game.unitAtPosition(newPosition);
-    if (unitAtPosition && !unitAtPosition.madeCurrentMove) {
-      return false;
-    }
-  }
-
-  // Failed to do anything, but change direction if necessary.
-  this.facingDirection = direction;
-  return true;
 };
 
-Dance.Units.OrangeSlime.prototype.makeNextMove = function(game) {
+Dance.Units.OrangeSlime.prototype.getMovementDirection = function(game) {
   var Move = Dance.Move;
-  var player = game.player;
-  var direction = Move.RIGHT;
   if (this.lastPosition) {
     if (this.lastPosition.column > this.position.column) {
-      direction = Move.UP;
+      return Move.UP;
     } else if (this.lastPosition.row < this.position.row) {
-      direction = Move.LEFT;
+      return Move.LEFT;
     } else if (this.lastPosition.column < this.position.column) {
-      direction = Move.DOWN;
+      return Move.DOWN;
+    } else if (this.lastPosition.row > this.position.row) {
+      return Move.RIGHT;
     }
-  }
-  var newPosition = this.position.movedTo(direction);
-  // Attack
-  if (player.isOnPosition(newPosition)) {
-    this.attack(game, player);
-    return true;
-  }
-  // Move
-  if (game.isPositionFree(newPosition)) {
-    this.move(game, direction);
-    return true;
   } else {
-    var unitAtPosition = game.unitAtPosition(newPosition);
-    if (unitAtPosition && !unitAtPosition.madeCurrentMove) {
-      return false;
-    }
+    return Move.RIGHT;
   }
-
-  // Failed to do anything, but change direction if necessary.
-  this.facingDirection = direction;
-  return true;
 };
 
 Dance.Units.approachMoves = function(from, to) {

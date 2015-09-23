@@ -54,22 +54,25 @@ Dance.View.prototype.update = function() {
     var enemy = enemies[i];
     var e = enemy.position;
     var symbol;
-    if (enemy instanceof Dance.Units.Skeleton) {
+    if (enemy.enemyId == Dance.Units.WhiteSkeleton.ID) {
       symbol = 's' + enemy.id;
-    } else if (enemy instanceof Dance.Units.YellowSkeleton) {
+    } else if (enemy.enemyId == Dance.Units.YellowSkeleton.ID) {
       symbol = 'y' + enemy.id;
-    } else if (enemy instanceof Dance.Units.SkeletonKnight) {
+    } else if (enemy.enemyId == Dance.Units.BlackSkeleton.ID) {
+      symbol = 'b' + enemy.id;
+    } else if (enemy.enemyId == Dance.Units.WhiteSkeletonKnight.ID) {
       symbol = 'S' + enemy.id;
-    } else if (enemy instanceof Dance.Units.YellowSkeletonKnight) {
+    } else if (enemy.enemyId == Dance.Units.YellowSkeletonKnight.ID) {
       symbol = 'Y' + enemy.id;
-    } else if (enemy instanceof Dance.Units.GreenSlime) {
+    } else if (enemy.enemyId == Dance.Units.GreenSlime.ID) {
       symbol = 'G' + enemy.id;
-    } else if (enemy instanceof Dance.Units.BlueSlime) {
+    } else if (enemy.enemyId == Dance.Units.BlueSlime.ID) {
       symbol = 'B' + enemy.id;
-    } else if (enemy instanceof Dance.Units.OrangeSlime) {
+    } else if (enemy.enemyId == Dance.Units.OrangeSlime.ID) {
       symbol = 'O' + enemy.id;
     } else {
       symbol = '?' + enemy.id;
+      console.log(enemy);
     }
     chars[e.row][e.column] = symbol;
   }

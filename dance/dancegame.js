@@ -17,6 +17,7 @@
 /**
  * @author jkadams
  */
+provide('Dance.Direction');
 provide('Dance.Move');
 provide('Dance.Game');
 provide('Dance.Board');
@@ -139,22 +140,34 @@ Test move dependencies
 //      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]);
 */
 
-Dance.Move = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
+Dance.Direction = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3 };
 
-Dance.Move.opposite = function(direction) {
+Dance.Direction.opposite = function(direction) {
   switch (direction) {
-    case Dance.Move.UP:
-      return Dance.Move.DOWN;
-    case Dance.Move.RIGHT:
-      return Dance.Move.LEFT;
-    case Dance.Move.DOWN:
-      return Dance.Move.UP;
-    case Dance.Move.LEFT:
-      return Dance.Move.RIGHT;
+    case Dance.Direction.UP:
+      return Dance.Direction.DOWN;
+    case Dance.Direction.RIGHT:
+      return Dance.Direction.LEFT;
+    case Dance.Direction.DOWN:
+      return Dance.Direction.UP;
+    case Dance.Direction.LEFT:
+      return Dance.Direction.RIGHT;
     default:
       return null;
   }
 };
+
+Dance.Move = function(rowDelta, colDelta, direction) {
+  this.rowDelta = rowDelta;
+  this.colDelta = colDelta;
+  this.direction = direction;
+};
+
+Dance.Move.UP = new Dance.Move(-1, 0, Dance.Direction.UP);
+Dance.Move.RIGHT = new Dance.Move(0, 1, Dance.Direction.RIGHT);
+Dance.Move.DOWN = new Dance.Move(1, 0, Dance.Direction.DOWN);
+Dance.Move.LEFT = new Dance.Move(0, -1, Dance.Direction.LEFT);
+Dance.Move.STAY = new Dance.Move(0, 0, Dance.Direction.DOWN);
 
 Dance.Game = function() {
 
@@ -174,8 +187,9 @@ Dance.Game = function() {
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 8)));
 
   this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(10, 7)));
-  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(11, 5)));
+  this.addUnit(new Dance.Units.YellowSkeleton(new Dance.Position(11, 5)));
   this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 8)));
+  this.addUnit(new Dance.Units.YellowSkeletonKnight(new Dance.Position(10, 10)));
   this.board = new Dance.Board([
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -192,11 +206,11 @@ Dance.Game = function() {
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]);
 };
 
-Dance.Game.prototype.doPlayerMove = function(direction) {
-  if (direction == null) {
+Dance.Game.prototype.doPlayerMove = function(move) {
+  if (move == null) {
     return false;
   }
-  var newPosition = this.player.position.movedTo(direction);
+  var newPosition = this.player.position.applyMove(move);
   // Dig
   var tile = this.board.getTileAt(newPosition);
   if (tile == Dance.Tile.DIRT) {
@@ -206,16 +220,16 @@ Dance.Game.prototype.doPlayerMove = function(direction) {
   // Attack
   var enemy = this.getEnemyAt(newPosition);
   if (enemy != null) {
-    this.player.attack(this, enemy, direction);
+    this.player.attack(this, enemy, move);
     return true;
   }
   // Move
   if (this.isPositionFree(newPosition)) {
-    this.player.move(this, direction);
+    this.player.move(this, move);
     return true;
   }
   // Failed to do anything, but change direction if necessary.
-  this.facingDirection = direction;
+  this.facingDirection = move.direction;
   return false;
 };
 
@@ -302,21 +316,25 @@ Dance.Position = function(row, column) {
   this.column = column;
 };
 
+Dance.Position.prototype.applyMove = function(move) {
+  return new Dance.Position(this.row + move.rowDelta, this.column + move.colDelta);
+};
+
 Dance.Position.prototype.movedTo = function(position) {
-  var Move = Dance.Move;
+  var Direction = Dance.Direction;
   var r = this.row;
   var c = this.column;
   switch (position) {
-    case Move.UP:
+    case Direction.UP:
       r--;
       break;
-    case Move.RIGHT:
+    case Direction.RIGHT:
       c++;
       break;
-    case Move.DOWN:
+    case Direction.DOWN:
       r++;
       break;
-    case Move.LEFT:
+    case Direction.LEFT:
       c--;
       break;
   }
