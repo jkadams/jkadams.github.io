@@ -61,7 +61,7 @@ MOVED: 3
  MOVED: 1
 
    this.player = new Dance.Units.Aria(new Dance.Position(6, 6));
-   this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(6, 1)));
+   this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(6, 1)));
    this.board = new Dance.Board([
        [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
        [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -90,14 +90,14 @@ MOVED: 0
 2 MOVED: 1
 
   this.player = new Dance.Units.Aria(new Dance.Position(6, 6));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(1, 7)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(2, 5)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(5, 1)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(5, 10)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(7, 2)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(7, 11)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(10, 7)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(11, 5)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(1, 7)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(2, 5)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(5, 1)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(5, 10)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(7, 2)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(7, 11)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(10, 7)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(11, 5)));
   this.board = new Dance.Board([
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -118,11 +118,11 @@ MOVED: 0
 Test move dependencies
 
 //  this.player = new Dance.Units.Aria(new Dance.Position(4, 10));
-//  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 4)));
-//  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 5)));
-//  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 6)));
-//  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 7)));
-//  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 8)));
+//  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 4)));
+//  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 5)));
+//  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 6)));
+//  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 7)));
+//  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 8)));
 //  this.board = new Dance.Board([
 //      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 //      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -173,9 +173,9 @@ Dance.Game = function() {
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 7)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 8)));
 
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(10, 7)));
-  this.addUnit(new Dance.Units.Skeleton(new Dance.Position(11, 5)));
-  this.addUnit(new Dance.Units.SkeletonKnight(new Dance.Position(4, 8)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(10, 7)));
+  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(11, 5)));
+  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 8)));
   this.board = new Dance.Board([
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
@@ -252,7 +252,7 @@ Dance.Game.prototype.removeUnit = function(unit) {
 };
 
 Dance.Game.prototype.doEnemyMove = function(enemy) {
-  return enemy.makeNextMove(this, enemy);
+  return enemy.makeMove(this, enemy);
 };
 
 Dance.Delta = function(rows, columns) {

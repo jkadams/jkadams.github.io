@@ -56,6 +56,9 @@
               'to a method of a different name');
         }
       };
+
+      provide('Dance.Enemies');
+      provide('Dance.Items');
     </script>
     <script src="enemies.js"></script>
     <script src="dancegame.js"></script>
@@ -69,8 +72,33 @@
     }
 
     function init() {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var response = xhr.responseXML.documentElement;
+        var enemiesXml = response.getElementsByTagName("enemies")[0];
+        Dance.Enemies = {};
+        for (var i = 0; i < enemiesXml.children.length; i++) {
+          var enemy = enemiesXml.children[i];
+          var id = enemy.getAttribute('id');
+          Dance.Enemies[id] = enemy;
+        }
+        var itemsXml = response.getElementsByTagName("items")[0];
+        Dance.Items = [];
+        for (var i = 0; i < itemsXml.children.length; i++) {
+          var item = itemsXml.children[i];
+          var id = item.getAttribute('id');
+          Dance.Items.push(item);
+        }
+        controller.startNewGame();
+      }
+      xhr.onerror = function() {
+        console.log("Error while getting necrodancer.xml");
+      }
+      xhr.open("GET", "http://jkadams.github.io/dance/necrodancer.xml");
+      xhr.responseType = "document";
+      xhr.send();
+
       document.getElementById('newGame').addEventListener('click', handleNewGame);
-      controller.startNewGame();
     }
     </script>
     </head>
