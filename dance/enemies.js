@@ -23,6 +23,9 @@ provide('Dance.Units.Skeleton');
 provide('Dance.Units.WhiteSkeleton');
 provide('Dance.Units.YellowSkeleton');
 provide('Dance.Units.BlackSkeleton');
+provide('Dance.Units.WhiteArmoredSkeleton');
+provide('Dance.Units.YellowArmoredSkeleton');
+provide('Dance.Units.BlackArmoredSkeleton');
 provide('Dance.Units.SkeletonKnight');
 provide('Dance.Units.WhiteSkeletonKnight');
 provide('Dance.Units.YellowSkeletonKnight');
@@ -185,24 +188,87 @@ Dance.Units.WhiteSkeleton.ID = 3;
 Dance.Units.YellowSkeleton.ID = 4;
 Dance.Units.BlackSkeleton.ID = 5;
 
-Dance.Units.SkeletonKnight = function(enemyId, replacementId, position) {
+
+
+Dance.Units.ArmoredSkeleton = function(enemyId, position) {
   base(this, enemyId, position);
-  this.replacementId = replacementId;
+  switch (enemyId) {
+    case Dance.Units.WhiteArmoredSkeleton.ID:
+      this.replacementId = Dance.Units.WhiteSkeleton.ID;
+      break;
+    case Dance.Units.YellowArmoredSkeleton.ID:
+      this.replacementId = Dance.Units.YellowSkeleton.ID;
+      break;
+    case Dance.Units.BlackArmoredSkeleton.ID:
+      this.replacementId = Dance.Units.BlackSkeleton.ID;
+      break;
+  }
+  this.directionHitFrom = null;
+};
+inherits(Dance.Units.ArmoredSkeleton, Dance.Units.BaseUnit);
+
+Dance.Units.ArmoredSkeleton.prototype.onHit = function(game, move, damage) {
+  var position = this.position;
+  var knockback = position.applyMove(move);
+  if (game.isPositionFree(knockback)) {
+    position = knockback;
+  }
+  var newUnit = new Dance.Units.Skeleton(this.replacementId, position);
+  newUnit.currentBeat = 1;
+  game.addUnit(newUnit);
+  this.health = 0;
+};
+
+Dance.Units.WhiteArmoredSkeleton = function(position) {
+  base(this, Dance.Units.WhiteArmoredSkeleton.ID, position);
+};
+inherits(Dance.Units.WhiteArmoredSkeleton, Dance.Units.ArmoredSkeleton);
+
+Dance.Units.YellowArmoredSkeleton = function(position) {
+  base(this, Dance.Units.YellowArmoredSkeleton.ID, position);
+};
+inherits(Dance.Units.YellowArmoredSkeleton, Dance.Units.ArmoredSkeleton);
+
+Dance.Units.BlackArmoredSkeleton = function(position) {
+  base(this, Dance.Units.BlackArmoredSkeleton.ID, position);
+};
+inherits(Dance.Units.BlackArmoredSkeleton, Dance.Units.ArmoredSkeleton);
+
+Dance.Units.WhiteArmoredSkeleton.ID = 100;
+Dance.Units.YellowArmoredSkeleton.ID = 101;
+Dance.Units.BlackArmoredSkeleton.ID = 102;
+
+
+
+
+Dance.Units.SkeletonKnight = function(enemyId, position) {
+  base(this, enemyId, position);
+  switch (enemyId) {
+    case Dance.Units.WhiteSkeletonKnight.ID:
+      this.replacementId = Dance.Units.WhiteArmoredSkeleton.ID;
+      break;
+    case Dance.Units.YellowSkeletonKnight.ID:
+      this.replacementId = Dance.Units.YellowArmoredSkeleton.ID;
+      break;
+    case Dance.Units.BlackSkeletonKnight.ID:
+      this.replacementId = Dance.Units.BlackArmoredSkeleton.ID;
+      break;
+  }
 };
 inherits(Dance.Units.SkeletonKnight, Dance.Units.BaseUnit);
 
 Dance.Units.WhiteSkeletonKnight = function(position) {
-  base(this, Dance.Units.WhiteSkeletonKnight.ID, Dance.Units.WhiteSkeleton.ID, position);
+  base(this, Dance.Units.WhiteSkeletonKnight.ID, position);
 };
 inherits(Dance.Units.WhiteSkeletonKnight, Dance.Units.SkeletonKnight);
 
 Dance.Units.YellowSkeletonKnight = function(position) {
-  base(this, Dance.Units.YellowSkeletonKnight.ID, Dance.Units.YellowSkeleton.ID, position);
+  base(this, Dance.Units.YellowSkeletonKnight.ID, position);
 };
 inherits(Dance.Units.YellowSkeletonKnight, Dance.Units.SkeletonKnight);
 
 Dance.Units.BlackSkeletonKnight = function(position) {
-  base(this, Dance.Units.BlackSkeletonKnight.ID, Dance.Units.BlackSkeleton.ID, position);
+  base(this, Dance.Units.BlackSkeletonKnight.ID, position);
 };
 inherits(Dance.Units.BlackSkeletonKnight, Dance.Units.SkeletonKnight);
 
@@ -211,13 +277,12 @@ Dance.Units.YellowSkeletonKnight.ID = 203;
 Dance.Units.BlackSkeletonKnight.ID = 204;
 
 Dance.Units.SkeletonKnight.prototype.onHit = function(game, move, damage) {
-  // Should actually add a shield skeleton.
   var position = this.position;
   var knockback = position.applyMove(move);
   if (game.isPositionFree(knockback)) {
     position = knockback;
   }
-  var newUnit = new Dance.Units.Skeleton(this.replacementId, position);
+  var newUnit = new Dance.Units.ArmoredSkeleton(this.replacementId, position);
   newUnit.currentBeat = 1;
   game.addUnit(newUnit);
   this.health = 0;

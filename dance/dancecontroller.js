@@ -40,30 +40,36 @@ Dance.Controller.prototype.startNewGame = function() {
   this.view = new Dance.View(this.game);
   this.view.enterDocument();
   this.view.board.focus();
-//  this.keyListener = this.handleKeyDown.bind(this);
-//  this.view.board.addEventListener('keydown', this.keyListener);
-
-//  this.game.init();
   this.keyListener = this.handleKeyDown.bind(this);
   this.view.board.addEventListener('keydown', this.keyListener);
   this.view.update();
-//  this.timer = window.setInterval(this.tick.bind(this), 10000);
+//  this.replay([0, 1, 2, 3, 0, 1, 2, 3, 0]);
 };
 
-Dance.Controller.prototype.tick = function() {
-//  console.log('Tick at ' + new Date().getTime());
-  this.makeMoves();
+Dance.Controller.prototype.replay = function(moves) {
+  this.timer = window.setInterval(this.replayTick.bind(this), 500);
+  this.replayMoves = moves;
+  this.replayMoveAt = 0;
+}
+
+Dance.Controller.prototype.replayTick = function() {
+  if (this.replayMoveAt >= this.replayMoves.length) {
+    if (this.timer != null) {
+      window.clearInterval(this.timer);
+    }
+    return;
+  }
+  var moveArr = [Dance.Move.UP, Dance.Move.RIGHT, Dance.Move.DOWN, Dance.Move.LEFT];
+  this.makeMoves(moveArr[this.replayMoves[this.replayMoveAt]]);
+  this.replayMoveAt++;
 };
 
-Dance.Controller.prototype.makeMoves = function() {
+Dance.Controller.prototype.makeMoves = function(userMove) {
   if (this.game.isGameOver()) {
     return;
   }
-
   var enemies = this.game.getEnemies();
-
-
-  this.game.doPlayerMove(this.nextMove);
+  this.game.doPlayerMove(userMove);
   this.nextMove = null;
 
   for (var i = 0; i < enemies.length; i++) {
@@ -142,6 +148,9 @@ Dance.Controller.prototype.handleKeyDown = function(e) {
     case 40: // down
       this.nextMove = Dance.Move.DOWN;
       break;
+    case 83: // s
+      this.view.toggleSprites();
+      return;
     case 78:
       this.startNewGame();
       return;
@@ -149,6 +158,6 @@ Dance.Controller.prototype.handleKeyDown = function(e) {
       return;
   }
   console.log('MOVED: ' + this.nextMove);
-  this.makeMoves();
+  this.makeMoves(this.nextMove);
   e.preventDefault();
 };
