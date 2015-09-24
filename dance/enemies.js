@@ -338,6 +338,22 @@ Dance.Units.OrangeSlime.prototype.getMovementDirection = function(game) {
   }
 };
 
+
+
+
+//
+//Dance.Units.GreenBanshee = function(position) {
+//  base(this, Dance.Units.GreenBanshee.ID, position);
+//};
+//inherits(Dance.Units.GreenBanshee, Dance.Units.BaseUnit);
+//
+//Dance.Units.GreenBanshee.ID = 406;
+//
+//
+
+
+
+
 Dance.Units.approachMoves = function(from, to) {
   var Move = Dance.Move;
   var delta = Dance.Delta.create(from, to);
