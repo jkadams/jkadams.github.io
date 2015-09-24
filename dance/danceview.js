@@ -128,7 +128,35 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     var yOff = Number(sprite.getAttribute('yOff'));
     div.style.height=frameHeight + 'px';
     div.style.width=frameWidth + 'px';
-    div.style.backgroundImage = 'url(http://jkadams.github.io/dance/' + spriteImage + ')';
+    var frames = Dance.Enemies[enemyId].getElementsByTagName('frame');
+    var tellFrames = [];
+    for (var i = 0; i < frames.length; i++) {
+      var animType = frames[i].getAttribute('animType');
+      if (animType == 'tell') {
+        tellFrames.push(frames[i]);
+      }
+    }
+    var frameX = 0;
+    var frameY = 0;
+
+    if (enemy.currentBeat == enemy.beatsPerMove - 1 && tellFrames.length > 0) {
+      frameX = Number(tellFrames[0].getAttribute('inSheet'));
+    }
+    if (enemyId >= 100 && enemyId <= 102) {
+      if (enemy.facingDirection == Dance.Direction.LEFT) {
+        frameX = 2;
+      } else if (enemy.facingDirection == Dance.Direction.UP) {
+        frameX = 0;
+      } else if (enemy.facingDirection == Dance.Direction.RIGHT) {
+        frameX = 2;
+        div.style.transform = 'scaleX(-1)';
+      } else if (enemy.facingDirection == Dance.Direction.DOWN) {
+        frameX = 5;
+      }
+    }
+    div.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+        -frameX * frameWidth + 'px ' +
+        -frameY * frameHeight + 'px';
     div.style.display='block';
     div.style.position='absolute';
     div.style.left=(Dance.View.TILE_PX * column + xOff) + 'px';
