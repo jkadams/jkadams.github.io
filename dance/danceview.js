@@ -126,6 +126,7 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     var frameWidth = Number(sprite.getAttribute('frameW'));
     var xOff = Number(sprite.getAttribute('xOff'));
     var yOff = Number(sprite.getAttribute('yOff'));
+    var zOff = Number(sprite.getAttribute('zOff')) + 100;
     div.style.height=frameHeight + 'px';
     div.style.width=frameWidth + 'px';
     var frames = Dance.Enemies[enemyId].getElementsByTagName('frame');
@@ -139,6 +140,7 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     var frameX = 0;
     var frameY = 0;
 
+    var flipHorizontal = false;
     if (enemy.currentBeat == enemy.beatsPerMove - 1 && tellFrames.length > 0) {
       frameX = Number(tellFrames[0].getAttribute('inSheet'));
     }
@@ -149,10 +151,21 @@ Dance.View.prototype.renderEnemy = function(enemy) {
         frameX = 0;
       } else if (enemy.facingDirection == Dance.Direction.RIGHT) {
         frameX = 2;
-        div.style.transform = 'scaleX(-1)';
+        flipHorizontal = true;
       } else if (enemy.facingDirection == Dance.Direction.DOWN) {
         frameX = 5;
       }
+    } else {
+      flipHorizontal = enemy.facingHorizontal == Dance.Direction.RIGHT;
+    }
+    if (enemyId >= 4 && enemyId <= 5) {
+      if (!enemy.hasHead) {
+        frameX = 8;
+      }
+    }
+
+    if (flipHorizontal) {
+      div.style.transform = 'scaleX(-1)';
     }
     div.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
         -frameX * frameWidth + 'px ' +

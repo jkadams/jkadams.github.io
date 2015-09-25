@@ -80,7 +80,7 @@ Dance.Controller.prototype.makeMoves = function(userMove) {
 
   // Sort by: enemy type, then historical distances to player (horizontal, then vertical, in case of a tie?), then order enemy created (i.e. nothing)
   enemies.sort(function(a, b) {
-    var type = a.typePriority - b.typePriority;
+    var type = b.typePriority - a.typePriority;
     if (type != 0) {
       return type;
     }

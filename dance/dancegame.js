@@ -177,6 +177,16 @@ Dance.Game = function() {
   this.enemies = [];
 
   this.player = new Dance.Units.Aria(new Dance.Position(6, 6));
+  this.addUnit(new Dance.Units.BlueBat(new Dance.Position(3, 6)));
+  this.addUnit(new Dance.Units.BlueBat(new Dance.Position(9, 6)));
+  this.addUnit(new Dance.Units.RedBat(new Dance.Position(9, 9)));
+
+
+//  this.addUnit(new Dance.Units.WhiteArmoredSkeleton(new Dance.Position(9, 6)));
+//  this.addUnit(new Dance.Units.YellowArmoredSkeleton(new Dance.Position(6, 9)));
+//  this.addUnit(new Dance.Units.BlackArmoredSkeleton(new Dance.Position(3, 6)));
+
+
   this.addUnit(new Dance.Units.GreenSlime(new Dance.Position(11, 8)));
   this.addUnit(new Dance.Units.BlueSlime(new Dance.Position(3, 2)));
 //  this.addUnit(new Dance.Units.BlueSlime(new Dance.Position(4, 2)));
@@ -185,11 +195,13 @@ Dance.Game = function() {
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(3, 8)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 7)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 8)));
-
-  this.addUnit(new Dance.Units.WhiteSkeleton(new Dance.Position(10, 7)));
-  this.addUnit(new Dance.Units.YellowSkeleton(new Dance.Position(11, 5)));
+  this.addUnit(new Dance.Units.WhiteArmoredSkeleton(new Dance.Position(10, 7)));
+  this.addUnit(new Dance.Units.YellowArmoredSkeleton(new Dance.Position(11, 5)));
+  this.addUnit(new Dance.Units.BlackArmoredSkeleton(new Dance.Position(11, 11)));
   this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 8)));
   this.addUnit(new Dance.Units.YellowSkeletonKnight(new Dance.Position(10, 10)));
+  this.addUnit(new Dance.Units.GreenBanshee(new Dance.Position(3, 4)));
+  this.addUnit(new Dance.Units.GreenDragon(new Dance.Position(4, 4)));
   this.board = new Dance.Board([
       [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
       [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
