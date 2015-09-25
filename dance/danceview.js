@@ -96,7 +96,7 @@ Dance.View.prototype.renderTile = function(tile, row, column) {
       div.style.width='24px';
       div.style.left=(Dance.View.TILE_PX * column) + 'px';
       div.style.top=(Dance.View.TILE_PX * row) - 15 + 'px';
-      div.style.zIndex = 10;
+//      div.style.zIndex = 10;
       div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/wall_catacomb_crypt1.png)';
     }
     this.floor.appendChild(div);

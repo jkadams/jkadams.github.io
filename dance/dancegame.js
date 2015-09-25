@@ -178,8 +178,8 @@ Dance.Game = function() {
 
   this.player = new Dance.Units.Aria(new Dance.Position(6, 6));
   this.addUnit(new Dance.Units.BlueBat(new Dance.Position(3, 6)));
-  this.addUnit(new Dance.Units.BlueBat(new Dance.Position(9, 6)));
-  this.addUnit(new Dance.Units.RedBat(new Dance.Position(9, 9)));
+  this.addUnit(new Dance.Units.BlueBat(new Dance.Position(19, 18)));
+  this.addUnit(new Dance.Units.RedBat(new Dance.Position(19, 9)));
 
 
 //  this.addUnit(new Dance.Units.WhiteArmoredSkeleton(new Dance.Position(9, 6)));
@@ -187,35 +187,32 @@ Dance.Game = function() {
 //  this.addUnit(new Dance.Units.BlackArmoredSkeleton(new Dance.Position(3, 6)));
 
 
-  this.addUnit(new Dance.Units.GreenSlime(new Dance.Position(11, 8)));
+  this.addUnit(new Dance.Units.GreenSlime(new Dance.Position(11, 18)));
   this.addUnit(new Dance.Units.BlueSlime(new Dance.Position(3, 2)));
 //  this.addUnit(new Dance.Units.BlueSlime(new Dance.Position(4, 2)));
 //  this.addUnit(new Dance.Units.BlueSlime(new Dance.Position(5, 2)));
-  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(3, 7)));
+  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(3, 17)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(3, 8)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 7)));
 //  this.addUnit(new Dance.Units.OrangeSlime(new Dance.Position(4, 8)));
-  this.addUnit(new Dance.Units.WhiteArmoredSkeleton(new Dance.Position(10, 7)));
+  this.addUnit(new Dance.Units.WhiteArmoredSkeleton(new Dance.Position(10, 22)));
   this.addUnit(new Dance.Units.YellowArmoredSkeleton(new Dance.Position(11, 5)));
-  this.addUnit(new Dance.Units.BlackArmoredSkeleton(new Dance.Position(11, 11)));
-  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(4, 8)));
-  this.addUnit(new Dance.Units.YellowSkeletonKnight(new Dance.Position(10, 10)));
-  this.addUnit(new Dance.Units.GreenBanshee(new Dance.Position(3, 4)));
-  this.addUnit(new Dance.Units.GreenDragon(new Dance.Position(4, 4)));
-  this.board = new Dance.Board([
-      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
-      [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]);
+  this.addUnit(new Dance.Units.BlackArmoredSkeleton(new Dance.Position(20, 11)));
+  this.addUnit(new Dance.Units.WhiteSkeletonKnight(new Dance.Position(6, 14)));
+  this.addUnit(new Dance.Units.YellowSkeletonKnight(new Dance.Position(20, 10)));
+  this.addUnit(new Dance.Units.GreenBanshee(new Dance.Position(23, 18)));
+  this.addUnit(new Dance.Units.GreenDragon(new Dance.Position(22, 4)));
+  var layout = [];
+  for (var i = 0; i <= 24; i++) {
+    var arr = [];
+    for (var j = 0; j <= 24; j++) {
+      arr.push((i==0 || i==12 || i==24 || j==0 || j==24) ? 2 : 0);
+    }
+    layout.push(arr);
+  }
+  layout[12][1] = 0;
+  layout[12][23] = 0;
+  this.board = new Dance.Board(layout);
 };
 
 Dance.Game.prototype.doPlayerMove = function(move) {
