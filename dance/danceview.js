@@ -170,11 +170,26 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     div.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
         -frameX * frameWidth + 'px ' +
         -frameY * frameHeight + 'px';
-    div.style.display='block';
-    div.style.position='absolute';
-    div.style.left=(Dance.View.TILE_PX * column + xOff) + 'px';
-    div.style.top=(Dance.View.TILE_PX * row + yOff) - 12 + 'px';
-    this.sprites.appendChild(div);
+    div.className = 'enemySprite';
+    var health = document.createElement('div');
+    health.className = 'healthHover';
+    for (var i = 0; i < enemy.initialHealth; i++) {
+      var heart = document.createElement('img');
+      heart.src = i < enemy.health ?
+          'http://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
+          'http://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
+      health.appendChild(heart);
+    }
+    var heartWidth = 12 * enemy.initialHealth;
+    health.style.left = Math.floor(-heartWidth+frameWidth) / 2 + 'px';
+    health.style.width = heartWidth + 'px';
+    var enemyDiv = document.createElement('div');
+    enemyDiv.style.position='absolute';
+    enemyDiv.style.left=(Dance.View.TILE_PX * column + xOff) + 'px';
+    enemyDiv.style.top=(Dance.View.TILE_PX * row + yOff) - 12 + 'px';
+    enemyDiv.appendChild(div);
+    enemyDiv.appendChild(health);
+    this.sprites.appendChild(enemyDiv);
   } else {
     var symbol;
     if (enemyId == Dance.Units.WhiteSkeleton.ID) {

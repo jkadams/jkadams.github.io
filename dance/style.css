@@ -47,3 +47,15 @@ body {
   border: 2px solid #37229F;
   white-space: pre;
 }
+.healthHover {
+  position: absolute;
+  font: 12px 'Lucida Console', monospace;
+  color: pink;
+  display: block;
+  text-align: center;
+  top: -10px;
+}
+.enemySprite {
+  position: absolute;
+  display: block;
+}
