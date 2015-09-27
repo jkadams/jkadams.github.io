@@ -52,7 +52,7 @@ Dance.View.prototype.update = function() {
       this.renderTile(layout[r][c], r, c);
     }
   }
-  this.renderEnemy(this.game.player);
+  this.renderPlayer(this.game.player);
   var enemies = this.game.getEnemies();
   for (var i = 0; i < enemies.length; i++) {
     var enemy = enemies[i];
@@ -87,9 +87,9 @@ Dance.View.prototype.renderTile = function(tile, row, column) {
     div.style.width=Dance.View.TILE_PX + 'px';
     if (tile == Dance.Tile.EMPTY) {
       if ((row + column) % 2 == 0) {
-        div.style.background = 'url(http://jkadams.github.io/dance/level/floor_dirt1.png) -27px -1px';
+        div.style.background = 'url(http://jkadams.github.io/dance/level/zone4_floor.png) -27px -1px';
       } else {
-        div.style.background = 'url(http://jkadams.github.io/dance/level/floor_dirt1.png) -1px -1px';
+        div.style.background = 'url(http://jkadams.github.io/dance/level/zone4_floor.png) -1px -1px';
       }
     } else {
       div.style.height='48px';
@@ -97,7 +97,23 @@ Dance.View.prototype.renderTile = function(tile, row, column) {
       div.style.left=(Dance.View.TILE_PX * column) + 'px';
       div.style.top=(Dance.View.TILE_PX * row) - 15 + 'px';
 //      div.style.zIndex = 10;
-      div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/wall_catacomb_crypt1.png)';
+      if (tile == Dance.Tile.DIRT) {
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/zone4_wall_dirt.png)';
+      } else if (tile == Dance.Tile.STONE) {
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/zone4_wall_rock_A.png)';
+      } else if (tile == Dance.Tile.CATACOMB) {
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/zone4_wall_catacomb_A.png)';
+      } else if (tile == Dance.Tile.SHOP) {
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/wall_shop_crypt.png)';
+      } else if (tile == Dance.Tile.STAIRS) {
+        div.style.left=(Dance.View.TILE_PX * column) + 'px';
+        div.style.top=(Dance.View.TILE_PX * row) + 'px';
+        div.style.height=Dance.View.TILE_PX + 'px';
+        div.style.width=Dance.View.TILE_PX + 'px';
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/stairs.png)';
+      } else {
+        div.style.backgroundImage = 'url(http://jkadams.github.io/dance/level/end_of_world.png)';
+      }
     }
     this.floor.appendChild(div);
   } else {
@@ -112,6 +128,72 @@ Dance.View.prototype.renderTile = function(tile, row, column) {
       this.textGrid[row][column] = '##';
     }
   }
+};
+
+
+
+Dance.View.prototype.renderPlayer = function(player) {
+  var row = player.position.row;
+  var column = player.position.column;
+
+  var head = document.createElement('div');
+  var frameHeight = 24;
+  var frameWidth = 24;
+  var spriteImage = 'entities/char' + player.character + '_heads.png';
+  head.style.height=frameHeight + 'px';
+  head.style.width=frameWidth + 'px';
+  var frameX = 0;
+  var frameY = 0;
+  var xOff = 0;
+  var yOff = 0;
+  if (player.facingHorizontal == Dance.Direction.LEFT) {
+    head.style.transform = 'scaleX(-1)';
+  }
+  head.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+      -frameX * frameWidth + 'px ' +
+      -frameY * frameHeight + 'px';
+  head.className = 'enemySprite';
+  
+  var armor = document.createElement('div');
+  var frameHeight = 24;
+  var frameWidth = 24;
+  var spriteImage = 'entities/char' + player.character + '_armor_body.png';
+  armor.style.height=frameHeight + 'px';
+  armor.style.width=frameWidth + 'px';
+  var frameX = 0;
+  var frameY = 0;
+  var xOff = 0;
+  var yOff = 0;
+  if (player.facingHorizontal == Dance.Direction.LEFT) {
+    armor.style.transform = 'scaleX(-1)';
+  }
+  armor.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+      -frameX * frameWidth + 'px ' +
+      -frameY * frameHeight + 'px';
+  armor.className = 'enemySprite';
+  
+  var health = document.createElement('div');
+  health.className = 'healthHover';
+  for (var i = 0; i < player.initialHealth; i++) {
+    var heart = document.createElement('img');
+    heart.src = i < player.health ?
+        'http://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
+        'http://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
+    health.appendChild(heart);
+  }
+  var heartWidth = 12 * player.initialHealth;
+  health.style.left = '4px';
+  health.style.top = '4px';
+  health.style.width = heartWidth + 'px';
+  health.style.zIndex = 100;
+  var enemyDiv = document.createElement('div');
+  enemyDiv.style.position='absolute';
+  enemyDiv.style.left=(Dance.View.TILE_PX * column + xOff) + 'px';
+  enemyDiv.style.top=(Dance.View.TILE_PX * row + yOff) - 12 + 'px';
+  enemyDiv.appendChild(armor);
+  enemyDiv.appendChild(head);
+  this.board.appendChild(health);
+  this.sprites.appendChild(enemyDiv);
 };
 
 Dance.View.prototype.renderEnemy = function(enemy) {
@@ -158,6 +240,14 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     } else {
       flipHorizontal = enemy.facingHorizontal == Dance.Direction.RIGHT;
     }
+    if (enemyId == 304 || enemyId == 305) {
+      if (enemy.state == Dance.Units.BaseBlademaster.State.LUNGING) {
+        frameX = 8;
+      } else if (enemy.state == Dance.Units.BaseBlademaster.State.LUNGED) {
+        frameX = 16;
+      }
+    }
+
     if (enemyId >= 4 && enemyId <= 5) {
       if (!enemy.hasHead) {
         frameX = 8;

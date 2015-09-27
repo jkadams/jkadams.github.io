@@ -28,6 +28,55 @@ Dance.Controller = function() {
   this.nextMove = null;
 };
 
+Dance.Controller.prototype.createLevel = function() {
+  var Units = Dance.Units;
+  var player = new Units.Player(new Dance.Position(18, 4));
+  var enemies = [
+      new Units.BlueBat(new Dance.Position(15, 9)),
+      new Units.BlueBat(new Dance.Position(14, 5)),
+      new Units.BlueBat(new Dance.Position(3, 6)),
+      new Units.Harpy(new Dance.Position(15, 11)),
+      new Units.Harpy(new Dance.Position(17, 11)),
+      new Units.ApprenticeBlademaster(new Dance.Position(16, 10)),
+      new Units.Lich(new Dance.Position(14, 9))
+
+  ];
+  var layout = [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,1,1,1,1,1,1,1,2,1,2,2,1,2,1,2,1,1,2,1,1,0,0,0,0,0,0,0],
+      [0,0,1,0,0,0,0,2,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,0,2,0,1,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,2,0,0,0,0,0,0,0],
+      [0,0,1,0,0,0,0,1,0,0,2,0,0,0,0,0,1,0,0,0,6,2,0,0,0,0,0,0,0],
+      [0,0,1,0,2,1,0,2,5,2,1,0,0,0,0,0,2,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,0,1,0,0,0,0,1,0,0,2,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,0,1,1,2,2,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,3,3,3,3,3,3,3,0],
+      [0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,1,1,1,1,1,3,0,0,0,0,0,3,0],
+      [0,0,1,0,0,0,0,1,1,2,2,1,1,1,1,1,1,0,0,0,0,3,0,0,0,0,0,3,0],
+      [0,0,2,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,3,0],
+      [0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,3,0,0,0,0,0,3,0],
+      [0,0,2,0,0,0,0,2,0,0,0,1,0,0,0,2,1,0,0,0,0,3,0,0,0,0,0,3,0],
+      [0,0,2,0,0,0,0,1,1,1,1,1,1,1,2,2,1,0,0,0,0,3,0,0,0,0,0,3,0],
+      [0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,2,2,1,1,2,1,3,0,0,0,0,0,3,0],
+      [0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,3,3,3,3,3,3,3,0],
+      [0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,0],
+      [0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+      [0,1,0,0,0,0,0,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0],
+      [0,2,1,1,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+  var randomNumbers = [
+      3,3,1,0,0,3,2,1,3,0,0,0,1,0,1,0,3,0,3,1,1,3,0,1,1,1,3,2,0,1,
+      3,3,0,1,2,2,0,2,3,3,0,2,1,2,2,1,1,1,0,3,2,2,2,3,0,2,1,3,2,1,
+      2,2,3,2,1,1,3,2,2,2,2,3,2,0,3,0,3,3,0,2,0,3,2,3,3,3,1,3,0,3,
+      2,1,0,3,1,3,0,3,3,2,1,1,2,2,3,0,2,1,2,1,2,0,2,3,1,2,1,2,0,3,
+      0,2,2,3,0,0,0,2,1,0,2,2,0,0,2,0,1,1,0,3,2,2,3,3,3,2,3,1,0,0,
+      1,0,2,0,0,2,0,2,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+      1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+      1,1,1,1,1,1,1,1,1,1];
+  return new Dance.Game(player, enemies, layout, randomNumbers);
+};
+
 Dance.Controller.prototype.startNewGame = function() {
   Dance.Units.ids = 0;
   this.endGame();
@@ -35,7 +84,7 @@ Dance.Controller.prototype.startNewGame = function() {
     this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
-  this.game = new Dance.Game();
+  this.game = this.createLevel();
   this.game.eventTarget = document;
   this.view = new Dance.View(this.game);
   this.view.enterDocument();
@@ -69,7 +118,7 @@ Dance.Controller.prototype.makeMoves = function(userMove) {
     return;
   }
   var enemies = this.game.getEnemies();
-  this.game.doPlayerMove(userMove);
+  this.game.player.doMove(this.game, userMove);
   this.nextMove = null;
 
   for (var i = 0; i < enemies.length; i++) {
@@ -103,17 +152,22 @@ Dance.Controller.prototype.makeMoves = function(userMove) {
 
   var ct = 0;
   while (enemies.length > 0 && ct++ < 200) {
-    if (ct > 20) debugger; // something has gone horribly wrong
+    if (ct > 150) debugger; // something has gone horribly wrong
     var remainingEnemies = [];
     for (var i = 0; i < enemies.length; i++) {
-      if (enemies[i] == null) debugger;
-      if (enemies[i].health > 0 && !enemies[i].madeCurrentMove) {
-        var madeMove = this.game.doEnemyMove(enemies[i]);
-        enemies[i].madeCurrentMove = madeMove;
+      var enemy = enemies[i];
+      if (enemy == null) debugger;
+      if (enemy.health > 0 && !enemy.madeCurrentMove) {
+        var madeMove = enemy.makeMove(this.game, enemy);
+        enemy.madeCurrentMove = madeMove;
         if (!madeMove) {
-          remainingEnemies.push(enemies[i]);
+          remainingEnemies.push(enemy);
         }
       }
+    }
+    if (remainingEnemies.length == enemies.length) {
+      // Cycle! Should have all units bounce and fail to move, but this works for now.
+      break;
     }
     enemies = remainingEnemies;
   }

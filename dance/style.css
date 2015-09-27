@@ -46,6 +46,7 @@ body {
   background: black;
   border: 2px solid #37229F;
   white-space: pre;
+  display: none;
 }
 .healthHover {
   position: absolute;
