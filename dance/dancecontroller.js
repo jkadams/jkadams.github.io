@@ -35,11 +35,23 @@ Dance.Controller.prototype.createLevel = function() {
       new Units.BlueBat(new Dance.Position(15, 9)),
       new Units.BlueBat(new Dance.Position(14, 5)),
       new Units.BlueBat(new Dance.Position(3, 6)),
+      new Units.BlueBat(new Dance.Position(9, 20)),
       new Units.Harpy(new Dance.Position(15, 11)),
       new Units.Harpy(new Dance.Position(17, 11)),
+      new Units.Harpy(new Dance.Position(17, 19)),
+      new Units.Harpy(new Dance.Position(2, 19)),
+      new Units.Harpy(new Dance.Position(7, 14)),
+      new Units.Harpy(new Dance.Position(8, 14)),
+      new Units.WhiteSkeletonKnight(new Dance.Position(6, 19)),
+      new Units.ApprenticeBlademaster(new Dance.Position(2, 13)),
+      new Units.ApprenticeBlademaster(new Dance.Position(5, 19)),
+      new Units.ApprenticeBlademaster(new Dance.Position(12, 19)),
+      new Units.ApprenticeBlademaster(new Dance.Position(16, 16)),
+      new Units.ApprenticeBlademaster(new Dance.Position(6, 4)),
+      new Units.ApprenticeBlademaster(new Dance.Position(9, 3)),
       new Units.ApprenticeBlademaster(new Dance.Position(16, 10)),
-      new Units.Lich(new Dance.Position(14, 9))
-
+      new Units.Lich(new Dance.Position(14, 9)),
+      new Units.Lich(new Dance.Position(9, 17))
   ];
   var layout = [
       [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],

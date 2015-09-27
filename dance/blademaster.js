@@ -62,10 +62,13 @@ Dance.Units.BaseBlademaster.prototype.getMovementDirection = function(game) {
     // check madeCurrentMove?
     // if obstacle, don't move
     var fullLunge = lunge.combine(lunge);
+    this.currentBeat = 1;
     return fullLunge;
   } else if (this.state == State.LUNGED) {
     this.state = State.READY;
-    return this.bestApproach(game);
+    this.currentBeat = 1;
+    return Dance.Move.STAY;
+//    return this.bestApproach(game);
   }
 };
 
@@ -78,6 +81,7 @@ Dance.Units.BaseBlademaster.prototype.onHit = function(game, move, damage) {
     // if player was not right next to this unit, go to READY instead
     this.state = State.PARRIED;
   } else {
+    // Only vulnerable for 1 turn after lunged, not 2.
     base(this, 'onHit', game, move, damage);
   }
 };
