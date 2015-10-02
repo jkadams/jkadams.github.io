@@ -28,6 +28,62 @@ Dance.Controller = function() {
   this.nextMove = null;
 };
 
+Dance.Controller.prototype.createLevelTorches2 = function() {
+  var Units = Dance.Units;
+  var player = new Units.Player(new Dance.Position(5, 12));
+  var enemies = [];
+  var layout = [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+  var randomNumbers = [];
+  return new Dance.Game(player, enemies, layout, randomNumbers);
+};
+
+Dance.Controller.prototype.createLevelTorches = function() {
+  var Units = Dance.Units;
+  var player = new Units.Player(new Dance.Position(5, 12));
+  var enemies = [];
+  var layout = [
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,2,2,2,0,2,2,2,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+      [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+  var randomNumbers = [];
+  return new Dance.Game(player, enemies, layout, randomNumbers);
+};
+
 Dance.Controller.prototype.createLevel = function() {
   var Units = Dance.Units;
   var player = new Units.Player(new Dance.Position(18, 4));
@@ -40,9 +96,22 @@ Dance.Controller.prototype.createLevel = function() {
       new Units.Harpy(new Dance.Position(17, 11)),
       new Units.Harpy(new Dance.Position(17, 19)),
       new Units.Harpy(new Dance.Position(2, 19)),
+      new Units.Harpy(new Dance.Position(4, 14)),
       new Units.Harpy(new Dance.Position(7, 14)),
       new Units.Harpy(new Dance.Position(8, 14)),
+      new Units.Warlock(new Dance.Position(2, 18)),
+      new Units.Warlock(new Dance.Position(6, 14)),
+      new Units.SleepingGoblin(new Dance.Position(3, 3)),
+      new Units.SleepingGoblin(new Dance.Position(11, 4)),
+      new Units.SleepingGoblin(new Dance.Position(11, 20)),
+      new Units.GoblinBomber(new Dance.Position(7, 19)),
+      new Units.GreenBanshee(new Dance.Position(4, 20)),
+      new Units.Gargoyle3(new Dance.Position(9, 4)),
+      new Units.Gargoyle1(new Dance.Position(9, 5)),
+      new Units.Gargoyle3(new Dance.Position(13, 4)),
+      new Units.Gargoyle3(new Dance.Position(13, 5)),
       new Units.WhiteSkeletonKnight(new Dance.Position(6, 19)),
+      new Units.WhiteSarcophagus(new Dance.Position(6, 20)),
       new Units.ApprenticeBlademaster(new Dance.Position(2, 13)),
       new Units.ApprenticeBlademaster(new Dance.Position(5, 19)),
       new Units.ApprenticeBlademaster(new Dance.Position(12, 19)),
@@ -104,22 +173,22 @@ Dance.Controller.prototype.startNewGame = function() {
   this.keyListener = this.handleKeyDown.bind(this);
   this.view.board.addEventListener('keydown', this.keyListener);
   this.view.update();
-//  this.replay([0, 1, 2, 3, 0, 1, 2, 3, 0]);
+  this.replay([0,1,1,1,1,1,3,1,1,3,1,1,1,1,0,1,3,3,0,0,3,1,1,1,2,0,1,0,0,0,3,3,0,0,0,3,0,0,3,3,0,3,2,3,1,0,1,3,3,1,3,3,0,1,0,0,0,1,2,1,1,1,3,1,1,3,1,1,1,3,1,0,0,0,0,2,2,0,0,1,3,3,0,3,3,3,2,2,3,3,3,3,3,3,3,0,0,3,3,2,0,1,0,2,2,2,2,3,2,2,3,2,2,2,2,2,2,1,0,1,2,0,2,2,2,2,2,2,2,2,1,1,1,1,2,2,1,0,1,1,1,1,1,1,1,0,3,1,1,3,1,1,0,2,2,1,1,0,1,0,3,3,3,0,1,1,1,1,2,1,1,8,2,2,1,0,0,0,1,3,0,0,2,0,0,2,0,0,0,0,3,2,1,0,2,0,3,3,0,1,0,2,2,2,0,0,2,0,2,0,3,0,3,0,2,0,0,3,2,2,0,0,0,0,0,0,0,0,2,0,0,0,2,3,0,0,2,0,2,2,1,2,2,1,1,2,1,1,3,3,3,0,3,3,2,2,3,0,0,0,0,0,0,0,1,0,3,3,3,0,0,3,3,0,1,1,1,2,2,1]);
 };
 
 Dance.Controller.prototype.replay = function(moves) {
-  this.timer = window.setInterval(this.replayTick.bind(this), 500);
+//  this.timer = window.setInterval(this.replayTick.bind(this), 500);
   this.replayMoves = moves;
   this.replayMoveAt = 0;
 }
 
 Dance.Controller.prototype.replayTick = function() {
-  if (this.replayMoveAt >= this.replayMoves.length) {
-    if (this.timer != null) {
-      window.clearInterval(this.timer);
-    }
-    return;
-  }
+//  if (this.replayMoveAt >= this.replayMoves.length) {
+//    if (this.timer != null) {
+//      window.clearInterval(this.timer);
+//    }
+//    return;
+//  }
   var moveArr = [Dance.Move.UP, Dance.Move.RIGHT, Dance.Move.DOWN, Dance.Move.LEFT];
   this.makeMoves(moveArr[this.replayMoves[this.replayMoveAt]]);
   this.replayMoveAt++;
@@ -131,13 +200,20 @@ Dance.Controller.prototype.makeMoves = function(userMove) {
   }
   var enemies = this.game.getEnemies();
   this.game.player.doMove(this.game, userMove);
+  this.game.board.expose(this.game.player.position);
   this.nextMove = null;
 
+  var exposedEnemies = [];
   for (var i = 0; i < enemies.length; i++) {
-    enemies[i].madeCurrentMove = false;
-    enemies[i].distancesToPlayer.push(
-        Dance.Delta.create(enemies[i].position, this.game.player.position).size());
+    var enemy = enemies[i];
+    if (this.game.board.isTileExposed(enemy.position)) {
+      enemy.madeCurrentMove = false;
+      enemy.distancesToPlayer.push(
+          Dance.Delta.create(enemy.position, this.game.player.position).size());
+      exposedEnemies.push(enemy);
+    }
   }
+  enemies = exposedEnemies;
 
   // Sort by: enemy type, then historical distances to player (horizontal, then vertical, in case of a tie?), then order enemy created (i.e. nothing)
   enemies.sort(function(a, b) {
@@ -155,12 +231,6 @@ Dance.Controller.prototype.makeMoves = function(userMove) {
     }
     return 0;
   });
-
-  var str = '';
-  for (var i = 0; i < enemies.length; i++) {
-    str += enemies[i].id + '(' + enemies[i].distancesToPlayer + '), ';
-  }
-  console.log(str);
 
   var ct = 0;
   while (enemies.length > 0 && ct++ < 200) {
@@ -214,6 +284,9 @@ Dance.Controller.prototype.handleKeyDown = function(e) {
     case 40: // down
       this.nextMove = Dance.Move.DOWN;
       break;
+    case 82: // r
+      this.replayTick();
+      return;
     case 83: // s
       this.view.toggleSprites();
       return;
