@@ -28,6 +28,7 @@ Dance.Game = function(player, enemies, layout, randomNumbers) {
   this.randomNumbers = randomNumbers;
   this.randomNumberAt = 0;
   this.board = new Dance.Board(layout);
+  this.board.expose(player.position);
   this.zone = 4;
   this.level = 1;
 };

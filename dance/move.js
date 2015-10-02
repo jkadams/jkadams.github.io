@@ -31,6 +31,11 @@ Dance.Move.DOWN = new Dance.Move(1, 0, Dance.Direction.DOWN);
 Dance.Move.LEFT = new Dance.Move(0, -1, Dance.Direction.LEFT);
 Dance.Move.STAY = new Dance.Move(0, 0, Dance.Direction.DOWN);
 
+Dance.Move.prototype.opposite = function() {
+  return new Dance.Move(-this.rowDelta, -this.colDelta,
+      Dance.Direction.opposite(this.direction));
+};
+
 Dance.Move.forDirection = function(direction) {
   switch (direction) {
     case Dance.Direction.UP:

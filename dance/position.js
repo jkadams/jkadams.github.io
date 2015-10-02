@@ -28,11 +28,11 @@ Dance.Position.prototype.applyMove = function(move) {
   return new Dance.Position(this.row + move.rowDelta, this.column + move.colDelta);
 };
 
-Dance.Position.prototype.movedTo = function(position) {
+Dance.Position.prototype.movedTo = function(dir) {
   var Direction = Dance.Direction;
   var r = this.row;
   var c = this.column;
-  switch (position) {
+  switch (dir) {
     case Direction.UP:
       r--;
       break;
