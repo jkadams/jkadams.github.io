@@ -28,7 +28,8 @@ Dance.Board = function(layout) {
   this.currentlyVisible;
 };
 
-Dance.Tile = { EMPTY: 0, DIRT: 1, DIRT_WITH_TORCH: 11, STONE: 2, CATACOMB: 5, SHOP: 3, SOLID: 4, STAIRS: 6 };
+Dance.Tile = { EMPTY: 0, DIRT: 1, DIRT_WITH_TORCH: 11, STONE: 2, CATACOMB: 5,
+    SHOP: 3, SHOP_WITH_TORCH: 13, SOLID: 4, STAIRS: 6 };
 
 Dance.Tile.strength = function(tile) {
   var Tile = Dance.Tile;
@@ -44,6 +45,7 @@ Dance.Tile.strength = function(tile) {
     case Tile.CATACOMB:
       return 3;
     case Tile.SHOP:
+    case Tile.SHOP_WITH_TORCH:
       return 4;
     case Tile.SOLID:
       return 999;
@@ -51,7 +53,7 @@ Dance.Tile.strength = function(tile) {
 };
 
 Dance.Tile.hasTorch = function(tile) {
-  return tile == Dance.Tile.DIRT_WITH_TORCH;
+  return tile == Dance.Tile.DIRT_WITH_TORCH || tile == Dance.Tile.SHOP_WITH_TORCH;
 };
 
 Dance.Board.prototype.create2D = function(initialValue) {

@@ -26,6 +26,7 @@ Dance.Controller = function() {
   this.game = null;
   this.view = null;
   this.nextMove = null;
+  this.useSprites = true;
 };
 
 Dance.Controller.prototype.createLevelTorches2 = function() {
@@ -288,7 +289,7 @@ Dance.Controller.prototype.handleKeyDown = function(e) {
       this.replayTick();
       return;
     case 83: // s
-      this.view.toggleSprites();
+      this.toggleSprites();
       return;
     case 78:
       this.startNewGame();
@@ -299,4 +300,14 @@ Dance.Controller.prototype.handleKeyDown = function(e) {
   console.log('MOVED: ' + this.nextMove);
   this.makeMoves(this.nextMove);
   e.preventDefault();
+};
+
+Dance.Controller.prototype.toggleSprites = function() {
+  this.useSprites = !this.useSprites;
+  this.view.exitDocument();
+  this.view = this.useSprites ? new Dance.View(this.game) : new Dance.ViewOld(this.game);
+  this.view.enterDocument();
+  this.view.board.focus();
+  this.view.resizeBoard();
+  this.view.update();
 };
