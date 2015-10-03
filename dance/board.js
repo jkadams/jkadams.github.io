@@ -28,7 +28,31 @@ Dance.Board = function(layout) {
   this.currentlyVisible;
 };
 
-Dance.Tile = { EMPTY: 0, DIRT: 1, STONE: 2, CATACOMB: 5, SHOP: 3, SOLID: 4, STAIRS: 6 };
+Dance.Tile = { EMPTY: 0, DIRT: 1, DIRT_WITH_TORCH: 11, STONE: 2, CATACOMB: 5, SHOP: 3, SOLID: 4, STAIRS: 6 };
+
+Dance.Tile.strength = function(tile) {
+  var Tile = Dance.Tile;
+  switch (tile) {
+    case Tile.EMPTY:
+    case Tile.STAIRS:
+      return 0;
+    case Tile.DIRT:
+    case Tile.DIRT_WITH_TORCH:
+      return 1;
+    case Tile.STONE:
+      return 2;
+    case Tile.CATACOMB:
+      return 3;
+    case Tile.SHOP:
+      return 4;
+    case Tile.SOLID:
+      return 999;
+  }
+};
+
+Dance.Tile.hasTorch = function(tile) {
+  return tile == Dance.Tile.DIRT_WITH_TORCH;
+};
 
 Dance.Board.prototype.create2D = function(initialValue) {
   var arr2D = [];

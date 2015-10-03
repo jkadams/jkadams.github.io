@@ -60,3 +60,33 @@ body {
   position: absolute;
   display: block;
 }
+.torch {
+  height: 26px;
+  width: 12px;
+  background: url(http://jkadams.github.io/dance/level/wall_torch.png);
+  position: absolute;
+  top: -9px;
+  left: 5px;
+  animation-duration: 0.4s;
+  animation-name: animateTorch;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1, end);
+
+}
+@keyframes animateTorch {
+  0% {
+    background: url(http://jkadams.github.io/dance/level/wall_torch.png);
+  }
+  25% {
+    background: url(http://jkadams.github.io/dance/level/wall_torch.png) -12px 0;
+  }
+  50% {
+    background: url(http://jkadams.github.io/dance/level/wall_torch.png) -24px 0;
+  }
+  75% {
+    background: url(http://jkadams.github.io/dance/level/wall_torch.png) -36px 0;
+  }
+  100% {
+    background: url(http://jkadams.github.io/dance/level/wall_torch.png);
+  }
+}

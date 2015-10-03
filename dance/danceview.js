@@ -83,7 +83,7 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
     var height = Dance.View.TILE_PX;
     var width = Dance.View.TILE_PX;
     var background;
-    exposed = true;
+    var torch = Dance.Tile.hasTorch(tile);
     if (!exposed) {
       background = 'black';
     } else if (tile == Dance.Tile.EMPTY) {
@@ -98,7 +98,7 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
       height = 48;
       width = 24;
       top = Dance.View.TILE_PX * row - 15;
-      if (tile == Dance.Tile.DIRT) {
+      if (tile == Dance.Tile.DIRT || tile == Dance.Tile.DIRT_WITH_TORCH) {
         background = 'url(http://jkadams.github.io/dance/level/zone4_wall_dirt.png)';
       } else if (tile == Dance.Tile.STONE) {
         background = 'url(http://jkadams.github.io/dance/level/zone4_wall_rock_A.png)';
@@ -122,11 +122,16 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
     imageDiv.style.background = background;
     imageDiv.style.position = 'absolute';
     div.appendChild(imageDiv);
+    if (exposed && torch) {
+      var torchDiv = document.createElement('div');
+      torchDiv.className = 'torch';
+      div.appendChild(torchDiv);
+    }
     if (exposed && !currentlyVisible) {
       var overlayDiv = document.createElement('div');
       overlayDiv.style.height=height + 'px';
       overlayDiv.style.width=width + 'px';
-      overlayDiv.style.background = 'rgba(50,0,0,0.6)';
+      overlayDiv.style.background = 'rgba(0,0,0,0.6)';
       overlayDiv.style.position = 'absolute';
       div.appendChild(overlayDiv);
     }

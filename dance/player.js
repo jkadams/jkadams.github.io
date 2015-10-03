@@ -42,7 +42,8 @@ Dance.Units.Player.prototype.doMove = function(game, move) {
   }
   var newPosition = this.position.applyMove(move);
   // Dig
-  if (game.board.getTileAt(newPosition) == Dance.Tile.DIRT) {
+  var tile = game.board.getTileAt(newPosition);
+  if (Dance.Tile.strength(tile) > 0 && Dance.Tile.strength(tile) <= 1) {
     game.board.setTileAt(newPosition, Dance.Tile.EMPTY);
     if (game.zone == 4) {
       // In Zone 4, digging dirt also takes out perpendicular tiles as well.
@@ -54,7 +55,8 @@ Dance.Units.Player.prototype.doMove = function(game, move) {
       }
       for (var i = 0; i < perpMoves.length; i++) {
         var pos2 = newPosition.applyMove(perpMoves[i]);
-        if (game.board.getTileAt(pos2) == Dance.Tile.DIRT) {
+        var tileStr2 = Dance.Tile.strength(game.board.getTileAt(pos2));
+        if (tileStr2 > 0 && tileStr2 <= 1) {
           game.board.setTileAt(pos2, Dance.Tile.EMPTY);
         }
       }
