@@ -88,7 +88,7 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
     top = Dance.View.TILE_PX * row - 15;
     if (tile == Dance.Tile.DIRT || tile == Dance.Tile.DIRT_WITH_TORCH) {
       background = 'url(http://jkadams.github.io/dance/level/zone4_wall_dirt.png)';
-    } else if (tile == Dance.Tile.STONE) {
+    } else if (tile == Dance.Tile.STONE || tile == Dance.Tile.STONE_WITH_TORCH) {
       background = 'url(http://jkadams.github.io/dance/level/zone4_wall_rock_A.png)';
     } else if (tile == Dance.Tile.CATACOMB) {
       background = 'url(http://jkadams.github.io/dance/level/zone4_wall_catacomb_A.png)';
@@ -119,7 +119,7 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
     var overlayDiv = document.createElement('div');
     overlayDiv.style.height=height + 'px';
     overlayDiv.style.width=width + 'px';
-    overlayDiv.style.background = 'rgba(0,0,0,0.6)';
+    overlayDiv.style.background = 'rgba(50,0,0,0.6)';
     overlayDiv.style.position = 'absolute';
     div.appendChild(overlayDiv);
   }

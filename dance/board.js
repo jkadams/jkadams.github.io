@@ -28,7 +28,7 @@ Dance.Board = function(layout) {
   this.currentlyVisible;
 };
 
-Dance.Tile = { EMPTY: 0, DIRT: 1, DIRT_WITH_TORCH: 11, STONE: 2, CATACOMB: 5,
+Dance.Tile = { EMPTY: 0, DIRT: 1, DIRT_WITH_TORCH: 11, STONE: 2, STONE_WITH_TORCH: 12, CATACOMB: 5,
     SHOP: 3, SHOP_WITH_TORCH: 13, SOLID: 4, STAIRS: 6 };
 
 Dance.Tile.strength = function(tile) {
@@ -41,6 +41,7 @@ Dance.Tile.strength = function(tile) {
     case Tile.DIRT_WITH_TORCH:
       return 1;
     case Tile.STONE:
+    case Tile.STONE_WITH_TORCH:
       return 2;
     case Tile.CATACOMB:
       return 3;
@@ -53,7 +54,8 @@ Dance.Tile.strength = function(tile) {
 };
 
 Dance.Tile.hasTorch = function(tile) {
-  return tile == Dance.Tile.DIRT_WITH_TORCH || tile == Dance.Tile.SHOP_WITH_TORCH;
+  return tile == Dance.Tile.DIRT_WITH_TORCH || tile == Dance.Tile.SHOP_WITH_TORCH ||
+      tile == Dance.Tile.STONE_WITH_TORCH;
 };
 
 Dance.Board.prototype.create2D = function(initialValue) {
@@ -66,6 +68,16 @@ Dance.Board.prototype.create2D = function(initialValue) {
     arr2D.push(arr);
   }
   return arr2D;
+};
+
+Dance.Board.TorchLight = [[1.00,1.00,1.00,0.96,0.18],
+                          [1.00,1.00,1.00,0.85,0.10],
+                          [1.00,1.00,1.00,0.50,0.00],
+                          [0.96,0.85,0.50,0.01,0.00],
+                          [0.18,0.10,0.00,0.00,0.00]];
+
+Dance.Board.getTorchLight = function(dx, dy) {
+  return Dance.Board.TorchLight[Math.abs(dx)][Math.abs(dy)];
 };
 
 // no torch: sqrt(16) sight, sqrt(5) sight for not just eyes. see sqrt(2) into walls
@@ -94,26 +106,47 @@ Dance.Board.prototype.expose = function(position) {
 //      }
 //    }
 //  }
+  this.lighting = this.create2D(0);
+
+  for (var r = 0; r < this.rows; r++) {
+    for (var c = 0; c < this.columns; c++) {
+      if (Dance.Tile.hasTorch(this.getTileAt(new Dance.Position(r, c)))) {
+        for (var dr = -4; dr <= 4; dr++) {
+          for (var dc = -4; dc <= 4; dc++) {
+            if (r + dr < 0 || c + dc < 0 || r + dr >= this.rows || c + dc >= this.columns) {
+              continue;
+            }
+            this.lighting[r + dr][c + dc] += Dance.Board.getTorchLight(dr, dc);
+          }
+        }
+      }
+    }
+  }
   this.currentlyVisible = this.create2D(false);
-  this.exposed[position.row][position.column] = true;
-  this.currentlyVisible[position.row][position.column] = true;
+  for (var dr = -5; dr <= 5; dr++) {
+    for (var dc = -5; dc <= 5; dc++) {
+      var r = position.row + dr;
+      var c = position.column + dc;
+      if (r < 0 || c < 0 || r >= this.rows || c >= this.columns) {
+        continue;
+      }
+      if (dr * dr + dc * dc <= 20) {
+        this.currentlyVisible[r][c] = true;
+        // Tiles that have ever been visible.
+        this.exposed[r][c] = true;
+        this.lighting[r][c] += 1;
+      }
+    }
+  }
   var logg = false;
-  // 5,12 to 12,10
   for (var r = -1; r < this.rows + 1; r++) {
     for (var c = -1; c < this.columns + 1; c++) {
-//      logg = (position.row == 5 && position.column == 10 && r == 13 && c == 15);
-//      logg = (position.row == 5 && position.column == 14 && r == 13 && c == 10);
-//      logg = (position.row == 5 && position.column == 14 && r == 13 && c == 10);
-//      if (!logg) continue;
-//      debugger;
-//      console.log((position.row * 2 + 1)+","+(position.column * 2 + 1)+" to " + (r*2) + ","+ (c*2));
       var y0 = position.row * 2 + 1;
       var x0 = position.column * 2 + 1;
       var y1 = r * 2;
       var x1 = c * 2;
       Dance.Board.castRay(y0, x0, y1, x1,
       function(x, y, corner) {
-        if (logg) console.log(">>>"+x+","+y+":"+corner);
         var row = Math.floor(y / 2);
         var column = Math.floor(x / 2);
         if (row < 0 || column < 0 || column >= this.columns || row >= this.rows) {
@@ -129,6 +162,7 @@ Dance.Board.prototype.expose = function(position) {
             for (var dr = 0; dr <= 1; dr++) {
               for (var dc = 0; dc <= 1; dc++) {
                 if (cornerRow - dr >= 0 && cornerColumn - dc >= 0) {
+                  if (this.lighting[cornerRow - dr][cornerColumn - dc] < 1) continue;
                   this.currentlyVisible[cornerRow - dr][cornerColumn - dc] = true;
                   this.exposed[cornerRow - dr][cornerColumn - dc] = true;
                 }
@@ -137,10 +171,13 @@ Dance.Board.prototype.expose = function(position) {
             return !this.isTileEmpty(new Dance.Position(row, column)); // returns true if the ray casting should stop
           }
         } else {
-          // Tiles that are visible this turn.
-          this.currentlyVisible[row][column] = true;
-          // Tiles that have ever been visible.
-          this.exposed[row][column] = true;
+          if (this.lighting[row][column] >= 1) {
+            // Tiles that are visible this turn.
+            if (row == 16 && column == 10) debugger;
+            this.currentlyVisible[row][column] = true;
+            // Tiles that have ever been visible.
+            this.exposed[row][column] = true;
+          }
           return !this.isTileEmpty(new Dance.Position(row, column)); // returns true if the ray casting should stop
         }
       }.bind(this));
