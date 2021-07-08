@@ -76,26 +76,26 @@ Dance.View.prototype.renderTile = function(tile, row, column, exposed, currently
     background = 'black';
   } else if (tile == Dance.Tile.EMPTY) {
     if ((row + column) % 2 == 0) {
-      background = 'url(http://jkadams.github.io/dance/level/zone4_floor.png) -27px -1px';
+      background = 'url(https://jkadams.github.io/dance/level/zone4_floor.png) -27px -1px';
     } else {
-      background = 'url(http://jkadams.github.io/dance/level/zone4_floor.png) -1px -1px';
+      background = 'url(https://jkadams.github.io/dance/level/zone4_floor.png) -1px -1px';
     }
   } else if (tile == Dance.Tile.STAIRS) {
-    background = 'url(http://jkadams.github.io/dance/level/stairs.png)';
+    background = 'url(https://jkadams.github.io/dance/level/stairs.png)';
   } else {
     height = 48;
     width = 24;
     top = Dance.View.TILE_PX * row - 15;
     if (tile == Dance.Tile.DIRT || tile == Dance.Tile.DIRT_WITH_TORCH) {
-      background = 'url(http://jkadams.github.io/dance/level/zone4_wall_dirt.png)';
+      background = 'url(https://jkadams.github.io/dance/level/zone4_wall_dirt.png)';
     } else if (tile == Dance.Tile.STONE || tile == Dance.Tile.STONE_WITH_TORCH) {
-      background = 'url(http://jkadams.github.io/dance/level/zone4_wall_rock_A.png)';
+      background = 'url(https://jkadams.github.io/dance/level/zone4_wall_rock_A.png)';
     } else if (tile == Dance.Tile.CATACOMB) {
-      background = 'url(http://jkadams.github.io/dance/level/zone4_wall_catacomb_A.png)';
+      background = 'url(https://jkadams.github.io/dance/level/zone4_wall_catacomb_A.png)';
     } else if (tile == Dance.Tile.SHOP || tile == Dance.Tile.SHOP_WITH_TORCH) {
-      background = 'url(http://jkadams.github.io/dance/level/wall_shop_crypt.png)';
+      background = 'url(https://jkadams.github.io/dance/level/wall_shop_crypt.png)';
     } else {
-      background = 'url(http://jkadams.github.io/dance/level/end_of_world.png)';
+      background = 'url(https://jkadams.github.io/dance/level/end_of_world.png)';
     }
   }
 
@@ -145,7 +145,7 @@ Dance.View.prototype.renderPlayer = function(player) {
   if (player.facingHorizontal == Dance.Direction.LEFT) {
     head.style.transform = 'scaleX(-1)';
   }
-  head.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+  head.style.background = 'url(https://jkadams.github.io/dance/' + spriteImage + ') ' +
       -frameX * frameWidth + 'px ' +
       -frameY * frameHeight + 'px';
   head.className = 'enemySprite';
@@ -163,7 +163,7 @@ Dance.View.prototype.renderPlayer = function(player) {
   if (player.facingHorizontal == Dance.Direction.LEFT) {
     armor.style.transform = 'scaleX(-1)';
   }
-  armor.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+  armor.style.background = 'url(https://jkadams.github.io/dance/' + spriteImage + ') ' +
       -frameX * frameWidth + 'px ' +
       -frameY * frameHeight + 'px';
   armor.className = 'enemySprite';
@@ -173,8 +173,8 @@ Dance.View.prototype.renderPlayer = function(player) {
   for (var i = 0; i < player.initialHealth; i++) {
     var heart = document.createElement('img');
     heart.src = i < player.health ?
-        'http://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
-        'http://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
+        'https://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
+        'https://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
     health.appendChild(heart);
   }
   var heartWidth = 12 * player.initialHealth;
@@ -253,7 +253,7 @@ Dance.View.prototype.renderEnemy = function(enemy) {
   if (flipHorizontal) {
     div.style.transform = 'scaleX(-1)';
   }
-  div.style.background = 'url(http://jkadams.github.io/dance/' + spriteImage + ') ' +
+  div.style.background = 'url(https://jkadams.github.io/dance/' + spriteImage + ') ' +
       -frameX * frameWidth + 'px ' +
       -frameY * frameHeight + 'px';
   div.className = 'enemySprite';
@@ -270,8 +270,8 @@ Dance.View.prototype.renderEnemy = function(enemy) {
     for (var i = 0; i < enemy.initialHealth; i++) {
       var heart = document.createElement('img');
       heart.src = i < enemy.health ?
-          'http://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
-          'http://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
+          'https://jkadams.github.io/dance/gui/TEMP_heart_small.png' :
+          'https://jkadams.github.io/dance/gui/TEMP_heart_empty_small.png';
       health.appendChild(heart);
     }
     var heartWidth = 12 * enemy.initialHealth;
