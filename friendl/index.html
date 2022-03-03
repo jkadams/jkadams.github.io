@@ -18,6 +18,12 @@
             width: 20em;
         }
 
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.2em;
+        }
+
         .keys {
           margin-top: 2em;
           width: 100%;
@@ -88,23 +94,26 @@
         }
 
         .key {
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 50px;
             text-transform: capitalize;
-            font: 14px Arial;
+            font: 16px Arial;
             vertical-align: top;
             text-align: left;
-            padding: 3px;
+            padding: 6px;
             margin: 3px;
-          font-weight: 500;
+          font-weight: bold;
           color: white;
           background-color: #222;
           border-radius: 2px;
           border-color: gray;
+    display: inline-flex;
+    align-items: flex-start;
         }
     </style>
 </head>
 <body onload="start()" style="background: black; color: white; font-family: Arial;">
+<div class="header"><button>Settings</button><button>Help</button></div>
 <div class="game">
 <div class="board">
 </div>
