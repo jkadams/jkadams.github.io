@@ -4,3 +4,4 @@ meld/java/State*.png
 *.class
 *.project
 *.iml
+*.xml

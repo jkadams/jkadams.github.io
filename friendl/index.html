@@ -1,80 +1,111 @@
 <html>
-  <head>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="friendl.js"></script>
     <style>
-      .board { 
-        border: 2px solid white;
-        max-width: 20em;
-        padding: 0.2em;
-        background-color: darkslategray;
-      }
-      .row {
-        display: flex;
-        justify-content: space-around;
-        padding: 0.2em;
-      }
-      .letter {
-        width: 1em;
-        height: 1em;
-        text-align: center;
-        font-family:'Arial';
-        font-weight: bold;
-        font-size: 2em;
-        border: 1px solid white;
-      }
-      .board.won {
-        background-color: blue;
-      }
-      .unknown,
-      .absent {
-        background-color: darkslategray;
-      }
-      .elsewhere {
-        background-color: blueviolet;
-      }
-      .correct {
-        background-color: yellow;
-        color: black;
-        border-color: black;
-      }
-      .player {
-        background-color: red;
-        border-radius: 1em;
-        width: 1em;
-        height: 1em;
-        font-size: 2em;
-        font-family:'Arial';
-        font-weight: bold;
-        text-align: center;
-        color: black;
-      }
-      .key {
-        width: 1em;
-        height: 1em;
-        border: 1px solid white;
-        text-align: center;
-      }
-      .keys {
-        margin-top: 2em;
-        max-width: 20em;
-      }
-      .keyrow {
-        display: flex;
-        justify-content: space-around;
-        padding: 0.2em;
-      }
+        .game {
+          display: flex;
+          flex-direction: column;
+          align-content: space-between;
+          align-items: center;
+          height: 100%;
+          width: 100%;
+        }
+        .board {
+            border: 2px solid white;
+            padding: 0.2em;
+            background-color: darkslategray;
+            width: 20em;
+        }
+
+        .keys {
+          margin-top: 2em;
+          width: 100%;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-around;
+            padding: 0.2em;
+        }
+
+        .letter {
+            width: 1em;
+            height: 1em;
+            text-align: center;
+            font-family: 'Arial';
+            font-weight: bold;
+            font-size: 2em;
+            border: 1px solid white;
+        }
+
+        .board.won {
+            background-color: blue;
+        }
+
+        .unknown,
+        .absent {
+            background-color: darkslategray;
+        }
+
+        .elsewhere {
+            background-color: blueviolet;
+        }
+
+        .correct {
+            background-color: yellow;
+            color: black;
+            border-color: black;
+        }
+
+        .player {
+            background-color: lightblue;
+            border-radius: 8px;
+            width: 1em;
+            height: 1em;
+            font-size: 2em;
+            font-family: Arial;
+            font-weight: bold;
+            text-align: center;
+            color: black;
+        }
+
+        .key {
+            width: 1em;
+            height: 1em;
+            border: 1px solid white;
+            text-align: center;
+        }
+
+        .keyrow {
+            display: flex;
+            justify-content: center;
+            padding: 0.2em;
+        }
+
+        .key {
+            width: 30px;
+            height: 30px;
+            text-transform: capitalize;
+            font: 14px Arial;
+            vertical-align: top;
+            text-align: left;
+            padding: 3px;
+            margin: 3px;
+          font-weight: 500;
+          color: white;
+          background-color: #222;
+          border-radius: 2px;
+          border-color: gray;
+        }
     </style>
-  </head>
-  <body onload="start()" style="background: black; color: white; font-family: Arial;">
-    <div class="board">
-    </div>
-    <div class="keys">
-      <div class="keyrow">
-        <div class="key">q</div><div class="key">w</div><div class="key">e</div><div>...</div>
-      </div>
-      <div class="keyrow">
-        <div class="key">a</div><div class="key">s</div><div>...</div>
-      </div>
-    </div>
-  </body>
+</head>
+<body onload="start()" style="background: black; color: white; font-family: Arial;">
+<div class="game">
+<div class="board">
+</div>
+<div class="keys">
+</div>
+</div>
+</body>
 </html>
