@@ -97,7 +97,7 @@ class Game {
     if (this.guess === this.target) {
       this.board.className = 'board won';
       this.gameComplete = true;
-      this.showNotification('Yay! Press R to restart.');
+      this.showNotification('Got it in ' + this.stateList.length +'! Press R to restart.');
     } else {
       this.guess = '';
       this.startNewRow();
@@ -105,8 +105,14 @@ class Game {
     }
   }
   updateKeys() {
+
     for (let i = 0; i < this.guessList.length; i++) {
-      // find 'max' for each letter or something
+        const guess = this.guessList[i];
+        for (let j = 0; j < guess.length; j++) {
+            const letter = guess.charAt(j);
+
+            // find 'max' for each letter or something
+        }
     }
   }
 
@@ -206,8 +212,8 @@ class Game {
     const help = document.getElementById('help');
 
     help.addEventListener('click', (event) => {
-      this.showNotification('Pink: correct letter, correct location\n' +
-          'Blue: correct letter, wrong location');
+      this.showNotification('Pink (left): correct letter, correct location\n' +
+          'Blue (right): correct letter, wrong location');
     }, false);
 
   }
@@ -230,6 +236,9 @@ function createKey(letter) {
   const singleKey = document.createElement('button');
   singleKey.innerText = letter;
   singleKey.className = 'key';
+  if (letter === BACKSPACE_KEY || letter === ENTER_KEY) {
+      singleKey.style.width = '70px';
+  }
   singleKey.addEventListener('click', (event) => {
     if (g.gameComplete) {
       if (letter === 'r') {
