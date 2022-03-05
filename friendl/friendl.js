@@ -48,6 +48,8 @@ class Game {
     this.board.appendChild(row);
     this.updateGuess();
     this.currentRow = this.board.lastChild;
+    row.appendChild(this.createCountNode('', PLAYER_1_COLOR));
+    row.appendChild(this.createCountNode('', PLAYER_2_COLOR));
   }
 
   letterCounts(word) {
@@ -136,15 +138,35 @@ class Game {
     while (row.firstChild) {
       row.removeChild(row.firstChild);
     }
+    // const player = document.createElement('div');
+    // player.className = 'player';
+    // const playerNum = (this.stateList.length % 2 + 1);
+    // player.style.backgroundColor = playerNum === 1 ? PLAYER_1_COLOR : PLAYER_2_COLOR;
+    // player.appendChild(document.createTextNode('' + playerNum));
+    // row.appendChild(player);
+    for (let i = 0; i < this.target.length; i++) {
+      // row.appendChild(this.makeLetter(states ? states[i] : LetterState.UNKNOWN, this.guess[i]));
+      row.appendChild(this.makeLetter(LetterState.UNKNOWN, this.guess[i]));
+    }
+    let correct = 0;
+    let elsewhere = 0;
+    for (let i = 0; i < states.length; i++) {
+      if (states[i] === LetterState.CORRECT) {
+        correct++;
+      } else if (states[i] === LetterState.ELSEWHERE) {
+        elsewhere++;
+      }
+    }
+    row.appendChild(this.createCountNode(''+correct, PLAYER_1_COLOR));
+    row.appendChild(this.createCountNode(''+elsewhere, PLAYER_2_COLOR));
+  }
+
+  createCountNode(count, color) {
     const player = document.createElement('div');
     player.className = 'player';
-    const playerNum = (this.stateList.length % 2 + 1);
-    player.style.backgroundColor = playerNum === 1 ? PLAYER_1_COLOR : PLAYER_2_COLOR;
-    player.appendChild(document.createTextNode('' + playerNum));
-    row.appendChild(player);
-    for (let i = 0; i < this.target.length; i++) {
-      row.appendChild(this.makeLetter(states ? states[i] : LetterState.UNKNOWN, this.guess[i]));
-    }
+    player.style.backgroundColor = color;
+    player.appendChild(document.createTextNode(count));
+    return player;
   }
 
   wordStates(input) {
