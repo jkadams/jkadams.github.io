@@ -278,9 +278,15 @@ class Game {
         'Blue (right): correct letter, wrong location');
   }
 
+  showSettings(event) {
+    this.showNotification('Sorry no settings yet :)');
+  }
+
   setup() {
     const help = document.getElementById('help');
     help.addEventListener('click', (event) => this.showHelp(), false);
+    const settings = document.getElementById('settings');
+    settings.addEventListener('click', (event) => this.showSettings(), false);
     const randomButton = document.getElementById('random');
     randomButton.addEventListener('click',
     (event) => this.chooseRandomWord(DEFAULT_WORD_SIZE), false); 
