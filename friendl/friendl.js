@@ -86,7 +86,7 @@ class Game {
       if (this.timer_) {
         clearTimeout(this.timer_);
       }
-      this.timer_ = setTimeout(() => notif.style.visibility = 'hidden', 5000);
+      this.timer_ = setTimeout(() => notif.style.visibility = 'hidden', 10000);
     }
   }
 
