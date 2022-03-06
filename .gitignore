@@ -5,3 +5,4 @@ meld/java/State*.png
 *.project
 *.iml
 *.xml
+.DS_Store
