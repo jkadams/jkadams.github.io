@@ -213,7 +213,7 @@ class Game {
     }
     // Then check for right-letter-wrong-place
     for (let i = 0; i < input.length; i++) {
-      if (countsByLetter[input[i]] > 0) {
+      if (countsByLetter[input[i]] > 0 && states[i] !== LetterState.CORRECT) {
         states[i] = LetterState.ELSEWHERE;
         countsByLetter[input[i]]--;
       }
