@@ -41,8 +41,10 @@ class Game {
     row.className = 'row';
     this.board.appendChild(row);
     const randomButton = document.getElementById('random');
-    randomButton.style.visibility = 'visible';
+    randomButton.style.display = 'unset';
     row.innerText = START_HELP_TEXT;
+    this.updateKeys();
+    this.showNotification(null);
   }
 
   chooseWord(target) {
@@ -61,7 +63,7 @@ class Game {
     this.startNewRow();
     this.gameState = GameState.GUESSING_WORD;
     const randomButton = document.getElementById('random');
-    randomButton.style.visibility = 'hidden';
+    randomButton.style.display = 'none';
     this.updateGuess();
   }
 
@@ -102,17 +104,17 @@ class Game {
   showNotification(text, timeout = 10000) {
     const notif = document.getElementsByClassName('notification')[0];
     if (!text || text === '') {
-      notif.style.visibility = 'hidden';
+      notif.style.display = 'none';
       if (this.timer_) {
         clearTimeout(this.timer_);
       }
     } else {
       notif.innerText = text;
-      notif.style.visibility = 'visible';
+      notif.style.display = 'unset';
       if (this.timer_) {
         clearTimeout(this.timer_);
       }
-      this.timer_ = setTimeout(() => notif.style.visibility = 'hidden', timeout);
+      this.timer_ = setTimeout(() => notif.style.display = 'none', timeout);
     }
   }
   commitWord() {
@@ -147,7 +149,11 @@ class Game {
       window.scrollTo(0, document.body.scrollHeight);
     }
   }
+
   updateKeys() {
+    for (let key in keyMap) {
+      keyMap[key].className = 'key';
+    }
     for (let i = 0; i < this.guessList.length; i++) {
       const guess = this.guessList[i];
       for (let j = 0; j < guess.length; j++) {
