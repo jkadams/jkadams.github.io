@@ -16,7 +16,7 @@
         .board {
             border: 2px solid white;
             padding: 0.2em;
-            background-color: darkslategray;
+            background-color: #222;
             width: 20em;
         }
 
@@ -56,7 +56,7 @@
         }
 
         .key.used {
-            background: #555;
+            background: #444;
             border-color: white;
             border-style: dashed;
         }
@@ -80,6 +80,7 @@
             /* justify-content: space-around; */
             padding: 0.2em;
             min-height: 38px;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         .board.won {
@@ -101,10 +102,23 @@
             border-color: black;
         }
 
+        .state.right {
+            border-style: double;
+            border-width: 3px;
+            background-color: lightgreen;
+            margin: 2px;
+        }
+        .state.else {
+            border-style: dashed;
+            border-width: 1px;
+            margin: 4px;
+            background-color: #55CDFC;
+        }
+
         .counter, .state, .letter {
             background-color: gray;
             border-radius: 8px;
-            border: 1px solid white;
+            border: 2px solid white;
             width: 1em;
             height: 1em;
             font-size: 2em;
@@ -112,7 +126,7 @@
             font-weight: bold;
             text-align: center;
             color: black;
-            margin: 2px;
+            margin: 3px;
         }
 
         .counter {

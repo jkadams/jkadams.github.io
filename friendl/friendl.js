@@ -3,7 +3,7 @@ LetterState.UNKNOWN = 'empty';
 LetterState.ABSENT = 'absent';
 LetterState.ELSEWHERE = 'elsewhere';
 LetterState.CORRECT = 'correct';
-const START_HELP_TEXT = 'Enter a word for someone to guess!\nOr choose a random word.';
+const START_HELP_TEXT = 'Enter a word for someone!\nOr choose a random word.';
 
 const GameState = {};
 GameState.CHOOSING_WORD = 'choose';
@@ -234,14 +234,13 @@ class Game {
         }
       }
     }
-    row.appendChild(this.createCountNode(correct, CORRECT_COLOR));
-    row.appendChild(this.createCountNode(elsewhere, ELSEWHERE_COLOR));
+    row.appendChild(this.createCountNode(correct, 'right'));
+    row.appendChild(this.createCountNode(elsewhere, 'else'));
   }
 
-  createCountNode(count, color) {
+  createCountNode(count, kind) {
     const player = document.createElement('div');
-    player.className = 'state';
-    player.style.backgroundColor = color;
+    player.className = 'state ' + kind;
     player.appendChild(document.createTextNode(count));
     return player;
   }
