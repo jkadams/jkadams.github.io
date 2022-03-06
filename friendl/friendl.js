@@ -178,21 +178,22 @@ class Game {
 
   }
 
-  deleteLetter() {
-    if (this.gameState == GameState.CHOOSING_WORD) {
-      if (this.pendingTarget.length >= 1) {
-        this.pendingTarget = this.pendingTarget.substring(0, this.pendingTarget.length - 1);
-      }
-    } else {
-      if (this.guess.length >= 1) {
-        this.guess = this.guess.substring(0, this.guess.length - 1);
-      }
+  deleteLetterTarget() {
+    if (this.pendingTarget.length >= 1) {
+      this.pendingTarget = this.pendingTarget.substring(0, this.pendingTarget.length - 1);
     }
     this.updateGuess();
     if (this.pendingTarget.length === 0) {
       const row = this.board.lastChild;
       row.innerText = START_HELP_TEXT;
     }
+  }
+
+  deleteLetterGuess() {
+    if (this.guess.length >= 1) {
+      this.guess = this.guess.substring(0, this.guess.length - 1);
+    }
+    this.updateGuess();
   }
 
   updateGuess(states) {
@@ -292,7 +293,7 @@ class Game {
       }
     } else if (g.gameState == GameState.GUESSING_WORD) {
       if (letter === BACKSPACE_KEY) {
-        g.deleteLetter();
+        g.deleteLetterGuess();
       } else if (letter === ENTER_KEY) {
         g.guessWord();
       } else {
@@ -300,7 +301,7 @@ class Game {
       }
     } else {
       if (letter === BACKSPACE_KEY) {
-        g.deleteLetter();
+        g.deleteLetterTarget();
       } else if (letter === ENTER_KEY) {
         g.commitWord();
       } else {
