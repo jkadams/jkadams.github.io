@@ -1,6 +1,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="words.js"></script>
     <script src="friendl.js"></script>
     <style>
         .game {
@@ -24,7 +25,7 @@
             justify-content: flex-end;
             margin-bottom: 8px;
         }
-        .header button {
+        button {
             font: 16px Arial;
             background: #222;
             color: white;
@@ -33,6 +34,29 @@
             border: 1px solid gray;
             border-radius: 2px;
             font-weight: bold;
+        }
+        button:hover {
+            background: #444;
+        }
+        button:active {
+            background: #666;
+        }
+
+        .key {
+            width: 50px;
+            height: 50px;
+            text-transform: capitalize;
+            vertical-align: top;
+            text-align: left;
+            padding: 6px;
+            margin: 3px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: flex-start;
+        }
+
+        .random {
+            margin: 8px;
         }
 
         .keys {
@@ -47,18 +71,9 @@
 
         .row {
             display: flex;
-            justify-content: space-around;
+            /* justify-content: space-around; */
             padding: 0.2em;
-        }
-
-        .letter {
-            width: 1em;
-            height: 1em;
-            text-align: center;
-            font-family: 'Arial';
-            font-weight: bold;
-            font-size: 2em;
-            border: 1px solid white;
+            min-height: 34px;
         }
 
         .board.won {
@@ -80,47 +95,28 @@
             border-color: black;
         }
 
-        .player {
-            background-color: lightblue;
+        .counter, .state, .letter {
+            background-color: gray;
             border-radius: 8px;
+            border: 1px solid white;
             width: 1em;
             height: 1em;
             font-size: 2em;
-            font-family: Arial;
+            font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             text-align: center;
             color: black;
+            margin: 2px;
         }
 
-        .key {
-            width: 1em;
-            height: 1em;
-            border: 1px solid white;
-            text-align: center;
+        .counter {
+            background-color: blueviolet;
         }
 
         .keyrow {
             display: flex;
             justify-content: center;
             padding: 0.2em;
-        }
-
-        .key {
-            width: 50px;
-            height: 50px;
-            text-transform: capitalize;
-            font: 16px Arial;
-            vertical-align: top;
-            text-align: left;
-            padding: 6px;
-            margin: 3px;
-            font-weight: bold;
-            color: white;
-            background-color: #222;
-            border-radius: 2px;
-            border-color: gray;
-            display: inline-flex;
-            align-items: flex-start;
         }
     </style>
 </head>
@@ -132,6 +128,7 @@
 <div class="game">
     <div class="board">
     </div>
+    <button id="random" class="random">Random Word</button>
     <div class="notification">Unknown word</div>
     <div class="keys">
     </div>
