@@ -279,7 +279,7 @@ class Game {
 
   showHelp(event) {
     this.showNotification('To start, enter a word for someone else to guess, or choose a random word.\n' +
-    'Pink (left): correct letter, correct location\n' +
+    'Green (left): correct letter, correct location\n' +
         'Blue (right): correct letter, wrong location');
   }
 
