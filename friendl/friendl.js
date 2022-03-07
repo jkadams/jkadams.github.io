@@ -17,14 +17,16 @@ const DEFAULT_WORD_SIZE = 4;
 
 const ENTER_KEY = '\u21A9';
 const BACKSPACE_KEY = '\u232B';
-const keys = ['qwertyuiop', 'asdfghjkl', ENTER_KEY + 'zxcvbnm' + BACKSPACE_KEY];
+const KEYS = ['qwertyuiop', 'asdfghjkl', ENTER_KEY + 'zxcvbnm' + BACKSPACE_KEY];
 
+const NUMBERS = ['\u24EA', '\u2460', '\u2461', '\u2462', '\u2463', '\u2464', '\u2465', '\u2466', '\u2467', '\u2468'];
 
 class Game {
   constructor() {
   }
 
   newGame() {
+    document.activeElement.blur();
     this.stateList = [];
     this.guessList = [];
     this.keyStates = {};
@@ -35,6 +37,8 @@ class Game {
       this.board.removeChild(this.board.firstChild);
     }
     this.board.className = 'board';
+    const share = document.getElementById('share');
+    share.className = 'share';
     this.gameState = GameState.CHOOSING_WORD;
     
     const row = document.createElement('div');
@@ -56,8 +60,10 @@ class Game {
       }
       return null;
     }
+    this.pendingTarget = '';
     this.size = target.length;
     this.target = target;
+    window.location.hash = '#' + encode(target);
     this.targetWordList = wordsByLength[this.target.length];
     this.board.removeChild(this.board.firstChild);
     this.startNewRow();
@@ -119,10 +125,10 @@ class Game {
   }
   commitWord() {
     this.chooseWord(this.pendingTarget);
-    this.pendingTarget = '';
   }
 
   guessWord() {
+    document.activeElement.blur();
     const input = this.guess.toLowerCase();
     if (input.length !== this.size) {
       return;
@@ -141,7 +147,10 @@ class Game {
     this.updateKeys();
     if (this.guess === this.target) {
       this.board.className = 'board won';
+      const share = document.getElementById('share');
+      share.className = 'share won';
       this.gameState = GameState.COMPLETE;
+      window.location.hash = '';
       this.showNotification('Got it in ' + this.stateList.length +'! Press R or Enter to restart.');
     } else {
       this.guess = '';
@@ -287,11 +296,53 @@ class Game {
     this.showNotification('Sorry no settings yet :)');
   }
 
+  share(event) {
+    let text = '';
+    if (this.gameState === GameState.GUESSING_WORD) {
+      text = 'Here you go! ' + window.location;
+    } else if (this.gameState == GameState.COMPLETE) {
+      for (let i = 0; i < this.stateList.length; i++) {
+        const states = this.stateList[i];
+        let correct = 0;
+        let elsewhere = 0;
+        for (let i = 0; i < states.length; i++) {
+          if (states[i] === LetterState.CORRECT) {
+            correct++;
+          } else if (states[i] === LetterState.ELSEWHERE) {
+            elsewhere++;
+          }
+        }
+        text += NUMBERS[correct];
+        text += NUMBERS[elsewhere];
+        text += '\n';
+      }
+      text += '\n';
+      text += '#' + encode(this.target);
+    }
+    if (navigator) {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Friendl',
+          text: text,
+          url: window.location
+        });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+      } else {
+        g.showNotification(text, 1000000);
+      }
+    }
+  }
+
   setup() {
     const help = document.getElementById('help');
     help.addEventListener('click', (event) => this.showHelp(), false);
-    const settings = document.getElementById('settings');
-    settings.addEventListener('click', (event) => this.showSettings(), false);
+    // const settings = document.getElementById('settings');
+    // settings.addEventListener('click', (event) => this.showSettings(), false);
+    const share = document.getElementById('share');
+    share.addEventListener('click', (event) => this.share(), false);
+    const restart = document.getElementById('restart');
+    restart.addEventListener('click', (event) => this.newGame(), false);
     const randomButton = document.getElementById('random');
     randomButton.addEventListener('click',
     (event) => this.chooseRandomWord(DEFAULT_WORD_SIZE), false); 
@@ -336,11 +387,11 @@ function createKey(letter) {
 const keyMap = {};
 function showKeyboard() {
   const keyboard = document.getElementsByClassName('keys')[0];
-  for (var i = 0; i < keys.length; i++) {
+  for (var i = 0; i < KEYS.length; i++) {
     const row = document.createElement('div');
     row.className = 'keyrow';
-    for (var j = 0; j < keys[i].length; j++) {
-      const character = keys[i].charAt(j);
+    for (var j = 0; j < KEYS[i].length; j++) {
+      const character = KEYS[i].charAt(j);
       const element = createKey(character);
       row.appendChild(element);
       keyMap[character] = element;
@@ -349,11 +400,47 @@ function showKeyboard() {
   }
 }
 
+function encode(word) {
+  let encoded = '';
+  let achar = 'a'.charCodeAt(0);
+  word = word.toLowerCase();
+  for (let i = 0; i < word.length; i++) {
+    let newLet = ((word.charCodeAt(i) - achar) + 11 + 13 * i + 17 * i * i) % 26;
+    if (newLet < 10) {
+      encoded += '0' + newLet;
+    } else {
+      encoded += newLet;
+    }
+  }
+  return encoded;
+}
+
+function decode(word) {
+  let decoded = '';
+  let achar = 'a'.charCodeAt(0);
+  word = word.toLowerCase();
+  try {
+    for (let i = 0; i < word.length; i += 2) {
+      let newLet = (parseInt(word.substring(i, i + 2), 10) - 11 - 13 * (i / 2) - 17 * (i / 2) * (i / 2) + 260) % 26;
+      decoded += String.fromCharCode(achar + newLet);
+    }
+  } catch (e) {
+    return null;
+  }
+  return decoded;
+}
+
 const g = new Game();
 function start() {
   showKeyboard();
   g.setup();
   g.newGame();
+  if (window.location.hash) {
+    const decoded = decode(window.location.hash.substring(1));
+    if (decoded) {
+      g.chooseWord(decoded);
+    }
+  }
   // g.chooseRandomWord(DEFAULT_WORD_SIZE);
 }
 

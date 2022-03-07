@@ -18,7 +18,7 @@
             border-radius: 2px;
             padding: 0.2em;
             background-color: #111;
-            width: 20em;
+            min-width: 258px;
         }
 
         .header {
@@ -102,6 +102,9 @@
             color: black;
             border-color: black;
         }
+        .share.won {
+            background-color: green;
+        }
 
         .state.right {
             border-style: double;
@@ -143,8 +146,10 @@
 </head>
 <body onload="start()" style="background: black; color: white; font-family: Arial;">
 <div class="header">
-    <button id="settings">Settings</button>
+    <button id="share" class="share">Share</button>
+    <!-- <button id="settings">Settings</button> -->
     <button id="help">Help</button>
+    <button id="restart">Restart</button>
 </div>
 <div class="game">
     <div class="board">
