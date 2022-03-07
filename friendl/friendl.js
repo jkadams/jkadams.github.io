@@ -317,7 +317,7 @@ class Game {
         text += '\n';
       }
       text += '\n';
-      text += window.location + '#' + encode(this.target);
+      text += 'https://jkadams.github.io/friendl/#' + encode(this.target);
     }
     if (navigator) {
       if (navigator.share) {
