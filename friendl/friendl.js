@@ -19,7 +19,18 @@ const ENTER_KEY = '\u21A9';
 const BACKSPACE_KEY = '\u232B';
 const KEYS = ['qwertyuiop', 'asdfghjkl', ENTER_KEY + 'zxcvbnm' + BACKSPACE_KEY];
 
-const NUMBERS = ['\u24EA', '\u2460', '\u2461', '\u2462', '\u2463', '\u2464', '\u2465', '\u2466', '\u2467', '\u2468'];
+//const NUMBERS = ['\u24EA', '\u2460', '\u2461', '\u2462', '\u2463', '\u2464', '\u2465', '\u2466', '\u2467', '\u2468'];
+const NUMBERS = ['\u0030\uFE0F\u20E3', 
+'\u0031\uFE0F\u20E3', 
+'\u0032\uFE0F\u20E3', 
+'\u0033\uFE0F\u20E3', 
+'\u0034\uFE0F\u20E3', 
+'\u0035\uFE0F\u20E3', 
+'\u0036\uFE0F\u20E3', 
+'\u0037\uFE0F\u20E3', 
+'\u0038\uFE0F\u20E3', 
+'\u0039\uFE0F\u20E3'];
+
 
 class Game {
   constructor() {
@@ -317,14 +328,14 @@ class Game {
         text += '\n';
       }
       text += '\n';
-      text += '#' + encode(this.target);
+      text += 'https://jkadams.github.io/friendl/#' + encode(this.target);
     }
     if (navigator) {
       if (navigator.share) {
         navigator.share({
           title: 'Friendl',
-          text: text,
-          url: window.location
+          text: text
+          // url: window.location + '#' + encode(this.target)
         });
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(text);
