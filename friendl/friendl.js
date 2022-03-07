@@ -317,14 +317,14 @@ class Game {
         text += '\n';
       }
       text += '\n';
-      text += '#' + encode(this.target);
+      text += window.location + '#' + encode(this.target);
     }
     if (navigator) {
       if (navigator.share) {
         navigator.share({
           title: 'Friendl',
-          text: text,
-          url: window.location
+          text: text
+          // url: window.location + '#' + encode(this.target)
         });
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(text);
