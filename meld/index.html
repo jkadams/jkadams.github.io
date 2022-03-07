@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Solver</title>
+    <title>Meld</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
@@ -12,18 +13,14 @@
     <script>
     // The controller for the game.
     var controller = new MeldController();
-
     // The web worker, which will find a good next move in another thread.
     var worker;
     // The solver, which will be defined if the worker is undefined.
     var solver;
-    
     // Whether to automatically move using the Solver.
     var autoMove;
-    
     // A map from highest card value to number of occurrences.
     var highestCounts = {};
-    
     // Milliseconds between each auto-move (after it has been calculated).
     var MOVE_INTERVAL = 1;
     
@@ -72,7 +69,15 @@
       autoMove = checkbox.checked;
       checkbox.addEventListener('click', handleToggleAutoMove);
       document.getElementById('newGame').addEventListener('click', handleNewGame);
+      document.getElementById('up').addEventListener('click', () => move(MeldGame.Move.UP));
+      document.getElementById('down').addEventListener('click', () => move(MeldGame.Move.DOWN));
+      document.getElementById('left').addEventListener('click', () => move(MeldGame.Move.LEFT));
+      document.getElementById('right').addEventListener('click', () => move(MeldGame.Move.RIGHT));
       newGame();
+    }
+
+    function move(dir) {
+      controller.move(dir);
     }
 
     function newGame() {
@@ -110,8 +115,6 @@
     </head>
     <body onload="init();">
       <div id="middle">
-      <h2>Please check out <a href="http://asherv.com/threes/">Threes</a>!</h2>
-      <h3>This is a basic javascript AI for Threes with animation.</h3>
       <div id="nextPieceContainer"><div>Next</div></div>
       <div id="gameBoard" tabindex=0></div>
       <div style="margin:10px"><span id="score" style="display:none"></span></div>
@@ -119,6 +122,25 @@
       <div><label><input type="checkbox" id="toggleAutoMove">Enable AI</label></div>
       <div><label><input type="checkbox" id="toggleAutoRestart">Auto-Restart AI</label></div>
       <div><label><input type="text" id="moveInterval" value="100" style="width:40px"> Wait between moves (ms)</label></div>
+
+      <div class="arrows">
+        <div class="arrowrow">
+        <button id="up">&#9650;</button>
+        </div>
+        <div class="arrowrow">
+        <button id="left">&#9664;</button>
+        <button id="right">&#9654;</button>
+        </div>
+        <div class="arrowrow">
+        <button id="down">&#9660;</button>
+        </div>
       </div>
+      </div>
+
+      <div class="note"><a href="http://asherv.com/threes/">Threes</a> with basic animation & AI on the web.
+        <br />
+        But please play the real game, it's so cute!
+        <br />
+      - June</div>
     </body>
 </html>

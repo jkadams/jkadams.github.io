@@ -79,7 +79,7 @@ MeldController.prototype.startNewGame = function() {
   this.view = new MeldView(this.game);
   this.view.enterDocument();
   this.view.board.focus();
-  this.keyListener = this.handleKeyDown.bind(this);
+  this.keyListener = (e) => this.handleKeyDown(e);
   this.view.board.addEventListener('keydown', this.keyListener);
 
   // Is this the new-game algorithm?

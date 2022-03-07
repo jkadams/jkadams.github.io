@@ -6,7 +6,7 @@ body {
 #middle {
   margin-left: auto;
   margin-right: auto;
-  width: 600px;
+  width: 100%;
   text-align: center;
 }
 #score {
@@ -81,4 +81,26 @@ body {
   -moz-box-shadow:    none;
   -webkit-box-shadow: none;
   box-shadow:         none;
+}
+.arrows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media only screen and (min-width: 768px) {
+  .arrows {
+    display: none;
+  }
+}
+.arrowrow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.arrows button {
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+  margin-top: 8px;
 }
