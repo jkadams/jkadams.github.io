@@ -57,7 +57,7 @@
           border-style: dashed;
       }
 
-      .random {
+      .random, .enterword {
           margin: 8px;
       }
 

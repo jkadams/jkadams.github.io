@@ -55,8 +55,8 @@ class Game {
     const row = document.createElement('div');
     row.className = 'row';
     this.board.appendChild(row);
-    const randomButton = document.getElementById('random');
-    randomButton.style.display = 'unset';
+    document.getElementById('random').style.display = 'unset';
+    document.getElementById('enterword').style.display = 'unset';
     row.innerText = START_HELP_TEXT;
     this.updateKeys();
     this.showNotification(null);
@@ -79,8 +79,7 @@ class Game {
     this.board.removeChild(this.board.firstChild);
     this.startNewRow();
     this.gameState = GameState.GUESSING_WORD;
-    const randomButton = document.getElementById('random');
-    randomButton.style.display = 'none';
+    this.hideButtons();
     this.updateGuess();
   }
 
@@ -345,6 +344,11 @@ class Game {
     }
   }
 
+  hideButtons() {
+    document.getElementById('random').style.display = 'none';
+    document.getElementById('enterword').style.display = 'none';
+  }
+
   setup() {
     const help = document.getElementById('help');
     help.addEventListener('click', (event) => this.showHelp(), false);
@@ -356,7 +360,10 @@ class Game {
     restart.addEventListener('click', (event) => this.newGame(), false);
     const randomButton = document.getElementById('random');
     randomButton.addEventListener('click',
-    (event) => this.chooseRandomWord(DEFAULT_WORD_SIZE), false); 
+    (event) => this.chooseRandomWord(DEFAULT_WORD_SIZE), false);
+    const enterWordButton = document.getElementById('enterword');
+    enterWordButton.addEventListener('click',
+    (event) => this.hideButtons(), false); 
   }
 
   handleKeyPress(letter) {
