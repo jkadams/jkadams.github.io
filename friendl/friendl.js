@@ -183,7 +183,7 @@ class Game {
   }
 
   makeLetter(state, l) {
-    const letter = document.createElement('div');
+    const letter = document.createElement('button');
     letter.className = 'letter ' + state;
     if (l) {
       letter.appendChild(document.createTextNode(l.toUpperCase()));
@@ -258,7 +258,7 @@ class Game {
   }
 
   createCountNode(count, kind) {
-    const player = document.createElement('div');
+    const player = document.createElement('button');
     player.className = 'state ' + kind;
     player.appendChild(document.createTextNode(count));
     return player;

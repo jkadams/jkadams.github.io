@@ -1,5 +1,4 @@
-
-        .game {
+     .game {
           display: flex;
           flex-direction: column;
           align-content: space-between;
@@ -11,7 +10,6 @@
       .board {
           border: 2px solid #444;
           border-radius: 2px;
-          padding: 0.2em;
           background-color: #111;
           min-width: 258px;
       }
@@ -30,6 +28,12 @@
           border: 1px solid gray;
           border-radius: 2px;
           font-weight: bold;
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -khtml-user-select: none;
+            -moz-user-select: none;
+              -ms-user-select: none;
+                  user-select: none;
       }
       button:hover {
           background: #444;
@@ -44,7 +48,7 @@
           text-transform: capitalize;
           vertical-align: top;
           text-align: left;
-          padding: 6px;
+          padding: 8px;
           margin: 3px;
           font-weight: bold;
           display: inline-flex;
@@ -74,6 +78,7 @@
       .row {
           display: flex;
           /* justify-content: space-around; */
+          align-items: center;
           padding: 0.2em;
           min-height: 40px;
           font-family: 'Courier New', Courier, monospace;
@@ -114,18 +119,24 @@
           background-color: #55CDFC;
       }
 
-      .counter, .state, .letter {
+      button.counter, button.state, button.letter {
           background-color: #CCC;
           border-radius: 8px;
           border: 2px solid white;
-          width: 1em;
-          height: 1em;
+          width: 40px;
+          height: 40px;
           font-size: 2em;
           font-family: 'Courier New', Courier, monospace;
           font-weight: bold;
           text-align: center;
           color: black;
-          margin: 3px;
+          margin: 4px;
+      }
+      button.letter:hover {
+        background: #999;
+      }
+      button.letter:active {
+          background: #777;
       }
 
       .counter {
