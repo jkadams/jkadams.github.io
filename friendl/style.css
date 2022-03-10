@@ -88,19 +88,35 @@
           background-color: blue;
       }
 
-      .unknown,
-      .absent {
-          background-color: darkslategray;
+      button.absent.letter {
+          background-color: #2f4f4f;
       }
-
-      .elsewhere {
+      button.absent.letter:hover {
+          background-color: #264040;
+      }
+      button.absent.letter:active {
+          background-color: #1b2e2e;
+      }
+      button.elsewhere.letter {
           background-color: blueviolet;
       }
+      button.elsewhere.letter:hover {
+          background-color: #9744e3;
+      }
+      button.elsewhere.letter:active {
+          background-color: #a967e5;
+      }
 
-      .correct {
-          background-color: yellow;
-          color: black;
-          border-color: black;
+      button.correct.letter {
+          background-color: #ffff00;
+      }
+
+      button.correct.letter:hover {
+          background-color: #dddd00;
+      }
+
+      button.correct.letter:active {
+          background-color: #bbbb00;
       }
       .share.won {
           background-color: green;
@@ -117,6 +133,7 @@
           border-width: 1px;
           margin: 4px;
           background-color: #55CDFC;
+          padding: 4px;
       }
 
       button.counter, button.state, button.letter {
@@ -131,6 +148,7 @@
           text-align: center;
           color: black;
           margin: 4px;
+          padding: 2px;
       }
       button.letter:hover {
         background: #999;

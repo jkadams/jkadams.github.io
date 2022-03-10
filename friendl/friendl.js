@@ -39,8 +39,10 @@ class Game {
   newGame() {
     document.activeElement.blur();
     this.stateList = [];
+    this.logicList = [];
     this.guessList = [];
     this.keyStates = {};
+    this.letterStates = {};
     this.pendingTarget = '';
     this.guess = '';
     this.board = document.getElementsByClassName('board')[0];
@@ -79,6 +81,7 @@ class Game {
     this.board.removeChild(this.board.firstChild);
     this.startNewRow();
     this.gameState = GameState.GUESSING_WORD;
+    this.logicList.push([]);
     this.hideButtons();
     this.updateGuess();
   }
@@ -153,6 +156,7 @@ class Game {
     this.updateGuess(states);
     this.guessList.push(this.guess);
     this.stateList.push(states);
+    this.logicList.push([]);
 
     this.updateKeys();
     if (this.guess === this.target) {
@@ -182,12 +186,52 @@ class Game {
     }
   }
 
-  makeLetter(state, l) {
+  toggleLetterState(state) {
+    if (!state) {
+      state = LetterState.UNKNOWN;
+    }
+    switch (state) {
+      case LetterState.UNKNOWN:
+        return LetterState.ELSEWHERE;
+      // case LetterState.CORRECT:
+        // return LetterState.ELSEWHERE;
+      case LetterState.ELSEWHERE:
+        return LetterState.UNKNOWN;
+      case LetterState.ABSENT:
+        return LetterState.UNKNOWN;
+    }
+  }
+
+  updateAllLetters() {
+    const rows = document.getElementsByClassName('row');
+    for (let r = 0; r < rows.length; r++) {
+      const letters = rows[r].getElementsByClassName('letter');
+      for (let p = 0; p < letters.length; p++) {
+        const letter = letters[p];
+        let state = this.logicList[r][p];
+        if (!state) {
+          state = LetterState.UNKNOWN;
+        }
+        letter.className = 'letter ' + state;
+      }
+    }
+  }
+
+  makeLetter(state, l, r, i) {
     const letter = document.createElement('button');
     letter.className = 'letter ' + state;
     if (l) {
       letter.appendChild(document.createTextNode(l.toUpperCase()));
     }
+    const row = r;
+    const index = i;
+
+    letter.addEventListener('click', (event) => {
+        const newState = this.toggleLetterState(this.logicList[row][index]);
+        this.logicList[row][index] = newState;
+        console.log(this.logicList);
+        this.updateAllLetters();
+    }, false);
     return letter;
   }
 
@@ -200,7 +244,6 @@ class Game {
       }
     }
     this.updateGuess();
-
   }
 
   deleteLetterTarget() {
@@ -236,9 +279,13 @@ class Game {
     // player.className = 'counter';
     // player.appendChild(document.createTextNode(this.stateList.length + 1));
     // row.appendChild(player);
+    const r = this.logicList.length - 1;
     for (let i = 0; i < this.target.length; i++) {
+      const l = this.guess[i];
+      const state = this.logicList[r][i];
       // row.appendChild(this.makeLetter(states ? states[i] : LetterState.UNKNOWN, this.guess[i]));
-      row.appendChild(this.makeLetter(LetterState.UNKNOWN, this.guess[i]));
+      row.appendChild(this.makeLetter(state ? state : LetterState.UNKNOWN, this.guess[i], r, i));
+      // row.appendChild(this.makeLetter(this.letterStates[l + i] ? this.letterStates[l + i] : LetterState.UNKNOWN, l, i));
     }
     let correct = '';
     let elsewhere = '';
@@ -255,6 +302,7 @@ class Game {
     }
     row.appendChild(this.createCountNode(correct, 'right'));
     row.appendChild(this.createCountNode(elsewhere, 'else'));
+    this.updateAllLetters();
   }
 
   createCountNode(count, kind) {
