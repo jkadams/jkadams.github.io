@@ -386,6 +386,7 @@ class Game {
         });
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(text);
+        this.showNotification('Copied to clipboard!');
       } else {
         g.showNotification(text, 1000000);
       }
