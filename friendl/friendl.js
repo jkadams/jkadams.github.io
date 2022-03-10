@@ -5,6 +5,10 @@ LetterState.ELSEWHERE = 'elsewhere';
 LetterState.CORRECT = 'correct';
 const START_HELP_TEXT = 'Enter a word for someone!\nOr choose a random word.';
 
+const GuessState = {};
+GuessState.UNKNOWN = 'empty';
+GuessState.HIGHLIGHTED = 'elsewhere';
+
 const GameState = {};
 GameState.CHOOSING_WORD = 'choose';
 GameState.GUESSING_WORD = 'guess';
@@ -18,6 +22,7 @@ const DEFAULT_WORD_SIZE = 4;
 const ENTER_KEY = '\u21A9';
 const BACKSPACE_KEY = '\u232B';
 const KEYS = ['qwertyuiop', 'asdfghjkl', ENTER_KEY + 'zxcvbnm' + BACKSPACE_KEY];
+const COLOR_CYCLE = ['blueviolet', 'orange', 'yellow', 'green'];
 
 //const NUMBERS = ['\u24EA', '\u2460', '\u2461', '\u2462', '\u2463', '\u2464', '\u2465', '\u2466', '\u2467', '\u2468'];
 const NUMBERS = ['\u0030\uFE0F\u20E3', 
@@ -43,6 +48,7 @@ class Game {
     this.guessList = [];
     this.keyStates = {};
     this.letterStates = {};
+    this.letterColors = {};
     this.pendingTarget = '';
     this.guess = '';
     this.board = document.getElementsByClassName('board')[0];
@@ -53,7 +59,6 @@ class Game {
     const share = document.getElementById('share');
     share.className = 'share';
     this.gameState = GameState.CHOOSING_WORD;
-    window.location.hash = '';
     
     const row = document.createElement('div');
     row.className = 'row';
@@ -63,6 +68,11 @@ class Game {
     row.innerText = START_HELP_TEXT;
     this.updateKeys();
     this.showNotification(null);
+  }
+
+  forceNewGame() {
+    window.location.hash = '';
+    this.newGame();
   }
 
   chooseWord(target) {
@@ -189,25 +199,52 @@ class Game {
 
   toggleLetterState(state) {
     if (!state) {
-      state = LetterState.UNKNOWN;
+      state = GuessState.UNKNOWN;
     }
     switch (state) {
-      case LetterState.UNKNOWN:
-        return LetterState.ELSEWHERE;
-      // case LetterState.CORRECT:
-        // return LetterState.ELSEWHERE;
-      case LetterState.ELSEWHERE:
-        return LetterState.UNKNOWN;
-      case LetterState.ABSENT:
-        return LetterState.UNKNOWN;
+      case GuessState.UNKNOWN:
+        return GuessState.HIGHLIGHTED;
+      case GuessState.HIGHLIGHTED:
+        return GuessState.UNKNOWN;
     }
+  }
+
+  getNewColor() {
+    let used = [];
+    for (let i = 0; i < COLOR_CYCLE.length; i++) {
+      used[i] = 0;
+    }
+    for (let k in this.letterColors) {
+      if (this.letterColors[k] !== undefined) {
+        used[this.letterColors[k]]++;
+      }
+    }
+    for (let i = 0; i < used.length - 1; i++) {
+
+      if (used[i] > used[i + 1]) {
+        return i + 1;
+      }
+    }
+    return 0;
   }
 
   updateAllLetters() {
       const letters = document.getElementsByClassName('letter');
       for (let p = 0; p < letters.length; p++) {
         const letter = letters[p];
-        let state = this.letterStates[letter.innerText.toLowerCase()];
+        const l = letter.innerText.toLowerCase();
+        let state = this.letterStates[l];
+        if (state === LetterState.ELSEWHERE) {
+          let color = this.letterColors[l];
+          if (color === undefined) {
+            color = this.getNewColor();
+            this.letterColors[l] = color;
+          }
+          letter.style.backgroundColor = COLOR_CYCLE[color];
+        } else {
+          letter.style.backgroundColor = null;
+          this.letterColors[l] = undefined;
+        }
         if (!state) {
           state = LetterState.UNKNOWN;
         }
@@ -272,7 +309,7 @@ class Game {
     }
     if (this.gameState == GameState.CHOOSING_WORD) {
       for (let i = 0; i < this.pendingTarget.length; i++) {
-        row.appendChild(this.makeLetter(LetterState.UNKNOWN, this.pendingTarget[i]));
+        row.appendChild(this.makeLetter(GuessState.UNKNOWN, this.pendingTarget[i]));
       }
       return;
     }
@@ -407,7 +444,7 @@ class Game {
     const share = document.getElementById('share');
     share.addEventListener('click', (event) => this.share(), false);
     const restart = document.getElementById('restart');
-    restart.addEventListener('click', (event) => this.newGame(), false);
+    restart.addEventListener('click', (event) => this.forceNewGame(), false);
     const randomButton = document.getElementById('random');
     randomButton.addEventListener('click',
     (event) => this.chooseRandomWord(DEFAULT_WORD_SIZE), false);

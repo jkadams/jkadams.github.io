@@ -35,9 +35,6 @@
               -ms-user-select: none;
                   user-select: none;
       }
-      button:hover {
-          background: #444;
-      }
       button:active {
           background: #666;
       }
@@ -88,7 +85,7 @@
           background-color: blue;
       }
 
-      button.absent.letter {
+      /* button.absent.letter {
           background-color: #2f4f4f;
       }
       button.absent.letter:hover {
@@ -96,18 +93,28 @@
       }
       button.absent.letter:active {
           background-color: #1b2e2e;
-      }
+      } */
       button.elsewhere.letter {
+          border-style: dashed;
           background-color: blueviolet;
       }
-      button.elsewhere.letter:hover {
-          background-color: #8c35dd;
+      @media (hover: hover) {
+        button.elsewhere.letter:hover {
+            background-color: #8c35dd;
+            /* needs to be custom... */
+        }
+        button.letter:hover {
+          background: #999;
+        }
+        button:hover {
+            background: #444;
+        }
       }
       button.elsewhere.letter:active {
           background-color: #a967e5;
       }
 
-      button.correct.letter {
+      /* button.correct.letter {
           background-color: #ffff00;
       }
 
@@ -117,7 +124,7 @@
 
       button.correct.letter:active {
           background-color: #bbbb00;
-      }
+      } */
       .share.won {
           background-color: green;
       }
@@ -149,9 +156,6 @@
           color: black;
           margin: 4px;
           padding: 2px;
-      }
-      button.letter:hover {
-        background: #999;
       }
       button.letter:active {
           background: #777;
