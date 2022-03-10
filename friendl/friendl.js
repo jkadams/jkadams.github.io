@@ -53,6 +53,7 @@ class Game {
     const share = document.getElementById('share');
     share.className = 'share';
     this.gameState = GameState.CHOOSING_WORD;
+    window.location.hash = '';
     
     const row = document.createElement('div');
     row.className = 'row';
@@ -203,34 +204,34 @@ class Game {
   }
 
   updateAllLetters() {
-    const rows = document.getElementsByClassName('row');
-    for (let r = 0; r < rows.length; r++) {
-      const letters = rows[r].getElementsByClassName('letter');
+      const letters = document.getElementsByClassName('letter');
       for (let p = 0; p < letters.length; p++) {
         const letter = letters[p];
-        let state = this.logicList[r][p];
+        let state = this.letterStates[letter.innerText.toLowerCase()];
         if (!state) {
           state = LetterState.UNKNOWN;
         }
         letter.className = 'letter ' + state;
       }
-    }
   }
 
-  makeLetter(state, l, r, i) {
+  makeLetter(state, l) {
     const letter = document.createElement('button');
     letter.className = 'letter ' + state;
     if (l) {
       letter.appendChild(document.createTextNode(l.toUpperCase()));
     }
-    const row = r;
-    const index = i;
+    // const row = r;
+    // const index = i;
+    const le = l;
 
     letter.addEventListener('click', (event) => {
-        const newState = this.toggleLetterState(this.logicList[row][index]);
-        this.logicList[row][index] = newState;
-        console.log(this.logicList);
+      if (le) {
+        const lower = le.toLowerCase();
+        const newState = this.toggleLetterState(this.letterStates[lower]);
+        this.letterStates[lower] = newState;
         this.updateAllLetters();
+      }
     }, false);
     return letter;
   }
@@ -282,10 +283,10 @@ class Game {
     const r = this.logicList.length - 1;
     for (let i = 0; i < this.target.length; i++) {
       const l = this.guess[i];
-      const state = this.logicList[r][i];
+      // const state = this.logicList[r][i];
       // row.appendChild(this.makeLetter(states ? states[i] : LetterState.UNKNOWN, this.guess[i]));
-      row.appendChild(this.makeLetter(state ? state : LetterState.UNKNOWN, this.guess[i], r, i));
-      // row.appendChild(this.makeLetter(this.letterStates[l + i] ? this.letterStates[l + i] : LetterState.UNKNOWN, l, i));
+      //row.appendChild(this.makeLetter(state ? state : LetterState.UNKNOWN, this.guess[i], r, i));
+      row.appendChild(this.makeLetter(this.letterStates[l] ? this.letterStates[l] : LetterState.UNKNOWN, l));
     }
     let correct = '';
     let elsewhere = '';
