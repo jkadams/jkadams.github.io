@@ -220,7 +220,9 @@ class Game {
       }
     }
     for (let i = 0; i < used.length - 1; i++) {
-
+      if (used[i] < used[i + 1]) {
+        return i;
+      }
       if (used[i] > used[i + 1]) {
         return i + 1;
       }
