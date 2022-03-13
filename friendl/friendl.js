@@ -398,9 +398,13 @@ class Game {
   }
 
   showHelp(event) {
-    this.showNotification('To start, enter a word for someone else to guess, or choose a random word.\n' +
-    'Green (left !): correct letter, correct location\n' +
+    if (this.gameState === GameState.CHOOSING_WORD) {
+      this.showNotification('Enter a word for someone else to guess, or choose a random word.');
+    } else if (this.gameState === GameState.GUESSING_WORD) {
+      this.showNotification(
+        'Green (left !): correct letter, correct location\n' +
         'Yellow (right ?): correct letter, wrong location');
+    }
   }
 
   share(event) {
