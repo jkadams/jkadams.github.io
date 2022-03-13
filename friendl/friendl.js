@@ -59,12 +59,14 @@ class Game {
     const share = document.getElementById('share');
     share.className = 'share';
     this.gameState = GameState.CHOOSING_WORD;
+    document.getElementById('head').innerText = 'Choose';
     
     const row = document.createElement('div');
     row.className = 'row';
     this.board.appendChild(row);
     document.getElementById('random').style.display = 'unset';
     document.getElementById('enterword').style.display = 'unset';
+    document.getElementsByClassName('keys')[0].style.display = 'none';
     row.innerText = START_HELP_TEXT;
     this.updateKeys();
     this.showNotification(null);
@@ -92,6 +94,7 @@ class Game {
     this.board.removeChild(this.board.firstChild);
     this.startNewRow();
     this.gameState = GameState.GUESSING_WORD;
+    document.getElementById('head').innerText = 'Guess';
     this.logicList.push([]);
     this.hideButtons();
     this.updateGuess();
@@ -100,6 +103,12 @@ class Game {
   chooseRandomWord(size) {
     let target = '';
     if (size == 4) {
+      // for (let i = 0; i < freq.length; i++) {
+      //   let all = freq[i];
+      //   if (wordsByLength[size].indexOf(all) < 0) {
+      //     console.log(all);
+      //   }
+      // }
       let attemptedTarget = null;
       while (!attemptedTarget) {
         attemptedTarget = freq[Math.floor(Math.random() * freq.length)];
@@ -149,6 +158,7 @@ class Game {
   }
   commitWord() {
     this.chooseWord(this.pendingTarget);
+    this.showNotification('Press Share to send a link with this word!');
   }
 
   guessWord() {
@@ -174,6 +184,7 @@ class Game {
       this.board.className = 'board won';
       const share = document.getElementById('share');
       share.className = 'share won';
+      document.getElementById('head').innerText = 'In ' + this.stateList.length + '!';
       this.gameState = GameState.COMPLETE;
       window.location.hash = '';
       this.showNotification('Got it in ' + this.stateList.length +'! Press R or Enter to restart.');
@@ -327,9 +338,11 @@ class Game {
       //row.appendChild(this.makeLetter(state ? state : LetterState.UNKNOWN, this.guess[i], r, i));
       row.appendChild(this.makeLetter(this.letterStates[l] ? this.letterStates[l] : LetterState.UNKNOWN, l));
     }
-    let correct = '';
-    let elsewhere = '';
+    let correct = '!';
+    let elsewhere = '?';
+    let pendingRow = ' pending';
     if (states) {
+      pendingRow = '';
       correct = 0;
       elsewhere = 0;
       for (let i = 0; i < states.length; i++) {
@@ -340,8 +353,8 @@ class Game {
         }
       }
     }
-    row.appendChild(this.createCountNode(correct, 'right'));
-    row.appendChild(this.createCountNode(elsewhere, 'else'));
+    row.appendChild(this.createCountNode(correct, 'right' + pendingRow));
+    row.appendChild(this.createCountNode(elsewhere, 'else' + pendingRow));
     this.updateAllLetters();
   }
 
@@ -386,12 +399,8 @@ class Game {
 
   showHelp(event) {
     this.showNotification('To start, enter a word for someone else to guess, or choose a random word.\n' +
-    'Green (left): correct letter, correct location\n' +
-        'Blue (right): correct letter, wrong location');
-  }
-
-  showSettings(event) {
-    this.showNotification('Sorry no settings yet :)');
+    'Green (left !): correct letter, correct location\n' +
+        'Yellow (right ?): correct letter, wrong location');
   }
 
   share(event) {
@@ -436,13 +445,12 @@ class Game {
   hideButtons() {
     document.getElementById('random').style.display = 'none';
     document.getElementById('enterword').style.display = 'none';
+    document.getElementsByClassName('keys')[0].style.display = 'unset';
   }
 
   setup() {
     const help = document.getElementById('help');
     help.addEventListener('click', (event) => this.showHelp(), false);
-    // const settings = document.getElementById('settings');
-    // settings.addEventListener('click', (event) => this.showSettings(), false);
     const share = document.getElementById('share');
     share.addEventListener('click', (event) => this.share(), false);
     const restart = document.getElementById('restart');

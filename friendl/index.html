@@ -1,7 +1,8 @@
 <html>
+
 <head>
-    
-<title>Friendl</title>
+
+    <title>Friendl</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="words.js"></script>
     <script src="friendl.js"></script>
@@ -9,21 +10,26 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
 </head>
+
 <body onload="start()" style="background: black; color: white; font-family: Arial;">
-<div class="header">
-    <button id="share" class="share">Share</button>
-    <!-- <button id="settings">Settings</button> -->
-    <button id="help">Help</button>
-    <button id="restart">Home</button>
-</div>
-<div class="game">
-    <div class="board">
+    <div class="header">
+        <div class="headertext" id="head">Friendl</div>
+        <div>
+        <button id="share" class="share">Share</button>
+        <button id="help">Help</button>
+        <button id="restart">Home</button>
+        </div>
     </div>
-    <button id="random" class="random">Random Word</button>
-    <button id="enterword" class="enterword">Type For Someone</button>
-    <div class="notification">Unknown word</div>
-    <div class="keys">
+    <div class="game">
+        <div class="gametop">
+            <div class="board"></div>
+            <button id="enterword" class="enterword">Type For Someone</button>
+            <button id="random" class="random">Random Word</button>
+            <div class="notification">Unknown word</div>
+        </div>
+        <div class="keys">
+        </div>
     </div>
-</div>
 </body>
+
 </html>
