@@ -59,7 +59,7 @@ class Game {
     const share = document.getElementById('share');
     share.className = 'share';
     this.gameState = GameState.CHOOSING_WORD;
-    document.getElementById('head').innerText = 'Choose';
+    document.getElementById('head').innerText = 'Friendl';
     
     const row = document.createElement('div');
     row.className = 'row';
@@ -94,7 +94,7 @@ class Game {
     this.board.removeChild(this.board.firstChild);
     this.startNewRow();
     this.gameState = GameState.GUESSING_WORD;
-    document.getElementById('head').innerText = 'Guess';
+    document.getElementById('head').innerText = 'Friendl';
     this.logicList.push([]);
     this.hideButtons();
     this.updateGuess();
@@ -184,7 +184,7 @@ class Game {
       this.board.className = 'board won';
       const share = document.getElementById('share');
       share.className = 'share won';
-      document.getElementById('head').innerText = 'In ' + this.stateList.length + '!';
+      document.getElementById('head').innerText = 'In ' + this.stateList.length + (this.stateList.length > 9 ? '...' : '!');
       this.gameState = GameState.COMPLETE;
       window.location.hash = '';
       this.showNotification('Got it in ' + this.stateList.length +'! Press R or Enter to restart.');
