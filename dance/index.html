@@ -90,7 +90,7 @@
     <script src="sarcophagus.js"></script>
     <script>
     // The controller for the game.
-    var controller = new Dance.Controller();
+    const controller = new Dance.Controller();
     function handleNewGame(event) {
       controller.startNewGame();
     }
@@ -115,6 +115,10 @@
         }
         controller.startNewGame();
       }
+      
+      function move(dir) {
+        controller.move(dir);
+      }
       xhr.onerror = function() {
         console.log("Error while getting necrodancer.xml");
       }
@@ -123,6 +127,10 @@
       xhr.send();
 
       document.getElementById('newGame').addEventListener('click', handleNewGame);
+      document.getElementById('up').addEventListener('click', () => controller.move(Dance.Move.UP));
+      document.getElementById('down').addEventListener('click', () => controller.move(Dance.Move.DOWN));
+      document.getElementById('left').addEventListener('click', () => controller.move(Dance.Move.LEFT));
+      document.getElementById('right').addEventListener('click', () => controller.move(Dance.Move.RIGHT));
     }
     </script>
     </head>
