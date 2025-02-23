@@ -319,37 +319,41 @@ Dance.Controller.prototype.endGame = function() {
   }
 };
 
+Dance.Controller.prototype.move = function(m) {
+  this.nextMove = m;
+  console.log('MOVED: ' + this.nextMove);
+  this.makeMoves(this.nextMove);
+};
+
 Dance.Controller.prototype.handleKeyDown = function(e) {
   switch (e.keyCode) {
     case 32: // space
-      this.nextMove = null;
+      this.move(null);
       break;
     case 37: // left
-      this.nextMove = Dance.Move.LEFT;
+      this.move(Dance.Move.LEFT);
       break;
     case 38: // up
-      this.nextMove = Dance.Move.UP;
+      this.move(Dance.Move.UP);
       break;
     case 39: // right
-      this.nextMove = Dance.Move.RIGHT;
+      this.move(Dance.Move.RIGHT);
       break;
     case 40: // down
-      this.nextMove = Dance.Move.DOWN;
+      this.move(Dance.Move.DOWN);
       break;
     case 82: // r
       this.replayTick();
-      return;
+      break;
     case 83: // s
       this.toggleSprites();
-      return;
+      break;
     case 78:
       this.startNewGame();
-      return;
+      break;
     default:
       return;
   }
-  console.log('MOVED: ' + this.nextMove);
-  this.makeMoves(this.nextMove);
   e.preventDefault();
 };
 
