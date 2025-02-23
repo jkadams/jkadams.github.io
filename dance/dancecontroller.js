@@ -326,6 +326,7 @@ Dance.Controller.prototype.move = function(m) {
 };
 
 Dance.Controller.prototype.handleKeyDown = function(e) {
+  if (e.shiftKey || e.ctrlKey) return;
   switch (e.keyCode) {
     case 32: // space
       this.move(null);
