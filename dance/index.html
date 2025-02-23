@@ -127,6 +127,7 @@
       xhr.send();
 
       document.getElementById('newGame').addEventListener('click', handleNewGame);
+      document.getElementById('wait').addEventListener('click', () => controller.move(null));
       document.getElementById('up').addEventListener('click', () => controller.move(Dance.Move.UP));
       document.getElementById('down').addEventListener('click', () => controller.move(Dance.Move.DOWN));
       document.getElementById('left').addEventListener('click', () => controller.move(Dance.Move.LEFT));
@@ -155,6 +156,9 @@ s: toggle sprites</pre>
           </div>
           <div class="arrowrow">
           <button id="down">&#9660;</button>
+          </div>
+          <div class="arrowrow">
+            <button id="wait">wait</button>
           </div>
       </div>
 
