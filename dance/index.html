@@ -132,6 +132,8 @@
       document.getElementById('down').addEventListener('click', () => controller.move(Dance.Move.DOWN));
       document.getElementById('left').addEventListener('click', () => controller.move(Dance.Move.LEFT));
       document.getElementById('right').addEventListener('click', () => controller.move(Dance.Move.RIGHT));
+      document.getElementById('sprites').addEventListener('click', () => controller.toggleSprites());
+      document.getElementById('replay').addEventListener('click', () => controller.replayTick());
     }
     </script>
     </head>
@@ -144,7 +146,8 @@
 arrow keys: move
 space: wait
 n: new game
-s: toggle sprites</pre>
+<button id="replay">r</button>: replay
+<button id="sprites">s</button>: toggle sprites</pre>
 
         <div class="arrows">
           <div class="arrowrow">
