@@ -58,7 +58,10 @@ Dance.ViewOld.prototype.update = function() {
     this.renderEnemy(enemy);
   }
 
-  this.topBar.innerText = 'Health: ' + this.game.player.health + '/' + this.game.player.initialHealth;
+  // this.topBar.innerText
+  for (let i = 0; i < this.game.player.health; i++) output += '<3';
+  for (let i = this.game.player.health; i < this.game.player.initialHealth; i++) output += '<x';
+  output += '\n\n';
   for (var r = 0; r < rows; r++) {
     for (var c = 0; c < columns; c++) {
       output += this.textGrid[r][c];
@@ -84,13 +87,13 @@ Dance.ViewOld.prototype.renderTile = function(tile, row, column, exposed, curren
       str = '>>';
       break;
     case Tile.DIRT:
-      str = 'DD';
+      str = '::';
       break;
     case Tile.DIRT_WITH_TORCH:
-      str = 'D*';
+      str = ':*';
       break;
     case Tile.STONE:
-      str = 'RR';
+      str = '##';
       break;
     case Tile.CATACOMB:
       str = 'CC';
@@ -127,6 +130,12 @@ Dance.ViewOld.prototype.renderEnemy = function(enemy) {
     symbol = 'ys';
   } else if (enemyId == Dance.Units.BlackSkeleton.ID) {
     symbol = 'bs';
+  } else  if (enemyId == Dance.Units.WhiteArmoredSkeleton.ID) {
+    symbol = 'wa';
+  } else if (enemyId == Dance.Units.YellowArmoredSkeleton.ID) {
+    symbol = 'ya';
+  } else if (enemyId == Dance.Units.BlackArmoredSkeleton.ID) {
+    symbol = 'ba';
   } else if (enemyId == Dance.Units.WhiteSkeletonKnight.ID) {
     symbol = 'SK';
   } else if (enemyId == Dance.Units.YellowSkeletonKnight.ID) {
@@ -141,6 +150,12 @@ Dance.ViewOld.prototype.renderEnemy = function(enemy) {
     symbol = 'bm';
   } else if (enemyId == Dance.Units.Blademaster.ID) {
     symbol = 'BM';
+  } else if (enemyId == Dance.Units.Warlock.ID) {
+    symbol = 'WL';
+  } else if (enemyId == Dance.Units.BlueBat.ID) {
+    symbol = 'bb';
+  } else if (enemyId == Dance.Units.RedDragon.ID) {
+    symbol = 'RD';
   } else {
     symbol = '??';
   }
