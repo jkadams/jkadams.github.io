@@ -16,11 +16,6 @@ body {
   padding: 5px;
   font-weight: bold;
 }
-#newGame {
-  padding: 5px;
-  font: 1em 'Arial', sans-serif; 
-  font-weight: bold;
-}
 #gameBoard {
   font: 20px 'Lucida Console', monospace;
   color: white;
