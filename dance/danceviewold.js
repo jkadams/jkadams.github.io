@@ -92,6 +92,9 @@ Dance.ViewOld.prototype.renderTile = function(tile, row, column, exposed, curren
     case Tile.DIRT_WITH_TORCH:
       str = ':*';
       break;
+    case Tile.STONE_WITH_TORCH:
+      str = '#*';
+      break;
     case Tile.STONE:
       str = '##';
       break;
