@@ -174,7 +174,7 @@ Dance.ViewOld.prototype.resizeBoard = function() {
   this.board.style.background = 'black';
   this.board.style.border = '2px solid #37229F';
   this.board.style.width = 24 * this.game.board.layout[0].length + 'px';
-  this.board.style.height = 20 * this.game.board.layout.length + 'px';
+  this.board.style.height = 20 * (this.game.board.layout.length + 2) + 'px';
 };
 
 Dance.ViewOld.prototype.enterDocument = function() {
