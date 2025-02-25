@@ -106,10 +106,8 @@ body {
   flex-direction: row;
   justify-content: center;
 }
-.arrows button {
-  margin-left: 20px;
-  margin-right: 20px;
-  width: 40px;
-  height: 40px;
-  margin-top: 8px;
+button {
+  width: 80px;
+  height: 80px;
+  margin: 4px;
 }
