@@ -173,7 +173,7 @@ Dance.Board.prototype.expose = function(position) {
         } else {
           if (this.lighting[row][column] >= 1) {
             // Tiles that are visible this turn.
-            if (row == 16 && column == 10) debugger;
+            // if (row == 16 && column == 10) debugger;
             this.currentlyVisible[row][column] = true;
             // Tiles that have ever been visible.
             this.exposed[row][column] = true;
