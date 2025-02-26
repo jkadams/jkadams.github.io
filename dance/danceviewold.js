@@ -59,8 +59,9 @@ Dance.ViewOld.prototype.update = function() {
   }
 
   // this.topBar.innerText
-  for (let i = 0; i < this.game.player.health; i++) output += '<3';
-  for (let i = this.game.player.health; i < this.game.player.initialHealth; i++) output += '<x';
+  outout += ' ';
+  for (let i = 0; i < this.game.player.health; i++) output += '<3 ';
+  for (let i = this.game.player.health; i < this.game.player.initialHealth; i++) output += '<x ';
   output += '\n\n';
   for (var r = 0; r < rows; r++) {
     for (var c = 0; c < columns; c++) {
@@ -174,7 +175,7 @@ Dance.ViewOld.prototype.resizeBoard = function() {
   this.board.style.background = 'black';
   this.board.style.border = '2px solid #37229F';
   this.board.style.width = 24 * this.game.board.layout[0].length + 'px';
-  this.board.style.height = 20 * (this.game.board.layout.length + 2) + 'px';
+  this.board.style.height = 20 * (this.game.board.layout.length + 5) + 'px';
 };
 
 Dance.ViewOld.prototype.enterDocument = function() {
