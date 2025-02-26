@@ -97,6 +97,11 @@ body {
     display: none;
   }
 }
+@media only screen and (max-width: 768px) {
+  .noarrows {
+    display: none;
+  }
+}
 .arrowrow {
   display: flex;
   flex-direction: row;
