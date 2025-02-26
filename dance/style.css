@@ -6,10 +6,9 @@ body {
   color: #ddd;
 }
 #middle {
-  margin-left: auto;
-  margin-right: auto;
-  width: 600px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
 }
 #score {
   border: 2px solid #37229F;
