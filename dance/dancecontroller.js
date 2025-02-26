@@ -27,6 +27,7 @@ Dance.Controller = function() {
   this.view = null;
   this.nextMove = null;
   this.useSprites = true;
+  this.nextNewGame = 0;
 };
 
 Dance.Controller.prototype.createLevelTorches2 = function() {
@@ -217,7 +218,22 @@ Dance.Controller.prototype.startNewGame = function() {
     this.view.board.removeEventListener('keydown', this.keyListener);
     this.view.exitDocument();
   }
-  this.game = this.createLevel();
+  switch (this.nextNewGame) {
+    case 0:
+    default:
+      this.game = this.createLevel();
+      break;
+    case 1:
+      this.game = this.createLevel41();
+      break;
+    case 2:
+      this.game = this.createLevelTorches();
+      break;
+    case 3:
+      this.game = this.createLevelTorches2();
+      break;
+  }
+  this.nextNewGame = (this.nextNewGame + 1) % 4;
   this.game.eventTarget = document;
   this.view = new Dance.View(this.game);
   this.view.enterDocument();
