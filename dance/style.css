@@ -4,6 +4,7 @@
 body {
   background-color: black;
   color: #ddd;
+  margin: 0px;
 }
 #middle {
   display: flex;
