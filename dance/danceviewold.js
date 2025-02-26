@@ -59,7 +59,7 @@ Dance.ViewOld.prototype.update = function() {
   }
 
   // this.topBar.innerText
-  outout += ' ';
+  output += ' ';
   for (let i = 0; i < this.game.player.health; i++) output += '<3 ';
   for (let i = this.game.player.health; i < this.game.player.initialHealth; i++) output += '<x ';
   output += '\n\n';
