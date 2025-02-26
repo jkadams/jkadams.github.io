@@ -10,6 +10,7 @@ body {
   display: flex;
   flex-direction: column;
   width: fit-content;
+min-width: 600px;
 }
 #score {
   border: 2px solid #37229F;
